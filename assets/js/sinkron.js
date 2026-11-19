@@ -1,5 +1,5 @@
 // Akun & sinkron progres Whetio. Progres tetap utama di browser (localStorage); bila masuk, disalin ke Neon.
-const AUTH = "/api/auth";
+const AUTH = "/api/auth-proxy/?jalur=";
 const API = "/api/progres/";
 export const K_AKUN = "whetio:akun";         // {email, nama, sinkron: ms}
 const K_ANTRE = "whetio:antrean";            // kiriman yang gagal, dicoba lagi
@@ -18,7 +18,7 @@ async function panggil(url, { method = "GET", body } = {}) {
   if (!r.ok) { const e = new Error((d && (d.message || (d.error && d.error.message) || d.code)) || `Galat ${r.status}`); e.status = r.status; e.kode = d && (d.code || (d.error && d.error.code)); throw e; }
   return d;
 }
-const auth = (jalur, body) => panggil(`${AUTH}/${jalur}/`, body ? { method: "POST", body } : {});
+const auth = (jalur, body) => panggil(AUTH + jalur, body ? { method: "POST", body } : {});
 
 // ---------- autentikasi (Neon Managed Better Auth, lewat proxy domain sendiri) ----------
 export const daftar = (email, password, name) => auth("sign-up/email", { email, password, name: name || email.split("@")[0] });

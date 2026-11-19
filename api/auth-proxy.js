@@ -1,5 +1,5 @@
 // Proxy Neon Auth (Managed Better Auth) di domain situs sendiri, agar cookie sesi menjadi first-party.
-// vercel.json menulis ulang /api/auth/<jalur> → /api/auth-proxy?jalur=<jalur>.
+// Dipanggil sebagai /api/auth-proxy/?jalur=<jalur Better Auth>, mis. jalur=sign-in/email.
 import { AUTH } from "./_lib.js";
 
 const JALUR = /^[a-z0-9-]+(\/[a-z0-9-]+){0,3}$/;
