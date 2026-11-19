@@ -49,6 +49,9 @@ function sementara(el, mood, ms) {
 }
 function picu(el, kelas, ms) { el.classList.remove(kelas); void el.getBoundingClientRect(); el.classList.add(kelas); setTimeout(() => el.classList.remove(kelas), ms); }
 
+// Kawanan pelatuk kecil di latar (saat pengguna diam).
+if (typeof document !== "undefined") { import("./kawanan.js"); import("./laporan.js"); }
+
 // Reaksi: kursor mendekat → menyapa (ramah), disentuh/diklik → mematuk. Dipasang sekali per halaman.
 if (typeof document !== "undefined" && !window.__pelatukHidup) {
   window.__pelatukHidup = true;

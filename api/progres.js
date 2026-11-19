@@ -1,7 +1,7 @@
 // Penyimpanan progres pengguna di Neon Postgres.
 // GET  /api/progres/?sejak=<ms>   → { email, profil, hasil:[{paket_id,kode,data,t}], latihan:[{t,data}], waktu }
 // POST /api/progres/  { profil?:{tgl_ujian}, hasil?:[{paket_id,kode,data,t}], latihan?:[{t,data}] } → upsert (yang lebih baru menang)
-// DELETE /api/progres/ → hapus seluruh data progres pengguna
+// DELETE /api/progres/ → hapus seluruh data progres pengguna (laporan yang pernah dikirim dianonimkan)
 import { sql, pastikanSkema, penggunaDari, bodyJSON } from "./_lib.js";
 
 const PAKET = /^(\d{4}-\d{2}-\d{2}|latihan)$/;
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true, hasil: ops.length - 1 - latihan.length, waktu: Date.now() });
     }
     if (req.method === "DELETE") {
-      await q.transaction([q`DELETE FROM hasil WHERE user_id = ${u.id}`, q`DELETE FROM latihan WHERE user_id = ${u.id}`, q`DELETE FROM profil WHERE user_id = ${u.id}`]);
+      await q.transaction([q`DELETE FROM hasil WHERE user_id = ${u.id}`, q`DELETE FROM latihan WHERE user_id = ${u.id}`, q`DELETE FROM profil WHERE user_id = ${u.id}`, q`UPDATE laporan SET user_id = NULL, email = NULL WHERE user_id = ${u.id}`]);
       return res.status(200).json({ ok: true });
     }
     return res.status(405).json({ message: "Metode tidak didukung." });

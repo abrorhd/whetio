@@ -24,6 +24,13 @@ export function pastikanSkema() {
       user_id text NOT NULL, t bigint NOT NULL, data jsonb NOT NULL,
       diubah timestamptz NOT NULL DEFAULT now(), PRIMARY KEY (user_id, t))`;
     await q`CREATE INDEX IF NOT EXISTS hasil_diubah ON hasil (user_id, diubah)`;
+    await q`CREATE TABLE IF NOT EXISTS laporan (
+      id bigserial PRIMARY KEY, dibuat timestamptz NOT NULL DEFAULT now(), diubah timestamptz NOT NULL DEFAULT now(),
+      jenis text NOT NULL, kategori text NOT NULL, paket_id text, kode text, no int, usulan int,
+      pesan text NOT NULL DEFAULT '', konteks jsonb, halaman text, user_id text, email text, ip_hash text,
+      status text NOT NULL DEFAULT 'baru', catatan text)`;
+    await q`CREATE INDEX IF NOT EXISTS laporan_status ON laporan (status, dibuat DESC)`;
+    await q`CREATE INDEX IF NOT EXISTS laporan_sidik ON laporan (ip_hash, dibuat)`;
   })().catch((e) => { _skema = null; throw e; });
   return _skema;
 }

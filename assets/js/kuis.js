@@ -1,11 +1,11 @@
 // Mesin simulasi & latihan psikotes Whetio. Dipakai halaman paket (/psikotes/paket/<tgl>/) dan latihan bebas.
 import { KODE as META } from "./gen/index.js";
 import { logo, pelatuk, ubahMood } from "./merek.js";
+import { bukaLapor } from "./laporan.js";
 import { akun, kirimHasil } from "./sinkron.js";
 
 const SKALA = ["Sangat tidak menggambarkan", "Tidak menggambarkan", "Agak menggambarkan", "Menggambarkan", "Sangat menggambarkan"];
 const HURUF = "ABCDEF";
-const REPO_ISSUE = "https://github.com/abrorhd/whetio/issues/new";
 export const KUNCI_RINGKAS = "whetio:psikotes:ringkas";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const polos = (h) => String(h).replace(/<svg[\s\S]*?<\/svg>/g, "[gambar]").replace(/<td>/g, " ").replace(/<\/tr>/g, " / ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
@@ -194,17 +194,23 @@ export function mulai(app, paket, opsi = {}) {
     out += `<p class="hint hint-kb">Papan ketik: ${s.jenis === "vm" ? "A–F atau 1–6" : "A–E atau 1–5"}${lat ? ", panah kanan untuk lanjut" : ""}.</p>`;
     return out;
   }
-  function lapor(s, q, i, jw) {
-    const kunci = s.jenis === "pasangan" ? q.k.map((k) => q.w[k]).join(" – ") : s.jenis === "vm" ? HURUF[q.k] : polos(q.o[q.k]);
-    const body = `Paket: ${paket.id} · ${s.nama} no. ${i + 1}\n\nSoal: ${polos(q.q || "")}\n${q.o ? "Opsi: " + q.o.map((o, j) => HURUF[j] + ". " + polos(o)).join(" | ") : q.w ? "Kata: " + q.w.join(", ") : ""}\n\nKunci situs: ${kunci}\nJawaban saya: ${jw == null ? "-" : Array.isArray(jw) ? jw.map((x) => q.w[x]).join(" – ") : HURUF[jw]}\n\nAlasan saya:`;
-    return `<a class="lapor" target="_blank" rel="noopener" href="${REPO_ISSUE}?title=${encodeURIComponent(`Kunci keliru? ${paket.id} ${s.kode} no ${i + 1}`)}&body=${encodeURIComponent(body.slice(0, 1800))}&labels=lapor-kunci">Kunci terasa keliru? Laporkan</a>`;
+  function lapor(s, i, teks = "Laporkan soal ini") { return `<button type="button" class="lapor" data-lapor="${s.kode}:${i}">&#9873; ${teks}</button>`; }
+  function konteksSoal(s, i) {
+    const q = i >= 0 ? s.soal[i] : null, jw = q && st.hasil[s.kode] ? st.hasil[s.kode].jw[i] : null;
+    const dasar = { jenis: "soal", paket_id: paket.id, kode: s.kode, label: `${paket.id === "latihan" ? "Latihan bebas" : paket.judul || "Paket " + paket.id} · ${s.nama}${q ? ` no. ${i + 1}` : ""}` };
+    if (!q) return { ...dasar, opsi: 0, konteks: { subtes: s.nama } };
+    const kunci = s.jenis === "pasangan" ? q.k.map((k) => q.w[k]).join(" – ") : HURUF[q.k];
+    const jawaban = jw == null ? null : Array.isArray(jw) ? jw.map((x) => q.w[x]).join(" – ") : HURUF[jw];
+    return { ...dasar, no: i + 1, opsi: s.jenis === "pasangan" ? 0 : s.jenis === "vm" ? s.ref.length : q.o ? q.o.length : 0,
+      konteks: { subtes: s.nama, soal: s.jenis === "vm" ? q.g : String(q.q || ""), opsi: q.o || q.w || null, ref: s.jenis === "vm" ? s.ref : null,
+        kunci, jawaban, relasi: q.r || null, pembahasan: q.e ? polos(q.e).slice(0, 1500) : null } };
   }
   function umpan(s, q, jw, i, hidup) {
     const ok = jw != null && benar(s, q, jw);
     const pl = hidup ? pelatuk(ok ? "senyum" : "marah") : "";
     const kunci = s.jenis === "pasangan" ? `${q.k.map((k) => esc(q.w[k])).join(" – ")} (${q.r === "S" ? "sinonim" : "antonim"})` : HURUF[q.k];
     const e = s.jenis === "vm" ? `Gambar ini sama persis dengan referensi ${HURUF[q.k]}.` : q.e;
-    return `<div class="fb">${pl}<div class="v ${ok ? "ok" : "no"}">${jw == null ? "Tidak dijawab." : ok ? "Benar." : "Kurang tepat."} Kunci: ${kunci}.</div><p>${e}</p>${s.jenis === "vm" ? "" : `<p>${lapor(s, q, i, jw)}</p>`}</div>`;
+    return `<div class="fb">${pl}<div class="v ${ok ? "ok" : "no"}">${jw == null ? "Tidak dijawab." : ok ? "Benar." : "Kurang tepat."} Kunci: ${kunci}.</div><p>${e}</p><p>${lapor(s, i)}</p></div>`;
   }
   function vHasil() {
     const s = BY[st.kode], n = nilai(st.kode), idx = SUB.indexOf(s), lanjut = SUB.slice(idx + 1).find((x) => !(st.hasil[x.kode] && st.hasil[x.kode].selesai));
@@ -242,14 +248,14 @@ export function mulai(app, paket, opsi = {}) {
     if (s.jenis === "likert") {
       const n = nilai(st.kode), byId = {};
       s.soal.forEach((q) => (byId[q.id] = q));
-      out += `<div class="panel"><h2>Pernyataan yang dijawab tidak konsisten</h2>${n.dev.filter((d) => d.d >= 2).map((d) => { const ids = d.id.split("/"); return `<p><span class="tag spark">${d.t === "ulang" ? "pernyataan berulang" : "pernyataan berlawanan"}</span><br>${ids.map((x) => esc(byId[x] ? byId[x].q : x)).join("<br>")}</p>`; }).join("") || '<p class="hint">Tidak ada selisih ≥ 2 poin. Bagus.</p>'}</div>`;
+      out += `<div class="panel"><h2>Pernyataan yang dijawab tidak konsisten</h2>${n.dev.filter((d) => d.d >= 2).map((d) => { const ids = d.id.split("/"); return `<p><span class="tag spark">${d.t === "ulang" ? "pernyataan berulang" : "pernyataan berlawanan"}</span><br>${ids.map((x) => esc(byId[x] ? byId[x].q : x)).join("<br>")}</p>`; }).join("") || '<p class="hint">Tidak ada selisih ≥ 2 poin. Bagus.</p>'}<p>${lapor(s, -1, "Ada pernyataan yang janggal? Laporkan")}</p></div>`;
       return out;
     }
     out += `<div class="modebar"><div class="seg">${[["salah", "Salah & kosong"], ["semua", "Semua"]].map(([f, t]) => `<button data-filter="${f}" aria-pressed="${st.filter === f}">${t}</button>`).join("")}</div></div>`;
     const daftar = s.soal.map((q, i) => [q, i]).filter(([q, i]) => st.filter === "semua" || !benar(s, q, h.jw[i]));
     if (!daftar.length) return out + '<p class="panel">Tidak ada soal yang salah atau kosong. Mantap.</p>';
     if (s.jenis === "vm") {
-      return out + `<div class="panel">${refVM(s)}<table class="tbl" style="margin-top:10px"><thead><tr><th>No</th><th>Gambar</th><th>Kunci</th><th>Anda</th></tr></thead><tbody>${daftar.map(([q, i]) => `<tr><td class="n">${i + 1}</td><td>${q.g.replace(/width="72" height="72"/, 'width="40" height="40"')}</td><td class="mono">${HURUF[q.k]}</td><td class="mono ${h.jw[i] == null ? "" : "no-t"}">${h.jw[i] == null ? "–" : HURUF[h.jw[i]]}</td></tr>`).join("")}</tbody></table></div>`;
+      return out + `<div class="panel">${refVM(s)}<table class="tbl" style="margin-top:10px"><thead><tr><th>No</th><th>Gambar</th><th>Kunci</th><th>Anda</th><th></th></tr></thead><tbody>${daftar.map(([q, i]) => `<tr><td class="n">${i + 1}</td><td>${q.g.replace(/width="72" height="72"/, 'width="40" height="40"')}</td><td class="mono">${HURUF[q.k]}</td><td class="mono ${h.jw[i] == null ? "" : "no-t"}">${h.jw[i] == null ? "–" : HURUF[h.jw[i]]}</td><td>${lapor(s, i, "Lapor")}</td></tr>`).join("")}</tbody></table></div>`;
     }
     return out + daftar.map(([q, i]) => {
       const jw = h.jw[i];
@@ -293,6 +299,7 @@ export function mulai(app, paket, opsi = {}) {
     if (d.mulai) { mulaiSubtes(d.mulai); return; }
     if (d.bahas) { st.view = "bahas"; st.kode = d.bahas; simpan(); render(); window.scrollTo(0, 0); return; }
     if (d.filter) { st.filter = d.filter; simpan(); render(); return; }
+    if (d.lapor) { const [k, i] = d.lapor.split(":"); if (BY[k]) bukaLapor(konteksSoal(BY[k], Number(i))); return; }
     if (d.buka) { st.bukaKunci = d.buka; simpan(); render(); return; }
     if (d.o !== undefined) { const v = Number(d.o); jawab(v); return; }
     if (d.sa !== undefined) {
@@ -326,6 +333,7 @@ export function mulai(app, paket, opsi = {}) {
   if (kbAktif) document.removeEventListener("keydown", kbAktif);
   document.addEventListener("keydown", (kbAktif = (ev) => {
     if (st.view !== "run" || !st.aktif || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    if (ev.target.closest && ev.target.closest("input,textarea,select,dialog")) return;
     const s = BY[st.aktif.kode], k = ev.key.toUpperCase();
     let j = HURUF.indexOf(k); if (j < 0 && /^[1-6]$/.test(k)) j = Number(k) - 1;
     const maks = s.jenis === "vm" ? 6 : 5;
