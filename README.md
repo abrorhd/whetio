@@ -15,6 +15,8 @@ Program pertama: **Siap Psikotes** (psikotes UPKP Kemenkeu 2026) di `/psikotes/`
 | `/psikotes/latihan/` | Latihan bebas tanpa batas: pilih subtes, jumlah soal, tempo 150/100/80% |
 | `/psikotes/metode/` | Metode belajar, teknik per subtes, panduan kepribadian, rencana harian sampai hari H |
 | `/tip/` | Tip ke Admin buat beli kopi (GoPay) |
+| `/akun/` | Daftar/masuk (email + password, verifikasi kode email), sinkron progres, keluar, hapus akun |
+| `/privasi/` | Kebijakan privasi |
 
 ## Susunan paket simulasi penuh
 
@@ -56,6 +58,12 @@ Generator memakai benih tanggal, jadi paket sebuah tanggal selalu sama. Kunci pi
 ```
 
 30 SA (sinonim dan antonim masing-masing ≥12) + 25 PK (format L dan B masing-masing ≥10).
+
+## Akun & database
+
+- Neon (lewat Vercel Marketplace, region Singapura). Login memakai Neon Managed Better Auth; proxy `api/auth-proxy.js` membuat cookie sesi menjadi milik domain situs.
+- `api/progres.js` menyimpan progres per pengguna (`profil`, `hasil` per paket×subtes, `latihan`). Progres tetap utama di browser; bila masuk, otomatis dikirim setiap subtes selesai dan ditarik saat membuka beranda/paket.
+- Akses tabel hanya lewat fungsi server yang memeriksa sesi; `DATABASE_URL` tidak pernah dikirim ke browser.
 
 ## Deploy
 

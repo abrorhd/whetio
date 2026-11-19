@@ -113,6 +113,8 @@ app.addEventListener("click", async (ev) => {
 
 (async () => {
   render();
+  const adaSalinan = !!(A.akun() && A.akun().sinkron);
   v.user = await A.sesi();
+  if (v.user && !adaSalinan) return setelahMasuk(); // perangkat baru dengan sesi aktif: tarik progres otomatis
   set({ layar: v.user ? "profil" : "masuk" });
 })();
