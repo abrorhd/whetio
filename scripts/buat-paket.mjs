@@ -40,7 +40,7 @@ function verbalPK(n) {
     const q = s.f === "L"
       ? `<p class="kelompok">${s.q.map(esc).join(", ")}, …</p><p class="tanya">Kata yang paling tepat melengkapi kelompok di atas adalah …</p>`
       : `<p class="tanya">Manakah kata yang <b>paling berbeda</b> dari kelompoknya?</p>`;
-    return { q, o: o.map(esc), k, e: esc(s.e) + ` <span class="kel">Kelompok: ${esc(s.g)}.</span>`, sid: sidikPK(s) };
+    return { q, o: o.map(esc), k, e: esc(s.e) + ` <span class="kel">Kelompok: ${esc(s.g)}.</span>`, sid: sidikPK(s), g: s.g, f: s.f };
   });
 }
 function kepribadianPD(n) {
