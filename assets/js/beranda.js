@@ -2,7 +2,7 @@
 import { SUBTES, KODE } from "./gen/index.js";
 import { kepalaSitus, KUNCI_RINGKAS } from "./kuis.js";
 import { pelatuk } from "./merek.js";
-import { tarik } from "./sinkron.js";
+import { tarik, akun } from "./sinkron.js";
 import { PILIHAN_TGL, tglUjian, setTglUjian, sisaHari, fase, teksTgl } from "./rencana.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -16,6 +16,7 @@ function hero() {
   const hitung = t == null ? "Pilih tanggal psikotes Anda:" : h > 0 ? `H-${h} menuju psikotes · ${teksTgl(t)}` : h === 0 ? "Hari ini psikotes. Tenang dan tajam!" : `Psikotes ${teksTgl(t)} sudah lewat`;
   return `<section class="hero"><div><span class="slogan">Asah sedikit, tajam tiap hari.</span><h1>Siap Psikotes</h1>
     <p class="lead">Simulasi penuh psikotes UPKP setiap pagi — 11 subtes, jumlah soal dan waktu seperti aslinya — plus latihan bebas tanpa batas untuk mengejar tempo.</p>
+    ${akun() ? "" : '<div class="panel" style="margin:0 0 12px;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:180px">Simpan progres di akun agar bisa dilanjutkan di perangkat lain.</span><a class="btn pri kecil" href="/akun/">Masuk / Daftar</a></div>'}
     <div class="hitung" id="hitung">${hitung}</div>
     <div class="tgl-uji" role="group" aria-label="Tanggal psikotes">${PILIHAN_TGL.map(([v, l]) => `<button class="chip" data-tgl="${v}" aria-pressed="${t === v}">${l}</button>`).join("")}</div>
     ${f ? `<div class="panel" style="margin-top:6px"><b>${esc(f.judul)}</b><ul style="margin:6px 0 0;padding-left:18px">${f.tugas.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><a class="hint" href="/psikotes/metode/">Lihat rencana lengkap &rarr;</a></div>` : ""}
