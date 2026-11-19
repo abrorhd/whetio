@@ -30,13 +30,13 @@ document.getElementById("app").innerHTML = kepalaSitus("") + `<main class="wrap"
   <span class="slogan">Asah sedikit, tajam tiap hari.</span>
   <p class="lead" style="margin-top:14px">Seperti batu asah: gesekan kecil yang rutin membuat pisau tetap tajam. Whetio memberi latihan ujian singkat setiap hari — terukur, berwaktu, dan langsung kelihatan bagian mana yang masih tumpul.</p>
   <div class="cta"><a class="btn spark" href="/psikotes/">Buka Siap Psikotes</a>${a ? `<a class="btn" href="/akun/">Akun saya</a>` : `<a class="btn pri" href="/akun/">Masuk / Daftar</a>`}<a class="btn" href="/psikotes/metode/">Metode belajar</a></div>
-  ${a ? `<p class="hint" style="margin-top:10px">Masuk sebagai <b>${a.email}</b> · progres tersinkron.</p>` : `<p class="hint" style="margin-top:10px">Buat akun gratis agar progres tersimpan dan bisa dilanjutkan di HP atau laptop lain.</p>`}
-</div>${pelatuk("patuk")}</section>
+  ${a ? `<p class="hint" style="margin-top:10px">Masuk sebagai <b>${a.email}</b> · progres tersinkron.</p>` : `<p class="hint" style="margin-top:10px">Latihan gratis tanpa akun (terbatas). Masuk untuk menyimpan progres belajar psikotes dan membuka semua fitur.</p>`}
+</div>${pelatuk("ramah", "anim-masuk")}</section>
 <h2 style="font-size:18px;margin:10px 0">Program</h2>
 <div class="kartu-grid">
   <a class="kartu" href="/psikotes/"><span class="tag spark">${hit}</span><b>Siap Psikotes UPKP</b><p>Simulasi penuh 11 subtes tiap pagi, latihan bebas tanpa batas, dan rencana belajar sampai hari H.</p></a>
   <a class="kartu" href="/psikotes/latihan/"><span class="tag">tanpa batas</span><b>Latihan bebas</b><p>Pilih subtes, jumlah soal, dan tempo. Soal baru setiap kali mulai.</p></a>
-  <a class="kartu" href="/akun/"><span class="tag">${a ? "masuk ✓" : "gratis"}</span><b>${a ? "Akun saya" : "Masuk / Daftar"}</b><p>Simpan progres latihan di akun dengan email dan password, lalu lanjutkan di perangkat mana pun.</p></a>
+  <a class="kartu" href="/akun/"><span class="tag">${a ? "masuk ✓" : "gratis"}</span><b>${a ? "Akun saya" : "Masuk / Daftar"}</b><p>Akun gratis (email + password) untuk menyimpan progres, membuka arsip paket, dan latihan tanpa batas.</p></a>
   <a class="kartu" href="/tip/"><span class="tag o">☕</span><b>Tip ke Admin buat beli kopi</b><p>Kalau Whetio membantu, traktir admin secangkir kopi lewat GoPay.</p></a>
 </div>
 <div class="panel"><h2>Kenapa pelatuk?</h2><p style="margin:0">Burung pelatuk mematuk dengan gerakan pendek yang rutin, cepat, dan tepat sasaran — persis cara Whetio mengajak Anda berlatih: sedikit, setiap hari, fokus pada titik yang perlu diasah.</p></div>

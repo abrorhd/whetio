@@ -6,6 +6,7 @@ import * as A from "./sinkron.js";
 
 const app = document.getElementById("app");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+const lanjut = (() => { const x = new URLSearchParams(location.search).get("lanjut") || ""; return /^\/(?!\/)[\w\-./?=&%]*$/.test(x) && !x.startsWith("/akun") ? x : ""; })();
 let v = { layar: "muat", email: "", pesan: "", galat: "", sibuk: false, user: null };
 
 const PESAN_GALAT = [
@@ -19,7 +20,7 @@ const PESAN_GALAT = [
 const terjemah = (e) => { const m = String((e && (e.kode || "")) + " " + ((e && e.message) || "")); for (const [r, t] of PESAN_GALAT) if (r.test(m)) return t; return (e && e.message) || "Terjadi kesalahan. Coba lagi."; };
 
 function form(isi, tombol, aksi) {
-  return `<form data-aksi="${aksi}" class="panel" style="max-width:440px;margin:14px auto">${isi}
+  return `<form data-aksi="${aksi}" class="panel" style="max-width:440px;margin:14px auto">${pelatuk(v.galat ? "marah" : "fokus", "akun-pl")}${isi}
     ${v.galat ? `<p class="no-t" role="alert">${esc(v.galat)}</p>` : ""}${v.pesan ? `<p class="ok-t">${esc(v.pesan)}</p>` : ""}
     <button class="btn pri" type="submit" style="width:100%;margin-top:6px"${v.sibuk ? " disabled" : ""}>${v.sibuk ? "Memproses…" : tombol}</button></form>`;
 }
@@ -43,16 +44,17 @@ function layar() {
     fld("password", "Password baru (minimal 8 karakter)", "password", 'autocomplete="new-password" required minlength="8"'), "Simpan password baru", "reset");
   // profil
   const a = A.akun() || {};
-  return `<section class="panel" style="max-width:520px;margin:14px auto;text-align:center">${pelatuk("senang")}
+  return `<section class="panel" style="max-width:520px;margin:14px auto;text-align:center">${pelatuk("ramah", "akun-pl anim-masuk")}
     <h2 style="margin:4px 0">${esc(v.user && v.user.name ? v.user.name : "Akun Whetio")}</h2><p class="hint" style="font-size:14px;margin:0">${esc(a.email || (v.user && v.user.email) || "")}</p>
     <p style="margin:12px 0 4px">${a.sinkron ? `Sinkron terakhir: <b>${new Date(a.sinkron).toLocaleString("id-ID")}</b>` : "Belum pernah sinkron."}</p>
     ${v.pesan ? `<p class="ok-t">${esc(v.pesan)}</p>` : ""}${v.galat ? `<p class="no-t">${esc(v.galat)}</p>` : ""}
-    <div class="cta" style="justify-content:center;margin-top:12px"><button class="btn pri" data-aksi-link="sinkron"${v.sibuk ? " disabled" : ""}>Sinkronkan sekarang</button><a class="btn" href="/psikotes/">Ke Siap Psikotes</a><button class="btn" data-aksi-link="keluar">Keluar</button></div>
+    <div class="cta" style="justify-content:center;margin-top:12px"><button class="btn pri" data-aksi-link="sinkron"${v.sibuk ? " disabled" : ""}>Sinkronkan sekarang</button><a class="btn" href="${esc(lanjut || "/psikotes/")}">Ke Siap Psikotes</a><button class="btn" data-aksi-link="keluar">Keluar</button></div>
     <p class="hint" style="margin-top:14px">Progres otomatis tersimpan ke akun setiap kali satu subtes selesai, dan diambil lagi saat Anda membuka situs di perangkat lain.</p></section>
     <section class="panel" style="max-width:520px;margin:14px auto"><h2>Hapus akun</h2><p class="hint" style="font-size:13.5px">Menghapus semua progres yang tersimpan di server beserta akun Anda. Progres di browser ini tidak ikut terhapus.</p><button class="btn kecil" data-aksi-link="hapus">Hapus akun &amp; data</button></section>`;
 }
 function render() {
-  app.innerHTML = kepalaSitus("akun") + `<main class="wrap"><div class="pk-head" style="text-align:center"><h1>Akun</h1><div class="sub">Simpan progres latihan dan lanjutkan di perangkat mana pun.</div></div>${layar()}</main>` + kaki();
+  const ajak = lanjut && v.layar !== "profil" ? `<p class="panel" style="max-width:440px;margin:10px auto 0;text-align:center"><b>Silakan masuk untuk menyimpan progres belajar psikotes.</b><br><span class="hint">Belum punya akun? Pilih tab Daftar — gratis.</span></p>` : "";
+  app.innerHTML = kepalaSitus("akun") + `<main class="wrap"><div class="pk-head" style="text-align:center"><h1>Akun</h1><div class="sub">Akun gratis untuk menyimpan progres, membuka arsip paket, dan latihan tanpa batas di semua perangkat.</div></div>${ajak}${layar()}</main>` + kaki();
   const f = app.querySelector("form input"); if (f && v.layar !== "profil") f.focus();
 }
 function set(o) { Object.assign(v, o); render(); }
@@ -63,6 +65,7 @@ async function setelahMasuk() {
   set({ layar: "profil", sibuk: true, galat: "", pesan: "Menyinkronkan progres…" });
   try { const r = await A.sinkronPenuh(); set({ sibuk: false, pesan: `Sinkron selesai${r.berubah ? ` — ${r.berubah} hasil subtes diambil dari akun` : ""}.` }); }
   catch (e) { set({ sibuk: false, pesan: "", galat: "Masuk berhasil, tetapi sinkron gagal: " + terjemah(e) }); }
+  if (lanjut) location.replace(lanjut);
 }
 
 app.addEventListener("submit", async (ev) => {
@@ -102,7 +105,7 @@ app.addEventListener("click", async (ev) => {
   const a = t.dataset.aksiLink;
   if (a === "kirim-ulang") { try { await A.kirimKodeVerifikasi(v.email); set({ pesan: "Kode baru sudah dikirim.", galat: "" }); } catch (e) { set({ galat: terjemah(e) }); } }
   if (a === "sinkron") { set({ sibuk: true, galat: "", pesan: "Menyinkronkan…" }); try { const r = await A.sinkronPenuh(); set({ sibuk: false, pesan: `Sinkron selesai${r.berubah ? ` — ${r.berubah} hasil diambil` : ""}.` }); } catch (e) { set({ sibuk: false, pesan: "", galat: terjemah(e) }); } }
-  if (a === "keluar") { await A.keluar(); set({ layar: "masuk", user: null, pesan: "Anda sudah keluar. Progres tetap tersimpan di browser ini.", galat: "" }); }
+  if (a === "keluar") { await A.keluar(); set({ layar: "masuk", user: null, pesan: "Anda sudah keluar. Masuk lagi untuk melanjutkan latihan.", galat: "" }); }
   if (a === "hapus") {
     if (t.dataset.yakin !== "1") { t.dataset.yakin = "1"; t.textContent = "Yakin? Klik sekali lagi — tidak bisa dibatalkan"; return; }
     set({ sibuk: true });
@@ -116,5 +119,6 @@ app.addEventListener("click", async (ev) => {
   const adaSalinan = !!(A.akun() && A.akun().sinkron);
   v.user = await A.sesi();
   if (v.user && !adaSalinan) return setelahMasuk(); // perangkat baru dengan sesi aktif: tarik progres otomatis
+  if (v.user && lanjut) return location.replace(lanjut);
   set({ layar: v.user ? "profil" : "masuk" });
 })();

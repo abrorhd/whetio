@@ -27,9 +27,13 @@ a{color:var(--accent)} button{font:inherit;color:inherit}
 .topbar .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:wrap;padding-block:6px}
 .merek{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-weight:800;font-size:19px;letter-spacing:-.02em}
 .merek .logo{color:var(--accent)}
-.topbar nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-.topbar nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:13.5px;padding:6px 10px;border-radius:999px}
-.topbar nav a[aria-current="page"],.topbar nav a:hover{background:var(--accent-soft);color:var(--accent)}
+.topbar .menu{display:flex;gap:2px;margin-left:auto}
+.topbar .menu a{text-decoration:none;color:var(--muted);font-weight:600;font-size:13.5px;padding:7px 11px;border-radius:999px;white-space:nowrap}
+.topbar .menu a[aria-current="page"],.topbar .menu a:hover{background:var(--accent-soft);color:var(--accent)}
+.akun-pil{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:800;font-size:13.5px;padding:7px 14px;border-radius:999px;background:var(--accent);color:var(--accent-ink);white-space:nowrap}
+.akun-pil.masuk{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:4px 12px 4px 4px}
+.akun-pil .avatar{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--crest);color:#fff;font-size:13px}
+.akun-pil[aria-current="page"]{outline:2px solid var(--spark);outline-offset:1px}
 
 /* Tombol & chip */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:9px 15px;font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);min-height:42px}
@@ -83,14 +87,14 @@ a{color:var(--accent)} button{font:inherit;color:inherit}
 .st .aksi{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 
 /* Runner */
-.run-top{position:sticky;top:0;z-index:4;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line)}
+.run-top{position:sticky;top:0;z-index:4;background:var(--bg);padding:12px 0 10px;box-shadow:0 1px 0 var(--line)}
 .run-top .r1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .run-top .nm{font-weight:800;font-size:15px;flex:1;min-width:140px}
 .jam{font-family:var(--mono);font-weight:700;font-size:15px;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
 .jam.kritis{background:var(--nos);color:var(--no);border-color:var(--no)}
-.bar-waktu{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:8px}
+.bar-waktu{height:4px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:5px}
 .bar-waktu i{display:block;height:100%;width:100%;background:var(--spark);transform-origin:left;transition:transform .2s linear}
-.bar-prog{height:4px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:6px}
+.bar-prog{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:10px}
 .bar-prog i{display:block;height:100%;background:var(--accent)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:12px}
 .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:12px}
@@ -203,8 +207,79 @@ footer.situs a{color:var(--muted)}
 .uap path{animation:uap 2.4s ease-in-out infinite}
 @keyframes uap{0%{opacity:0;transform:translateY(4px)}50%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
 
+
+/* Si Pelatuk — ekspresi & gerak halus */
+svg.pelatuk{overflow:visible;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pelatuk .pl-tubuh,.pelatuk .pl-kepala,.pelatuk .pl-jambul,.pelatuk .pl-jambul-marah,.pelatuk .pl-sayap,.pelatuk .m-kelopak,.pelatuk .pl-uap g{transform-box:view-box}
+.pelatuk .pl-tubuh{transform-origin:112px 196px;animation:pl-napas 3.6s ease-in-out infinite}
+.pelatuk .pl-kepala{transform-origin:122px 92px;transition:transform .35s ease}
+.pelatuk .pl-jambul{transform-origin:116px 48px;animation:pl-goyang 3.2s ease-in-out infinite}
+.pelatuk .pl-sayap{transform-origin:86px 104px;transition:transform .3s ease}
+.pelatuk .m-kelopak{transform-origin:123px 53px;transform:scaleY(0);animation:pl-kedip 5.2s infinite;animation-delay:var(--kd,0s)}
+.pelatuk .pl-pipi{fill:#F28B9A;opacity:0;transition:opacity .3s,fill .3s}
+.pelatuk .m-senyum,.pelatuk .m-marah,.pelatuk .m-kilau,.pelatuk .pl-alis,.pelatuk .pl-jambul-marah,.pelatuk .pl-uap,.pelatuk .pl-percik,.pelatuk .pl-kopi{display:none}
+/* senyum */
+.pelatuk[data-mood=senyum] .m-buka,.pelatuk[data-mood=senyum] .m-kelopak{display:none}
+.pelatuk[data-mood=senyum] .m-senyum{display:inline}
+.pelatuk[data-mood=senyum] .pl-pipi{opacity:.6}
+svg.pelatuk[data-mood=senyum]{animation:pl-lompat .55s ease-out 2}
+/* ramah */
+.pelatuk[data-mood=ramah] .m-kilau{display:inline}
+.pelatuk[data-mood=ramah] .pl-pipi{opacity:.45}
+.pelatuk[data-mood=ramah] .pl-kepala{transform:rotate(-7deg)}
+.pelatuk[data-mood=ramah] .pl-sayap{animation:pl-lambai .45s ease-in-out 4 alternate}
+/* marah */
+.pelatuk[data-mood=marah] .m-buka,.pelatuk[data-mood=marah] .pl-jambul{display:none}
+.pelatuk[data-mood=marah] .m-marah,.pelatuk[data-mood=marah] .pl-alis,.pelatuk[data-mood=marah] .pl-jambul-marah,.pelatuk[data-mood=marah] .pl-uap{display:inline}
+.pelatuk[data-mood=marah] .pl-pipi{fill:#E0453A;opacity:.55}
+.pelatuk[data-mood=marah] .pl-kepala{animation:pl-gemetar .09s linear 8}
+.pelatuk[data-mood=marah] .pl-uap .u1{animation:pl-uap 1.8s ease-out infinite}
+.pelatuk[data-mood=marah] .pl-uap .u2{animation:pl-uap 1.8s ease-out .9s infinite}
+/* patuk & ngopi */
+.pelatuk[data-mood=patuk] .pl-percik{display:inline;animation:pl-percik 1.6s infinite}
+.pelatuk[data-mood=patuk] .pl-kepala{animation:pl-patuk-ulang 1.6s ease-in-out infinite}
+.pelatuk.anim-patuk .pl-kepala{animation:pl-patuk .3s ease-in-out 3}
+.pelatuk.anim-patuk .pl-percik{display:inline;animation:pl-percik .3s 3}
+.pelatuk[data-mood=ngopi] .pl-kopi{display:inline}
+svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
+@keyframes pl-napas{50%{transform:scale(1.012,1.028)}}
+@keyframes pl-goyang{50%{transform:rotate(-4deg)}}
+@keyframes pl-kedip{0%,93%,100%{transform:scaleY(0)}95%,97%{transform:scaleY(1)}}
+@keyframes pl-lompat{40%{transform:translateY(-7%)}70%{transform:translateY(0)}85%{transform:translateY(-2%)}}
+@keyframes pl-lambai{from{transform:rotate(0)}to{transform:rotate(-24deg)}}
+@keyframes pl-gemetar{25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+@keyframes pl-uap{0%{opacity:0;transform:translateY(6px) scale(.7)}30%{opacity:.9}100%{opacity:0;transform:translateY(-14px) scale(1.15)}}
+@keyframes pl-patuk{50%{transform:translateX(7px) rotate(5deg)}}
+@keyframes pl-patuk-ulang{0%,40%,100%{transform:none}8%,24%{transform:translateX(7px) rotate(5deg)}16%,32%{transform:none}}
+@keyframes pl-percik{0%,100%{opacity:0}10%,30%{opacity:1}}
+@keyframes pl-masuk{from{opacity:0;transform:translateY(14px) scale(.94)}}
+.run-top .pelatuk{width:30px;height:30px;flex:none}
+.fb:has(> svg.pelatuk){display:grid;grid-template-columns:58px 1fr;column-gap:12px;align-items:start}
+.fb > svg.pelatuk{grid-row:1 / span 3;width:58px;height:58px;margin-top:-2px}
+.fb:has(> svg.pelatuk) > :not(svg){grid-column:2}
+.akun-pl{display:block;width:84px;height:84px;margin:0 auto 4px}
+.hasil-atas{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px}
+.hasil .hasil-atas .pelatuk{width:110px;height:110px;margin:0;flex:none}
+.gelembung{position:relative;background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700;max-width:260px;text-align:left;line-height:1.4}
+.gelembung::before{content:"";position:absolute;left:-8px;top:50%;width:14px;height:14px;background:inherit;border-left:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.ajak-masuk{display:flex;align-items:center;gap:12px;background:var(--spark-soft);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:14px 0}
+.ajak-masuk .pelatuk{width:46px;height:46px;flex:none}
+.ajak-masuk .isi{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;line-height:1.4}
+.ajak-masuk .isi span{font-size:13px;color:var(--muted)}
+.kunci-arsip{max-width:560px;margin:28px auto;text-align:center}
+.kunci-arsip h1{font-size:21px;margin:6px 0 8px}
+.pk.terkunci{opacity:.78}
+.chip[disabled]{opacity:.5;cursor:not-allowed}
+@media (pointer:coarse){.hint-kb{display:none}}
+
 @media (max-width:640px){
-  .topbar nav{width:100%;margin-left:-8px;flex-wrap:nowrap;overflow-x:auto;gap:0}.topbar nav a{white-space:nowrap;font-size:13px;padding:6px 9px}
+  .topbar .wrap{justify-content:space-between}
+  .topbar .menu{order:3;width:100%;margin:0 0 0 -10px;overflow-x:auto;scrollbar-width:none}.topbar .menu::-webkit-scrollbar{display:none}
+  .topbar .menu a{font-size:13px;padding:6px 10px}
+  .ajak-masuk{flex-wrap:wrap}.ajak-masuk .btn{width:100%}
+  .hasil-atas{flex-direction:column}.gelembung::before{left:50%;top:-8px;transform:translateX(-50%) rotate(135deg)}
+  .run-top .nm{min-width:0;font-size:14px}
+  .panel .tgl-uji,.panel .cta{justify-content:flex-start}.panel .cta .btn{flex:1}
   .hero{grid-template-columns:1fr;text-align:center;padding-top:18px}.hero .pelatuk{max-width:180px;order:-1}.hero p.lead{margin-inline:auto}.cta,.tgl-uji{justify-content:center}
   .opts.gambar{grid-template-columns:repeat(3,minmax(0,1fr))}
   .opts.likert{grid-template-columns:1fr}

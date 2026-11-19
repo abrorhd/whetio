@@ -3,6 +3,7 @@ import { SUBTES, KODE } from "./gen/index.js";
 import { kepalaSitus, KUNCI_RINGKAS } from "./kuis.js";
 import { pelatuk } from "./merek.js";
 import { tarik, akun } from "./sinkron.js";
+import { tamu, ajakMasuk } from "./gerbang.js";
 import { PILIHAN_TGL, tglUjian, setTglUjian, sisaHari, fase, teksTgl } from "./rencana.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -16,11 +17,10 @@ function hero() {
   const hitung = t == null ? "Pilih tanggal psikotes Anda:" : h > 0 ? `H-${h} menuju psikotes · ${teksTgl(t)}` : h === 0 ? "Hari ini psikotes. Tenang dan tajam!" : `Psikotes ${teksTgl(t)} sudah lewat`;
   return `<section class="hero"><div><span class="slogan">Asah sedikit, tajam tiap hari.</span><h1>Siap Psikotes</h1>
     <p class="lead">Simulasi penuh psikotes UPKP setiap pagi — 11 subtes, jumlah soal dan waktu seperti aslinya — plus latihan bebas tanpa batas untuk mengejar tempo.</p>
-    ${akun() ? "" : '<div class="panel" style="margin:0 0 12px;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:180px">Simpan progres di akun agar bisa dilanjutkan di perangkat lain.</span><a class="btn pri kecil" href="/akun/">Masuk / Daftar</a></div>'}
     <div class="hitung" id="hitung">${hitung}</div>
     <div class="tgl-uji" role="group" aria-label="Tanggal psikotes">${PILIHAN_TGL.map(([v, l]) => `<button class="chip" data-tgl="${v}" aria-pressed="${t === v}">${l}</button>`).join("")}</div>
     ${f ? `<div class="panel" style="margin-top:6px"><b>${esc(f.judul)}</b><ul style="margin:6px 0 0;padding-left:18px">${f.tugas.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><a class="hint" href="/psikotes/metode/">Lihat rencana lengkap &rarr;</a></div>` : ""}
-    </div>${pelatuk("patuk")}</section>`;
+    </div>${pelatuk("ramah", "anim-masuk")}</section>`;
 }
 
 function statusPaket(p) {
@@ -52,7 +52,7 @@ function fokus(per) {
 
 function render(list) {
   const per = ringkasPerSubtes(), adaData = Object.keys(per).length > 0;
-  let h = kepalaSitus("psikotes") + '<main class="wrap">' + hero();
+  let h = kepalaSitus("psikotes") + '<main class="wrap">' + hero() + (tamu() ? ajakMasuk("Silakan masuk untuk menyimpan progres belajar psikotes.", "Tanpa akun Anda tetap bisa latihan gratis: paket hari ini dan 3 sesi latihan bebas per hari. Masuk untuk membuka arsip paket, latihan tanpa batas, dan progres di semua perangkat.") : "");
   const kini = list[0];
   if (kini) {
     const s = statusPaket(kini);
@@ -70,8 +70,9 @@ function render(list) {
       return `<tr><td>${s.no}. ${esc(s.nama)}<div class="meter"><i style="width:${p}%"></i></div></td><td class="n">${p}%${arah}</td><td class="n${x.dt > s.target ? " no-t" : " ok-t"}">${(x.dt || 0).toFixed(1)}</td><td class="n">${s.target}</td></tr>`;
     }).join("")}</tbody></table><p class="hint">Dari simulasi dan latihan bebas di browser ini. Merah = lebih lambat dari target tempo.</p></div>`;
   }
-  h += `<h2 style="font-size:18px;margin:22px 0 10px">Semua paket</h2><div class="pk-list">${list.map((p) => {
+  h += `<h2 style="font-size:18px;margin:22px 0 10px">Semua paket</h2><div class="pk-list">${list.map((p, i) => {
     const s = statusPaket(p), r = (baca(KUNCI_RINGKAS) || {})[p.id] || {};
+    if (i > 0 && tamu()) return `<a class="pk terkunci" href="/akun/?lanjut=${encodeURIComponent("/psikotes/paket/" + p.id + "/")}"><span class="t">${esc(p.judul)}</span><span class="mono">🔒</span><span class="s">Masuk untuk membuka arsip paket</span></a>`;
     let b = 0, n = 0; Object.values(r).forEach((x) => { if (x.b != null) { b += x.b; n += x.n; } });
     return `<a class="pk" href="/psikotes/paket/${p.id}/"><span class="t">${esc(p.judul)}</span><span class="mono">${s.sel}/${s.total}</span><span class="s">${p.jumlah} butir${n ? ` · kognitif ${b}/${n} benar (${pct(b, n)}%)` : ""}</span><span class="bar-prog"><i style="width:${pct(s.sel, s.total)}%"></i></span></a>`;
   }).join("") || '<p class="hint">Belum ada paket.</p>'}</div>

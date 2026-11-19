@@ -1,6 +1,6 @@
 // Mesin simulasi & latihan psikotes Whetio. Dipakai halaman paket (/psikotes/paket/<tgl>/) dan latihan bebas.
 import { KODE as META } from "./gen/index.js";
-import { logo, pelatuk } from "./merek.js";
+import { logo, pelatuk, ubahMood } from "./merek.js";
 import { akun, kirimHasil } from "./sinkron.js";
 
 const SKALA = ["Sangat tidak menggambarkan", "Tidak menggambarkan", "Agak menggambarkan", "Menggambarkan", "Sangat menggambarkan"];
@@ -17,8 +17,11 @@ function tulis(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 let kbAktif = null; // satu pendengar papan ketik per halaman
 
 export function kepalaSitus(aktif) {
-  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ["/tip/", "Tip", "tip"], ["/akun/", akun() ? "Akun ✓" : "Masuk", "akun"]];
-  return `<header class="topbar"><div class="wrap"><a class="merek" href="/">${logo(34)}<span>Whetio</span></a><nav>${nav.map(([h, t, k]) => `<a href="${h}"${k === aktif ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div></header>`;
+  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ["/tip/", "Tip kopi", "tip"]];
+  const a = akun(), inisial = a && a.email ? esc(a.email[0].toUpperCase()) : "";
+  const tombol = a ? `<a class="akun-pil masuk" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""} title="${esc(a.email)}"><span class="avatar">${inisial}</span>Akun</a>`
+    : `<a class="akun-pil" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""}>Masuk</a>`;
+  return `<header class="topbar"><div class="wrap"><a class="merek" href="/">${logo(34)}<span>Whetio</span></a><nav class="menu">${nav.map(([h, t, k]) => `<a href="${h}"${k === aktif ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav>${tombol}</div></header>`;
 }
 
 export function mulai(app, paket, opsi = {}) {
@@ -108,6 +111,7 @@ export function mulai(app, paket, opsi = {}) {
     if (s.batas && now - a.soal >= s.batas * 1000) { st.hasil[a.kode].dt[a.i] = s.batas; return berikut(); }
     const jam = app.querySelector("#jam"), bar = app.querySelector("#bar-soal i");
     if (jam) { jam.textContent = jamStr(a.akhir - now); jam.classList.toggle("kritis", a.akhir - now < 60000); }
+    ubahMood(app.querySelector(".run-top svg.pelatuk"), a.akhir - now < 60000 ? "marah" : "fokus");
     if (bar && s.batas) bar.style.transform = `scaleX(${Math.max(0, 1 - (now - a.soal) / (s.batas * 1000))})`;
   }
 
@@ -128,8 +132,9 @@ export function mulai(app, paket, opsi = {}) {
   function kepalaPaket() {
     return `<div class="pk-head">${opsi.kembali ? `<a class="hint" href="${opsi.kembali.href}">&larr; ${esc(opsi.kembali.teks)}</a>` : ""}<h1>${esc(paket.judul)}</h1><div class="sub">${esc(paket.subjudul || `${SUB.length} subtes · ${paket.jumlah} butir · format & waktu seperti psikotes UPKP`)}</div></div>`;
   }
+  const ajak = () => (typeof opsi.ajak === "function" ? opsi.ajak() : opsi.ajak || "");
   function vDaftar() {
-    let h = kepalaPaket();
+    let h = kepalaPaket() + ajak();
     if (SUB.length > 1) h += `<div class="tabs" role="tablist">${[["subtes", "Subtes"], ["kunci", "Kunci"], ["rekap", "Rekap"]].map(([k, t]) => `<button role="tab" data-tab="${k}" aria-selected="${st.tab === k}">${t}</button>`).join("")}</div>`;
     if (st.tab === "kunci" && SUB.length > 1) return h + vKunci();
     if (st.tab === "rekap" && SUB.length > 1) return h + vRekap();
@@ -161,7 +166,7 @@ export function mulai(app, paket, opsi = {}) {
   function vRun() {
     const a = st.aktif, s = BY[a.kode], q = s.soal[a.i], h = st.hasil[a.kode], jw = h.jw[a.i];
     const lat = st.mode === "latihan", tampil = lat && jw != null && s.jenis !== "likert";
-    let out = `<div class="run-top"><div class="r1"><span class="nm">${s.no}. ${esc(s.nama)}</span><span class="qno">${a.i + 1}/${s.n}</span>${lat ? "" : `<span class="jam" id="jam">${jamStr(a.akhir - Date.now())}</span>`}
+    let out = `<div class="run-top"><div class="r1"><span class="nm">${s.no}. ${esc(s.nama)}</span><span class="qno">${a.i + 1}/${s.n}</span>${lat ? "" : `${pelatuk("fokus", "mini")}<span class="jam" id="jam">${jamStr(a.akhir - Date.now())}</span>`}
       <button class="btn kecil" data-act="akhiri">${lat ? "Selesai" : "Akhiri"}</button></div>
       <div class="bar-prog"><i style="width:${pct(a.i, s.n)}%"></i></div>${!lat && s.batas ? '<div class="bar-waktu" id="bar-soal"><i></i></div>' : ""}</div>`;
     out += `<article class="card" aria-live="polite">`;
@@ -179,14 +184,14 @@ export function mulai(app, paket, opsi = {}) {
       const gbr = q.o.some((o) => o.includes("<svg"));
       out += `<div class="stem">${q.q}</div><ol class="opts${gbr ? " gambar" : ""}">${q.o.map((o, j) => `<li><button class="opt${tampil ? (j === q.k ? " ok" : j === jw ? " no" : "") : ""}" data-o="${j}" aria-pressed="${jw === j}"${tampil ? " disabled" : ""}><span class="L">${HURUF[j]}</span><span>${o}</span></button></li>`).join("")}</ol>`;
     }
-    if (tampil) out += umpan(s, q, jw, a.i);
+    if (tampil) out += umpan(s, q, jw, a.i, true);
     out += "</article>";
     if (lat && s.jenis !== "likert") {
       out += `<div class="nav"><button class="btn" data-go="${a.i - 1}"${a.i ? "" : " disabled"}>&larr; Sebelumnya</button><button class="btn pri" data-go="${a.i + 1}">${a.i + 1 >= s.n ? "Selesai" : "Berikutnya &rarr;"}</button></div>`;
       out += `<div class="peta">${s.soal.map((qq, i) => { const x = h.jw[i]; const c = x == null ? "" : benar(s, qq, x) ? "ok" : "no"; return `<button class="${c}${i === a.i ? " kini" : ""}" data-go="${i}">${i + 1}</button>`; }).join("")}</div>`;
     }
     if (s.jenis === "likert") out += `<div class="nav"><button class="btn" data-go="${a.i - 1}"${a.i ? "" : " disabled"}>&larr; Sebelumnya</button><span class="hint" style="flex:2;align-self:center">Bisa kembali, tetapi sebaiknya jangan mengubah jawaban.</span></div>`;
-    out += `<p class="hint">Papan ketik: ${s.jenis === "vm" ? "A–F atau 1–6" : "A–E atau 1–5"}${lat ? ", panah kanan untuk lanjut" : ""}.</p>`;
+    out += `<p class="hint hint-kb">Papan ketik: ${s.jenis === "vm" ? "A–F atau 1–6" : "A–E atau 1–5"}${lat ? ", panah kanan untuk lanjut" : ""}.</p>`;
     return out;
   }
   function lapor(s, q, i, jw) {
@@ -194,28 +199,32 @@ export function mulai(app, paket, opsi = {}) {
     const body = `Paket: ${paket.id} · ${s.nama} no. ${i + 1}\n\nSoal: ${polos(q.q || "")}\n${q.o ? "Opsi: " + q.o.map((o, j) => HURUF[j] + ". " + polos(o)).join(" | ") : q.w ? "Kata: " + q.w.join(", ") : ""}\n\nKunci situs: ${kunci}\nJawaban saya: ${jw == null ? "-" : Array.isArray(jw) ? jw.map((x) => q.w[x]).join(" – ") : HURUF[jw]}\n\nAlasan saya:`;
     return `<a class="lapor" target="_blank" rel="noopener" href="${REPO_ISSUE}?title=${encodeURIComponent(`Kunci keliru? ${paket.id} ${s.kode} no ${i + 1}`)}&body=${encodeURIComponent(body.slice(0, 1800))}&labels=lapor-kunci">Kunci terasa keliru? Laporkan</a>`;
   }
-  function umpan(s, q, jw, i) {
+  function umpan(s, q, jw, i, hidup) {
     const ok = jw != null && benar(s, q, jw);
+    const pl = hidup ? pelatuk(ok ? "senyum" : "marah") : "";
     const kunci = s.jenis === "pasangan" ? `${q.k.map((k) => esc(q.w[k])).join(" – ")} (${q.r === "S" ? "sinonim" : "antonim"})` : HURUF[q.k];
     const e = s.jenis === "vm" ? `Gambar ini sama persis dengan referensi ${HURUF[q.k]}.` : q.e;
-    return `<div class="fb"><div class="v ${ok ? "ok" : "no"}">${jw == null ? "Tidak dijawab." : ok ? "Benar." : "Kurang tepat."} Kunci: ${kunci}.</div><p>${e}</p>${s.jenis === "vm" ? "" : `<p>${lapor(s, q, i, jw)}</p>`}</div>`;
+    return `<div class="fb">${pl}<div class="v ${ok ? "ok" : "no"}">${jw == null ? "Tidak dijawab." : ok ? "Benar." : "Kurang tepat."} Kunci: ${kunci}.</div><p>${e}</p>${s.jenis === "vm" ? "" : `<p>${lapor(s, q, i, jw)}</p>`}</div>`;
   }
   function vHasil() {
     const s = BY[st.kode], n = nilai(st.kode), idx = SUB.indexOf(s), lanjut = SUB.slice(idx + 1).find((x) => !(st.hasil[x.kode] && st.hasil[x.kode].selesai));
     let h = `<section class="card hasil">`;
     if (s.jenis === "likert") {
-      h += `${pelatuk("senang")}<div class="tag">Subtes ${s.no} selesai</div><h2>${esc(s.nama)}</h2>` + panelLikert(s, n);
+      const ml = n.kons == null || n.kons >= 85 ? "senyum" : "ramah";
+      h += `<div class="hasil-atas">${pelatuk(ml)}<div class="gelembung">${ml === "senyum" ? "Konsisten dan tegas. Bagus!" : "Ada jawaban yang belum konsisten. Cek rinciannya."}</div></div><div class="tag">Subtes ${s.no} selesai</div><h2>${esc(s.nama)}</h2>` + panelLikert(s, n);
     } else {
-      const mood = n.b / n.n >= 0.8 ? "senang" : "fokus";
+      const p = n.b / n.n, mood = p >= 0.8 ? "senyum" : p < 0.5 || n.k / n.n >= 0.3 ? "marah" : "ramah";
+      const kata = { senyum: "Tajam! Pertahankan.", ramah: "Lumayan — tinggal diasah sedikit lagi.", marah: n.k / n.n >= 0.3 ? "Banyak yang kosong! Ingat, tidak ada nilai minus." : "Masih tumpul. Ayo asah lagi!" }[mood];
       const vt = { cepat: ["cepat", "Tempo sudah sesuai target"], pas: ["pas", "Masih dalam batas waktu, belum secepat target"], lambat: ["lambat", "Lebih lambat dari batas — latih tempo"] }[n.vonis] || null;
-      h += `${pelatuk(mood)}<div class="tag">Subtes ${s.no} selesai · ${st.hasil[s.kode].mode === "simulasi" ? "simulasi" : "latihan"}</div><h2>${esc(s.nama)}</h2>
+      h += `<div class="hasil-atas">${pelatuk(mood)}<div class="gelembung">${kata}</div></div><div class="tag">Subtes ${s.no} selesai · ${st.hasil[s.kode].mode === "simulasi" ? "simulasi" : "latihan"}</div><h2>${esc(s.nama)}</h2>
         <div class="skor">${n.b}<span class="hint" style="font-size:20px">/${n.n}</span></div>
         <div class="stat-row" style="margin-top:12px"><div class="stat"><b>${pct(n.b, n.n)}%</b><span>ketepatan</span></div><div class="stat"><b>${n.salah}</b><span>salah</span></div><div class="stat"><b>${n.k}</b><span>kosong</span></div><div class="stat"><b>${n.dt ? n.dt.toFixed(1) : "–"}</b><span>dtk/soal (target ${s.target})</span></div></div>
-        ${vt ? `<span class="vonis ${vt[0]}">${vt[1]}</span>` : ""}${n.k ? `<p class="hint">Ingat: tidak ada nilai minus. ${n.k} soal kosong = poin yang hilang percuma.</p>` : ""}`;
+        ${vt && n.n - n.k >= n.n / 2 ? `<span class="vonis ${vt[0]}">${vt[1]}</span>` : ""}${n.k && n.k / n.n < 0.3 ? `<p class="hint">Tidak ada nilai minus — ${n.k} soal kosong berarti poin yang hilang percuma.</p>` : ""}`;
     }
     h += `<div class="nav">${s.jenis !== "likert" || n.dev.length ? `<button class="btn" data-bahas="${s.kode}">${s.jenis === "likert" ? "Rincian" : "Pembahasan"}</button>` : ""}`;
     h += st.penuh && lanjut ? `<button class="btn pri" data-intro="${lanjut.kode}">Lanjut: ${esc(lanjut.nama)} &rarr;</button>` : `<button class="btn pri" data-act="daftar">${SUB.length > 1 ? "Daftar subtes" : "Selesai"}</button>`;
-    return h + "</div></section>";
+    const aj = ajak().replace("Silakan masuk untuk menyimpan progres belajar psikotes.", "Hasil ini baru tersimpan di browser ini. Silakan masuk untuk menyimpan progres belajar psikotes.");
+    return h + "</div>" + (aj ? `<div style="margin-top:16px;text-align:left">${aj}</div>` : "") + "</section>";
   }
   function panelLikert(s, n) {
     const saran = [];
