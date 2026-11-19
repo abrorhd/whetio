@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="logo" viewBox="0 -6 64 56" width="64" height="48" role="img" aria-label="Whetio">
+  <polyline points="5,9 16,40 27,19 38,40 47,16" fill="none" stroke="#1F4E5F" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="10"/>
+  <polygon points="43.6,14.9 50.4,17.1 55,3" fill="#1F4E5F"/>
+  <g stroke="#E8891C" stroke-width="2.6" stroke-linecap="round"><line x1="57" y1="7" x2="62" y2="9"/><line x1="58" y1="1.5" x2="62.5" y2="-0.5"/><line x1="53" y1="0" x2="52.5" y2="-4"/></g>
+</svg>

@@ -1,0 +1,1169 @@
+{
+ "skala": [
+  "Sangat tidak menggambarkan",
+  "Tidak menggambarkan",
+  "Agak menggambarkan",
+  "Menggambarkan",
+  "Sangat menggambarkan"
+ ],
+ "dimensi": [
+  "Integritas",
+  "Profesionalisme",
+  "Sinergi",
+  "Pelayanan",
+  "Kesempurnaan",
+  "Kepemimpinan",
+  "Ketangguhan",
+  "Ketelitian"
+ ],
+ "PD": [
+  {
+   "id": "pd01",
+   "q": "Saya tetap jujur melaporkan kesalahan saya meskipun tidak ada yang mengetahuinya.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd02",
+   "q": "Saya menolak pemberian dari pihak yang sedang saya layani.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd03",
+   "q": "Sesekali membulatkan jam lembur ke atas adalah hal yang wajar.",
+   "d": "Integritas",
+   "r": 1
+  },
+  {
+   "id": "pd04",
+   "q": "Saya menepati janji yang sudah saya buat, sekecil apa pun.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd05",
+   "q": "Saya bersedia menunda keuntungan pribadi demi menaati aturan.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd06",
+   "q": "Memakai fasilitas kantor untuk keperluan pribadi tidak masalah selama tidak ada yang dirugikan.",
+   "d": "Integritas",
+   "r": 1
+  },
+  {
+   "id": "pd07",
+   "q": "Saya berani menolak ajakan yang melanggar aturan, meskipun datang dari atasan.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd08",
+   "q": "Apa yang saya katakan selalu sejalan dengan apa yang saya lakukan.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd09",
+   "q": "Saya menjaga kerahasiaan data yang dipercayakan kepada saya.",
+   "d": "Integritas",
+   "r": 0
+  },
+  {
+   "id": "pd10",
+   "q": "Bila aturannya kurang jelas, saya memilih tafsiran yang paling menguntungkan saya.",
+   "d": "Integritas",
+   "r": 1
+  },
+  {
+   "id": "pd11",
+   "q": "Saya menyelesaikan pekerjaan sesuai tenggat yang disepakati.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd12",
+   "q": "Saya terus memperbarui pengetahuan yang berkaitan dengan pekerjaan saya.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd13",
+   "q": "Saya bekerja sebaik mungkin walaupun tugas itu tidak dinilai.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd14",
+   "q": "Saya cenderung menunda pekerjaan yang tidak saya sukai.",
+   "d": "Profesionalisme",
+   "r": 1
+  },
+  {
+   "id": "pd15",
+   "q": "Saya memisahkan urusan pribadi dari urusan pekerjaan.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd16",
+   "q": "Saya bertanggung jawab penuh atas hasil kerja saya, termasuk bila hasilnya kurang baik.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd17",
+   "q": "Bagi saya cukup bekerja sesuai perintah tanpa perlu memahami tujuannya.",
+   "d": "Profesionalisme",
+   "r": 1
+  },
+  {
+   "id": "pd18",
+   "q": "Saya mempersiapkan bahan sebelum rapat dimulai.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd19",
+   "q": "Saya datang tepat waktu ke setiap kegiatan yang saya ikuti.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd20",
+   "q": "Saya mengakui keterbatasan kemampuan saya dan berusaha memperbaikinya.",
+   "d": "Profesionalisme",
+   "r": 0
+  },
+  {
+   "id": "pd21",
+   "q": "Saya senang bertukar ide dengan rekan untuk menyelesaikan tugas bersama.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd22",
+   "q": "Saya lebih nyaman mengerjakan semuanya sendiri daripada berbagi tugas dengan tim.",
+   "d": "Sinergi",
+   "r": 1
+  },
+  {
+   "id": "pd23",
+   "q": "Saya menghargai pendapat rekan meskipun berbeda dengan pendapat saya.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd24",
+   "q": "Saya bersedia membantu unit lain walaupun itu bukan tugas utama saya.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd25",
+   "q": "Saya membagikan informasi penting kepada rekan tanpa harus diminta.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd26",
+   "q": "Keberhasilan tim lebih penting bagi saya daripada pujian pribadi.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd27",
+   "q": "Saya enggan bekerja sama dengan rekan yang pernah berselisih dengan saya.",
+   "d": "Sinergi",
+   "r": 1
+  },
+  {
+   "id": "pd28",
+   "q": "Saya mudah membangun hubungan baik dengan orang baru di lingkungan kerja.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd29",
+   "q": "Saya mencari titik temu ketika terjadi perbedaan pendapat dalam tim.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd30",
+   "q": "Saya percaya hasil kerja bersama lebih baik daripada hasil kerja perorangan.",
+   "d": "Sinergi",
+   "r": 0
+  },
+  {
+   "id": "pd31",
+   "q": "Saya berusaha memahami kebutuhan orang yang saya layani sebelum memberi solusi.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd32",
+   "q": "Saya tetap ramah kepada pengguna layanan yang bersikap kasar.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd33",
+   "q": "Saya merasa terganggu bila harus menjelaskan hal yang sama berulang kali kepada pengguna layanan.",
+   "d": "Pelayanan",
+   "r": 1
+  },
+  {
+   "id": "pd34",
+   "q": "Saya menindaklanjuti keluhan sampai benar-benar selesai.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd35",
+   "q": "Saya memberi informasi yang jelas dan mudah dipahami kepada masyarakat.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd36",
+   "q": "Saya mendahulukan pelayanan yang cepat tanpa mengabaikan ketentuan.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd37",
+   "q": "Saya memperlakukan semua pengguna layanan secara setara.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd38",
+   "q": "Bila antrean masih panjang menjelang jam pulang, saya meminta pengguna layanan kembali besok.",
+   "d": "Pelayanan",
+   "r": 1
+  },
+  {
+   "id": "pd39",
+   "q": "Saya mencari cara agar layanan di unit saya lebih mudah diakses.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd40",
+   "q": "Saya senang bila hasil kerja saya bermanfaat langsung bagi orang lain.",
+   "d": "Pelayanan",
+   "r": 0
+  },
+  {
+   "id": "pd41",
+   "q": "Saya mencari cara kerja baru agar hasilnya lebih baik.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd42",
+   "q": "Saya terbuka terhadap perubahan sistem kerja di kantor.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd43",
+   "q": "Saya lebih suka cara kerja lama yang sudah terbukti daripada mencoba cara baru.",
+   "d": "Kesempurnaan",
+   "r": 1
+  },
+  {
+   "id": "pd44",
+   "q": "Saya mengevaluasi hasil kerja saya untuk perbaikan berikutnya.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd45",
+   "q": "Saya menerima kritik sebagai bahan perbaikan.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd46",
+   "q": "Saya mengusulkan perbaikan prosedur yang saya nilai tidak efisien.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd47",
+   "q": "Saya merasa cukup bila hasil kerja sudah memenuhi standar minimal.",
+   "d": "Kesempurnaan",
+   "r": 1
+  },
+  {
+   "id": "pd48",
+   "q": "Saya mempelajari teknologi baru yang dapat mempermudah pekerjaan.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd49",
+   "q": "Saya menetapkan target yang lebih tinggi dari target yang diberikan.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd50",
+   "q": "Saya menyukai tantangan memperbaiki hal yang belum optimal.",
+   "d": "Kesempurnaan",
+   "r": 0
+  },
+  {
+   "id": "pd51",
+   "q": "Saya bersedia mengambil keputusan ketika situasi membutuhkannya.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd52",
+   "q": "Saya senang bila diberi tanggung jawab memimpin sebuah proyek kelompok.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd53",
+   "q": "Saya memberi contoh lebih dulu sebelum meminta orang lain melakukannya.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd54",
+   "q": "Saya lebih suka menunggu arahan daripada mengambil inisiatif.",
+   "d": "Kepemimpinan",
+   "r": 1
+  },
+  {
+   "id": "pd55",
+   "q": "Saya mendorong rekan untuk berkembang sesuai kemampuannya.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd56",
+   "q": "Saya membagi tugas dalam tim sesuai kemampuan setiap anggota.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd57",
+   "q": "Saya berani menyampaikan pendapat di depan pimpinan.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd58",
+   "q": "Saya menghindari peran yang menuntut saya bertanggung jawab atas orang lain.",
+   "d": "Kepemimpinan",
+   "r": 1
+  },
+  {
+   "id": "pd59",
+   "q": "Saya mampu menenangkan tim ketika menghadapi tekanan.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd60",
+   "q": "Saya memberi apresiasi kepada rekan yang bekerja dengan baik.",
+   "d": "Kepemimpinan",
+   "r": 0
+  },
+  {
+   "id": "pd61",
+   "q": "Saya tetap tenang ketika pekerjaan menumpuk.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd62",
+   "q": "Saya cepat bangkit setelah mengalami kegagalan.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd63",
+   "q": "Saya mudah tersinggung bila hasil kerja saya dikritik.",
+   "d": "Ketangguhan",
+   "r": 1
+  },
+  {
+   "id": "pd64",
+   "q": "Saya mampu bekerja dengan baik di bawah tekanan waktu.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd65",
+   "q": "Saya tetap bersemangat meskipun tugasnya berulang setiap hari.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd66",
+   "q": "Saya memandang masalah sebagai kesempatan untuk belajar.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd67",
+   "q": "Saya mudah putus asa bila hasil tidak sesuai harapan.",
+   "d": "Ketangguhan",
+   "r": 1
+  },
+  {
+   "id": "pd68",
+   "q": "Saya dapat menyesuaikan diri dengan cepat saat dipindahkan ke unit baru.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd69",
+   "q": "Saya mengelola emosi dengan baik saat berbeda pendapat.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd70",
+   "q": "Saya tetap fokus walaupun suasana kerja sedang tidak nyaman.",
+   "d": "Ketangguhan",
+   "r": 0
+  },
+  {
+   "id": "pd71",
+   "q": "Saya memeriksa ulang dokumen sebelum menyerahkannya.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd72",
+   "q": "Saya mencatat hal penting agar tidak terlupa.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd73",
+   "q": "Saya sering melewatkan detail kecil karena ingin cepat selesai.",
+   "d": "Ketelitian",
+   "r": 1
+  },
+  {
+   "id": "pd74",
+   "q": "Saya menyusun rencana kerja sebelum memulai tugas.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd75",
+   "q": "Saya merapikan arsip agar mudah ditemukan kembali.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd76",
+   "q": "Saya memastikan angka dalam laporan sudah sesuai dengan data sumbernya.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd77",
+   "q": "Bagi saya pemeriksaan ulang hanya membuang waktu.",
+   "d": "Ketelitian",
+   "r": 1
+  },
+  {
+   "id": "pd78",
+   "q": "Saya mengikuti prosedur langkah demi langkah.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd79",
+   "q": "Saya memperhatikan ketentuan sebelum mengambil tindakan.",
+   "d": "Ketelitian",
+   "r": 0
+  },
+  {
+   "id": "pd80",
+   "q": "Saya menuntaskan satu tugas sebelum berpindah ke tugas lain.",
+   "d": "Ketelitian",
+   "r": 0
+  }
+ ],
+ "pasangan": [
+  [
+   "pd21",
+   "pd22"
+  ],
+  [
+   "pd11",
+   "pd14"
+  ],
+  [
+   "pd71",
+   "pd73"
+  ],
+  [
+   "pd52",
+   "pd58"
+  ],
+  [
+   "pd41",
+   "pd43"
+  ],
+  [
+   "pd62",
+   "pd67"
+  ],
+  [
+   "pd44",
+   "pd47"
+  ],
+  [
+   "pd51",
+   "pd54"
+  ],
+  [
+   "pd69",
+   "pd63"
+  ],
+  [
+   "pd23",
+   "pd27"
+  ]
+ ],
+ "KK": [
+  {
+   "id": "kk01",
+   "s": "Menjelang tenggat laporan, seorang anggota tim jatuh sakit sehingga bagiannya belum selesai.",
+   "p": [
+    {
+     "q": "Saya mengambil alih sebagian pekerjaannya dan membagi sisanya bersama tim.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya melaporkan kondisi ini kepada atasan sambil mengusulkan pembagian ulang tugas.",
+     "d": "Kepemimpinan",
+     "r": 0
+    },
+    {
+     "q": "Saya hanya menyelesaikan bagian saya karena itu tanggung jawab saya.",
+     "d": "Sinergi",
+     "r": 1
+    },
+    {
+     "q": "Saya meminta perpanjangan tenggat tanpa mencoba menyelesaikannya lebih dulu.",
+     "d": "Profesionalisme",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk02",
+   "s": "Atasan meminta Anda memakai aplikasi kerja baru yang belum Anda kuasai mulai minggu depan.",
+   "p": [
+    {
+     "q": "Saya mempelajari aplikasi itu lebih awal dari panduan dan dari rekan yang sudah mahir.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya tetap memakai cara lama sampai aplikasi baru benar-benar diwajibkan.",
+     "d": "Kesempurnaan",
+     "r": 1
+    },
+    {
+     "q": "Saya mencatat kendala selama mencoba dan menyampaikannya sebagai masukan.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya merasa cemas dan menunggu orang lain mencobanya terlebih dahulu.",
+     "d": "Ketangguhan",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk03",
+   "s": "Seorang pengguna layanan marah di loket karena merasa urusannya dipersulit.",
+   "p": [
+    {
+     "q": "Saya mendengarkan keluhannya sampai selesai sebelum menjelaskan prosedurnya.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya meminta petugas keamanan menanganinya agar antrean tidak terganggu.",
+     "d": "Pelayanan",
+     "r": 1
+    },
+    {
+     "q": "Saya menuliskan langkah yang perlu ia tempuh agar tidak keliru lagi.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya membalas dengan nada tinggi agar ia menghormati petugas.",
+     "d": "Ketangguhan",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk04",
+   "s": "Anda menemukan kesalahan angka pada laporan yang sudah dikirim tim Anda ke kantor pusat.",
+   "p": [
+    {
+     "q": "Saya segera memberi tahu atasan dan menyiapkan ralatnya.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya membiarkannya karena selisihnya kecil dan belum ada yang menyadari.",
+     "d": "Integritas",
+     "r": 1
+    },
+    {
+     "q": "Saya menelusuri penyebabnya agar kesalahan serupa tidak terulang.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya menunggu sampai ada yang menanyakan sebelum memperbaikinya.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk05",
+   "s": "Rekan satu ruangan sering mengobrol keras sehingga Anda sulit berkonsentrasi.",
+   "p": [
+    {
+     "q": "Saya menyampaikannya secara pribadi dan sopan kepada rekan tersebut.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya langsung melaporkannya kepada atasan tanpa berbicara dengannya lebih dulu.",
+     "d": "Sinergi",
+     "r": 1
+    },
+    {
+     "q": "Saya mencari cara agar tetap fokus, misalnya bekerja di ruang rapat yang kosong.",
+     "d": "Ketangguhan",
+     "r": 0
+    },
+    {
+     "q": "Saya ikut mengobrol karena toh sudah sulit berkonsentrasi.",
+     "d": "Profesionalisme",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk06",
+   "s": "Seorang kenalan menawarkan hadiah setelah urusan administrasinya Anda selesaikan.",
+   "p": [
+    {
+     "q": "Saya menolak hadiah itu dengan sopan dan menjelaskan aturannya.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya menerimanya karena urusannya sudah selesai.",
+     "d": "Integritas",
+     "r": 1
+    },
+    {
+     "q": "Saya melaporkannya sesuai ketentuan gratifikasi bila ia tetap memaksa.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya menyarankan agar hadiahnya diberikan kepada seluruh tim saja.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk07",
+   "s": "Atasan memberi tugas mendadak di luar bidang Anda dengan tenggat dua hari.",
+   "p": [
+    {
+     "q": "Saya menerima tugas itu dan segera bertanya kepada pihak yang memahami bidangnya.",
+     "d": "Profesionalisme",
+     "r": 0
+    },
+    {
+     "q": "Saya menolak karena tugas itu bukan bidang saya.",
+     "d": "Profesionalisme",
+     "r": 1
+    },
+    {
+     "q": "Saya menyusun jadwal agar pekerjaan lain tetap berjalan.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya menganggapnya sebagai kesempatan menambah kemampuan.",
+     "d": "Ketangguhan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk08",
+   "s": "Dalam rapat, usulan Anda ditolak dan pimpinan memilih usulan rekan lain.",
+   "p": [
+    {
+     "q": "Saya mendukung pelaksanaan usulan yang dipilih dengan sepenuh hati.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya kecewa dan mengurangi keterlibatan saya dalam kegiatan itu.",
+     "d": "Ketangguhan",
+     "r": 1
+    },
+    {
+     "q": "Saya menawarkan bagian usulan saya yang dapat melengkapi usulan terpilih.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya menanyakan alasan penolakan agar usulan berikutnya lebih baik.",
+     "d": "Kesempurnaan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk09",
+   "s": "Unit Anda terkena pemotongan anggaran sehingga beberapa kegiatan harus dibatalkan.",
+   "p": [
+    {
+     "q": "Saya membantu menyusun prioritas kegiatan yang paling berdampak.",
+     "d": "Kepemimpinan",
+     "r": 0
+    },
+    {
+     "q": "Saya mencari cara menjalankan kegiatan penting dengan biaya lebih kecil.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya mempertimbangkan pindah ke unit lain yang anggarannya lebih besar.",
+     "d": "Ketangguhan",
+     "r": 1
+    },
+    {
+     "q": "Saya menyerahkan sepenuhnya kepada pimpinan untuk mencari jalan keluar.",
+     "d": "Kepemimpinan",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk10",
+   "s": "Anda ditunjuk menjadi ketua tim yang sebagian anggotanya lebih senior dari Anda.",
+   "p": [
+    {
+     "q": "Saya mengajak anggota senior berdiskusi untuk menyusun rencana kerja bersama.",
+     "d": "Kepemimpinan",
+     "r": 0
+    },
+    {
+     "q": "Saya merasa sungkan sehingga membiarkan anggota senior menentukan semuanya.",
+     "d": "Kepemimpinan",
+     "r": 1
+    },
+    {
+     "q": "Saya membagi tugas sesuai keahlian masing-masing anggota.",
+     "d": "Kepemimpinan",
+     "r": 0
+    },
+    {
+     "q": "Saya meminta atasan menunjuk orang lain saja.",
+     "d": "Kepemimpinan",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk11",
+   "s": "Anda melihat rekan mengisi daftar hadir untuk temannya yang terlambat.",
+   "p": [
+    {
+     "q": "Saya menegur rekan tersebut secara langsung.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya pura-pura tidak melihat agar hubungan tetap baik.",
+     "d": "Integritas",
+     "r": 1
+    },
+    {
+     "q": "Saya melaporkannya kepada atasan bila perbuatan itu terus berulang.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya menganggapnya wajar karena hanya sesekali.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk12",
+   "s": "Sistem aplikasi layanan mati saat banyak pengguna sedang menunggu.",
+   "p": [
+    {
+     "q": "Saya menjelaskan kendalanya kepada pengguna dan memberi perkiraan waktu.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya mencatat data pengguna agar dapat dilayani lebih dulu begitu sistem pulih.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya menutup layanan dan meminta semua pengguna datang lagi besok.",
+     "d": "Pelayanan",
+     "r": 1
+    },
+    {
+     "q": "Saya segera menghubungi petugas teknis dan memantau perbaikannya.",
+     "d": "Profesionalisme",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk13",
+   "s": "Anda mendapat penilaian kinerja yang lebih rendah dari harapan.",
+   "p": [
+    {
+     "q": "Saya meminta umpan balik rinci tentang hal yang perlu saya perbaiki.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya menyusun rencana perbaikan untuk periode berikutnya.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya merasa penilaian itu tidak adil dan kehilangan semangat kerja.",
+     "d": "Ketangguhan",
+     "r": 1
+    },
+    {
+     "q": "Saya membandingkan nilai saya dengan rekan lain untuk mencari pembenaran.",
+     "d": "Profesionalisme",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk14",
+   "s": "Dua rekan dalam tim Anda berselisih sehingga pekerjaan tim tersendat.",
+   "p": [
+    {
+     "q": "Saya mempertemukan keduanya untuk membicarakan masalah secara terbuka.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya tidak ikut campur karena itu urusan pribadi mereka.",
+     "d": "Sinergi",
+     "r": 1
+    },
+    {
+     "q": "Saya membantu tim tetap fokus pada target bersama.",
+     "d": "Kepemimpinan",
+     "r": 0
+    },
+    {
+     "q": "Saya memihak rekan yang lebih dekat dengan saya.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk15",
+   "s": "Anda ditugaskan ke kantor di daerah terpencil selama tiga bulan.",
+   "p": [
+    {
+     "q": "Saya menerima penugasan itu sebagai bagian dari pengabdian.",
+     "d": "Ketangguhan",
+     "r": 0
+    },
+    {
+     "q": "Saya mempelajari kondisi daerah tersebut sebelum berangkat.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya mencari alasan agar tidak perlu berangkat.",
+     "d": "Profesionalisme",
+     "r": 1
+    },
+    {
+     "q": "Saya memanfaatkan penugasan itu untuk belajar hal baru.",
+     "d": "Ketangguhan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk16",
+   "s": "Seorang pengguna layanan meminta berkasnya diproses lebih dulu karena ia mengenal pimpinan Anda.",
+   "p": [
+    {
+     "q": "Saya tetap memproses berkas sesuai urutan antrean.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya mendahulukannya agar pimpinan tidak kecewa.",
+     "d": "Integritas",
+     "r": 1
+    },
+    {
+     "q": "Saya menjelaskan dengan sopan bahwa semua pengguna dilayani setara.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya menanyakan kepada pimpinan apakah berkas itu perlu didahulukan.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk17",
+   "s": "Tugas rutin Anda selesai lebih cepat dari jadwal.",
+   "p": [
+    {
+     "q": "Saya menawarkan bantuan kepada rekan yang pekerjaannya masih banyak.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya memakai sisa waktu untuk mempelajari keterampilan yang menunjang pekerjaan.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya memeriksa ulang hasil pekerjaan sebelum melaporkannya.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya bersantai karena tugas saya sudah beres.",
+     "d": "Profesionalisme",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk18",
+   "s": "Atasan memberi instruksi yang menurut Anda bertentangan dengan prosedur.",
+   "p": [
+    {
+     "q": "Saya menyampaikan keberatan dengan sopan beserta dasar ketentuannya.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya tetap melaksanakannya karena itu perintah atasan.",
+     "d": "Integritas",
+     "r": 1
+    },
+    {
+     "q": "Saya meminta instruksi tertulis sebelum bertindak.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya mengusulkan alternatif yang sesuai prosedur dan tetap mencapai tujuan atasan.",
+     "d": "Kepemimpinan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk19",
+   "s": "Rekan baru di unit Anda tampak kesulitan memahami pekerjaannya.",
+   "p": [
+    {
+     "q": "Saya menawarkan diri untuk menjelaskan alur kerja kepadanya.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya membiarkannya belajar sendiri agar mandiri.",
+     "d": "Sinergi",
+     "r": 1
+    },
+    {
+     "q": "Saya membagikan catatan dan contoh dokumen yang pernah saya buat.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya memintanya bertanya kepada atasan saja.",
+     "d": "Sinergi",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk20",
+   "s": "Beberapa pekerjaan dengan tenggat yang sama datang bersamaan.",
+   "p": [
+    {
+     "q": "Saya menyusun prioritas berdasarkan dampak dan tenggatnya.",
+     "d": "Ketelitian",
+     "r": 0
+    },
+    {
+     "q": "Saya mengerjakan yang paling mudah lebih dulu tanpa memperhatikan urgensinya.",
+     "d": "Ketelitian",
+     "r": 1
+    },
+    {
+     "q": "Saya memberi tahu pemberi tugas bila ada pekerjaan yang berisiko terlambat.",
+     "d": "Profesionalisme",
+     "r": 0
+    },
+    {
+     "q": "Saya tetap tenang dan menyelesaikannya satu per satu.",
+     "d": "Ketangguhan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk21",
+   "s": "Anda diminta mempresentasikan hasil kerja tim di depan pimpinan.",
+   "p": [
+    {
+     "q": "Saya mempersiapkan materi dan berlatih bersama tim.",
+     "d": "Profesionalisme",
+     "r": 0
+    },
+    {
+     "q": "Saya menyebutkan kontribusi setiap anggota tim dalam presentasi.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya meminta rekan lain yang tampil karena saya gugup.",
+     "d": "Kepemimpinan",
+     "r": 1
+    },
+    {
+     "q": "Saya menyiapkan jawaban atas pertanyaan yang mungkin muncul.",
+     "d": "Ketelitian",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk22",
+   "s": "Seorang pengguna layanan lanjut usia kesulitan mengisi formulir daring.",
+   "p": [
+    {
+     "q": "Saya membantunya mengisi formulir langkah demi langkah.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya memintanya datang lagi bersama keluarga yang lebih paham teknologi.",
+     "d": "Pelayanan",
+     "r": 1
+    },
+    {
+     "q": "Saya menjelaskan dengan bahasa sederhana dan sabar.",
+     "d": "Pelayanan",
+     "r": 0
+    },
+    {
+     "q": "Saya mengusulkan agar disediakan petugas pendamping bagi pengguna serupa.",
+     "d": "Kesempurnaan",
+     "r": 0
+    }
+   ]
+  },
+  {
+   "id": "kk23",
+   "s": "Hasil kerja Anda disebut atasan sebagai hasil kerja rekan lain.",
+   "p": [
+    {
+     "q": "Saya meluruskannya kepada atasan dengan menunjukkan bukti kerja secara baik-baik.",
+     "d": "Integritas",
+     "r": 0
+    },
+    {
+     "q": "Saya membiarkannya agar tidak terjadi keributan.",
+     "d": "Ketangguhan",
+     "r": 1
+    },
+    {
+     "q": "Saya membicarakannya lebih dulu dengan rekan tersebut.",
+     "d": "Sinergi",
+     "r": 0
+    },
+    {
+     "q": "Saya membalas dengan tidak lagi membantu rekan itu.",
+     "d": "Sinergi",
+     "r": 1
+    }
+   ]
+  },
+  {
+   "id": "kk24",
+   "s": "Kantor menerapkan aturan jam kerja baru yang mengharuskan Anda berangkat lebih pagi.",
+   "p": [
+    {
+     "q": "Saya menyesuaikan rutinitas pribadi agar dapat mematuhi aturan baru.",
+     "d": "Profesionalisme",
+     "r": 0
+    },
+    {
+     "q": "Saya ikut mengeluhkan aturan itu bersama rekan-rekan.",
+     "d": "Ketangguhan",
+     "r": 1
+    },
+    {
+     "q": "Saya memahami alasan di balik aturan itu sebelum menilainya.",
+     "d": "Kesempurnaan",
+     "r": 0
+    },
+    {
+     "q": "Saya tetap datang seperti biasa sampai ada teguran.",
+     "d": "Integritas",
+     "r": 1
+    }
+   ]
+  }
+ ]
+}

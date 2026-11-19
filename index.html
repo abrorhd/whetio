@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Whetio — Asah sedikit, tajam tiap hari</title>
+<meta name="description" content="Whetio: latihan ujian harian yang singkat dan presisi. Program pertama: Siap Psikotes UPKP.">
+<meta name="theme-color" content="#1F4E5F">
+<link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="/assets/whetio.css">
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+import { kepalaSitus } from "/assets/js/kuis.js";
+import { logo, pelatuk } from "/assets/js/merek.js";
+import { kaki } from "/assets/js/beranda.js";
+import { tglUjian, sisaHari, teksTgl } from "/assets/js/rencana.js";
+const t = tglUjian(), h = sisaHari(t);
+const hit = t == null ? "Tanggal psikotes: 30 Nov – 2 Des 2026" : h > 0 ? `H-${h} · ${teksTgl(t)}` : h === 0 ? "Hari ini psikotes!" : "Psikotes sudah lewat";
+document.getElementById("app").innerHTML = kepalaSitus("") + `<main class="wrap">
+<section class="hero"><div>
+  <div style="color:var(--accent)">${logo(84)}</div>
+  <h1>Whetio</h1>
+  <span class="slogan">Asah sedikit, tajam tiap hari.</span>
+  <p class="lead" style="margin-top:14px">Seperti batu asah: gesekan kecil yang rutin membuat pisau tetap tajam. Whetio memberi latihan ujian singkat setiap hari — terukur, berwaktu, dan langsung kelihatan bagian mana yang masih tumpul.</p>
+  <div class="cta"><a class="btn spark" href="/psikotes/">Buka Siap Psikotes</a><a class="btn" href="/psikotes/metode/">Metode belajar</a></div>
+</div>${pelatuk("patuk")}</section>
+<h2 style="font-size:18px;margin:10px 0">Program</h2>
+<div class="kartu-grid">
+  <a class="kartu" href="/psikotes/"><span class="tag spark">${hit}</span><b>Siap Psikotes UPKP</b><p>Simulasi penuh 11 subtes tiap pagi, latihan bebas tanpa batas, dan rencana belajar sampai hari H.</p></a>
+  <a class="kartu" href="/psikotes/latihan/"><span class="tag">tanpa batas</span><b>Latihan bebas</b><p>Pilih subtes, jumlah soal, dan tempo. Soal baru setiap kali mulai.</p></a>
+  <a class="kartu" href="/tip/"><span class="tag o">☕</span><b>Tip ke Admin buat beli kopi</b><p>Kalau Whetio membantu, traktir admin secangkir kopi lewat GoPay.</p></a>
+</div>
+<div class="panel"><h2>Kenapa pelatuk?</h2><p style="margin:0">Burung pelatuk mematuk dengan gerakan pendek yang rutin, cepat, dan tepat sasaran — persis cara Whetio mengajak Anda berlatih: sedikit, setiap hari, fokus pada titik yang perlu diasah.</p></div>
+</main>` + kaki();
+</script>
+</body>
+</html>
