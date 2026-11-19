@@ -1,8 +1,10 @@
 // Pemuat halaman paket: ambil soal.json lalu jalankan mesin simulasi.
 import { mulai } from "./kuis.js";
+import { tarik } from "./sinkron.js";
 
 const app = document.getElementById("app");
-fetch(app.dataset.src, { cache: "no-store" })
+Promise.race([tarik().catch(() => 0), new Promise((r) => setTimeout(r, 2500))])
+  .then(() => fetch(app.dataset.src, { cache: "no-store" }))
   .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then((p) => mulai(app, p, {
     kembali: { href: "/psikotes/", teks: "Siap Psikotes" },

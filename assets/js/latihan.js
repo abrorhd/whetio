@@ -2,6 +2,7 @@
 import { SUBTES, buatSubtes } from "./gen/index.js";
 import { mulai, kepalaSitus } from "./kuis.js";
 import { kaki } from "./beranda.js";
+import { kirimLatihan } from "./sinkron.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const KOG = SUBTES.filter((s) => s.jenis !== "likert");
@@ -54,7 +55,8 @@ async function mulaiLatihan() {
     kembali: { href: "/psikotes/latihan/?s=" + s.kode + "&mode=" + (tempo ? "tempo" : "latihan"), teks: "Atur latihan" },
     drill: (kode, nilai) => {
       const log = baca(LOG) || [];
-      log.push({ kode, n: nilai.n, b: nilai.b, k: nilai.k, dt: Math.round(nilai.dt * 10) / 10, mode: MODE.find((m) => m[0] === pil.mode)[1], t: Date.now() });
+      const rec = { kode, n: nilai.n, b: nilai.b, k: nilai.k, dt: Math.round(nilai.dt * 10) / 10, mode: MODE.find((m) => m[0] === pil.mode)[1], t: Date.now() };
+      log.push(rec); kirimLatihan(rec);
       try { localStorage.setItem(LOG, JSON.stringify(log.slice(-200))); } catch (e) {}
     },
   });

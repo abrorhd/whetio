@@ -1,8 +1,9 @@
 // Tanggal ujian (pilihan pengguna) dan rencana belajar per fase menuju psikotes.
+import { kirimTgl } from "./sinkron.js";
 export const PILIHAN_TGL = [["2026-11-30", "Sen, 30 Nov"], ["2026-12-01", "Sel, 1 Des"], ["2026-12-02", "Rab, 2 Des"]];
 export const KUNCI_TGL = "whetio:psikotes:tgl";
 export function tglUjian() { try { return localStorage.getItem(KUNCI_TGL); } catch (e) { return null; } }
-export function setTglUjian(t) { try { localStorage.setItem(KUNCI_TGL, t); } catch (e) {} }
+export function setTglUjian(t) { try { localStorage.setItem(KUNCI_TGL, t); } catch (e) {} kirimTgl(t); }
 export function sisaHari(t, dari = new Date()) {
   if (!t) return null;
   const [y, m, d] = t.split("-").map(Number);

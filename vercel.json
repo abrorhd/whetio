@@ -3,8 +3,47 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "headers": [
-    { "source": "/psikotes/paket.json", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
-    { "source": "/psikotes/paket/(.*)/soal.json", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
-    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] }
+    {
+      "source": "/psikotes/paket.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/psikotes/paket/(.*)/soal.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/auth/:jalur*",
+      "destination": "/api/auth-proxy?jalur=:jalur*"
+    }
   ]
 }

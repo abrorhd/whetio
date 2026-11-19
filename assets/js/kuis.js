@@ -1,6 +1,7 @@
 // Mesin simulasi & latihan psikotes Whetio. Dipakai halaman paket (/psikotes/paket/<tgl>/) dan latihan bebas.
 import { KODE as META } from "./gen/index.js";
 import { logo, pelatuk } from "./merek.js";
+import { akun, kirimHasil } from "./sinkron.js";
 
 const SKALA = ["Sangat tidak menggambarkan", "Tidak menggambarkan", "Agak menggambarkan", "Menggambarkan", "Sangat menggambarkan"];
 const HURUF = "ABCDEF";
@@ -16,7 +17,7 @@ function tulis(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 let kbAktif = null; // satu pendengar papan ketik per halaman
 
 export function kepalaSitus(aktif) {
-  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ["/tip/", "Tip kopi", "tip"]];
+  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ["/tip/", "Tip", "tip"], ["/akun/", akun() ? "Akun ✓" : "Masuk", "akun"]];
   return `<header class="topbar"><div class="wrap"><a class="merek" href="/">${logo(34)}<span>Whetio</span></a><nav>${nav.map(([h, t, k]) => `<a href="${h}"${k === aktif ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div></header>`;
 }
 
@@ -67,6 +68,7 @@ export function mulai(app, paket, opsi = {}) {
     x[kode] = s.jenis === "likert" ? { n: n.n, kons: n.kons, agak: n.agak, ekstrem: n.ekstrem, mode: st.hasil[kode].mode, t: Date.now() }
       : { b: n.b, n: n.n, k: n.k, dt: Math.round(n.dt * 10) / 10, mode: st.hasil[kode].mode, t: Date.now() };
     tulis(KUNCI_RINGKAS, semua);
+    kirimHasil(paket.id, kode, st.hasil[kode], x[kode]);
   }
 
   // ---------- alur ----------

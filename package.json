@@ -1,5 +1,9 @@
 {
   "name": "whetio",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "description": "Whetio — latihan ujian harian (situs statis + fungsi akun & progres di Neon).",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0"
+  }
 }

@@ -2,6 +2,7 @@
 import { SUBTES, KODE } from "./gen/index.js";
 import { kepalaSitus, KUNCI_RINGKAS } from "./kuis.js";
 import { pelatuk } from "./merek.js";
+import { tarik } from "./sinkron.js";
 import { PILIHAN_TGL, tglUjian, setTglUjian, sisaHari, fase, teksTgl } from "./rencana.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -77,7 +78,7 @@ function render(list) {
   app.innerHTML = h;
 }
 export function kaki() {
-  return `<footer class="situs"><div class="wrap">Whetio · Asah sedikit, tajam tiap hari. · Soal disusun orisinal mengikuti format psikotes UPKP; bukan materi resmi BPPK. · <a href="/tip/">Tip ke Admin buat beli kopi</a></div></footer>`;
+  return `<footer class="situs"><div class="wrap">Whetio · Asah sedikit, tajam tiap hari. · Soal disusun orisinal mengikuti format psikotes UPKP; bukan materi resmi BPPK. · <a href="/tip/">Tip ke Admin buat beli kopi</a> · <a href="/privasi/">Privasi</a></div></footer>`;
 }
 
 if (app && app.dataset.halaman === "beranda") {
@@ -87,6 +88,6 @@ if (app && app.dataset.halaman === "beranda") {
   });
   let LIST = [];
   const muatUlang = () => render(LIST);
-  fetch("/psikotes/paket.json", { cache: "no-store" }).then((r) => r.json()).then((l) => { LIST = l; render(l); })
+  fetch("/psikotes/paket.json", { cache: "no-store" }).then((r) => r.json()).then((l) => { LIST = l; render(l); tarik().then((n) => { if (n) render(LIST); }); })
     .catch(() => { render([]); });
 }
