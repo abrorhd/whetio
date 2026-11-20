@@ -19,7 +19,7 @@ let kbAktif = null; // satu pendengar papan ketik per halaman
 
 export function kepalaSitus(aktif) {
   const pw = paywall(), pn = penuh();
-  const nav = [["/psikotes/", "Persiapan Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ...(pw && !pn ? [["/akses/", "Akses Penuh", "akses"]] : []), ["/tip/", "Tip kopi", "tip"]];
+  const nav = [["/psikotes/", "Persiapan Psikotes", "psikotes"], ["/psikotes/materi/", "Materi", "materi"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ...(pw && !pn ? [["/akses/", "Akses Penuh", "akses"]] : []), ["/tip/", "Tip kopi", "tip"]];
   const a = akun(), inisial = a && a.email ? esc(a.email[0].toUpperCase()) : "";
   const tombol = a ? `<a class="akun-pil masuk" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""} title="${esc(a.email)}${pw && pn ? " · Akses Penuh" : ""}"><span class="avatar">${inisial}</span>Akun${pw && pn ? '<span class="bintang" aria-label="Akses Penuh">★</span>' : ""}</a>`
     : `<a class="akun-pil" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""}>Masuk</a>`;

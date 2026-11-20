@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Whetio — Asah sedikit, tajam tiap hari</title>
-<meta name="description" content="Whetio: latihan ujian harian yang singkat dan presisi. Program pertama: Siap Psikotes UPKP.">
+<meta name="description" content="Whetio: latihan ujian harian yang singkat dan presisi. Program pertama: Persiapan Psikotes UPKP.">
 <meta name="theme-color" content="#1F4E5F">
 <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,16 @@ import { kaki } from "/assets/js/beranda.js";
 import { tglUjian, sisaHari, teksTgl } from "/assets/js/rencana.js";
 import { akun } from "/assets/js/sinkron.js";
 import { paywall, penuh, bacaAkses, muatAkses, rupiah, tglPendek } from "/assets/js/akses.js";
+const ik = (d) => `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IKON = {
+  target: ik('<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>'),
+  buku: ik('<path d="M12 6.5C10 5 7 4.6 3.5 5v13c3.5-.4 6.5 0 8.5 1.5 2-1.5 5-1.9 8.5-1.5V5c-3.5-.4-6.5 0-8.5 1.5z"/><path d="M12 6.5v13"/>'),
+  jam: ik('<circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M9.5 3h5M12 3v3.5M18.2 7.3l1.3-1.3"/>'),
+  rute: ik('<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.8"/>'),
+  orang: ik('<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c1.2-3.6 3.9-5.5 7.2-5.5s6 1.9 7.2 5.5"/>'),
+  bintang: ik('<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>'),
+  kopi: ik('<path d="M4.5 9.5h11v4.5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M15.5 10.5h1.3a2.6 2.6 0 0 1 0 5.2h-1.6M8 3.5c-.7.9.7 1.8 0 2.8M11.5 3.5c-.7.9.7 1.8 0 2.8"/>'),
+};
 function render() {
 const a = akun(), pw = paywall(), ak = bacaAkses() || {};
 const t = tglUjian(), h = sisaHari(t);
@@ -34,14 +44,21 @@ document.getElementById("app").innerHTML = kepalaSitus("") + `<main class="wrap"
   <div class="cta"><a class="btn spark" href="/psikotes/">Buka Persiapan Psikotes</a>${a ? `<a class="btn" href="/akun/">Akun saya</a>` : `<a class="btn pri" href="/akun/">Masuk / Daftar</a>`}<a class="btn" href="/psikotes/metode/">Metode belajar</a></div>
   ${a ? `<p class="hint" style="margin-top:10px">Masuk sebagai <b>${a.email}</b> · progres tersinkron.</p>` : `<p class="hint" style="margin-top:10px">Latihan gratis tanpa akun (terbatas). Masuk untuk menyimpan progres belajar psikotes${pw ? "" : " dan membuka semua fitur"}.</p>`}
 </div>${pelatuk("ramah", "anim-masuk")}</section>
-<h2 style="font-size:18px;margin:10px 0">Program</h2>
-<div class="kartu-grid">
-  <a class="kartu" href="/psikotes/"><span class="tag spark">${hit}</span><b>Siap Psikotes UPKP</b><p>Simulasi penuh 11 subtes tiap pagi, latihan bebas${pw ? "" : " tanpa batas"}, dan rencana belajar sampai hari H.</p></a>
-  <a class="kartu" href="/psikotes/latihan/"><span class="tag">${pw ? "drill tempo" : "tanpa batas"}</span><b>Latihan bebas</b><p>Pilih subtes, jumlah soal, dan tempo. Soal baru setiap kali mulai.</p></a>
-  <a class="kartu" href="/akun/"><span class="tag">${a ? "masuk ✓" : "gratis"}</span><b>${a ? "Akun saya" : "Masuk / Daftar"}</b><p>${pw ? "Akun gratis (email + password) untuk menyimpan progres di semua perangkat." : "Akun gratis (email + password) untuk menyimpan progres, membuka arsip paket, dan latihan tanpa batas."}</p></a>
-  ${pw && !penuh() ? `<a class="kartu" href="/akses/"><span class="tag spark">${rupiah(ak.harga || 10000)}</span><b>Akses Penuh</b><p>Semua arsip paket dan latihan bebas tanpa batas, sekali bayar, berlaku sampai ${tglPendek(ak.batas)}.</p></a>` : ""}
-  <a class="kartu" href="/tip/"><span class="tag o">☕</span><b>Tip ke Admin buat beli kopi</b><p>Kalau Whetio membantu, traktir admin secangkir kopi lewat GoPay.</p></a>
+<h2 class="judul-program">Program</h2>
+<a class="program-utama" href="/psikotes/">
+  <span class="pu-ikon">${IKON.target}</span>
+  <span class="pu-teks"><span class="tag spark">${hit}</span><b>Persiapan Psikotes UPKP</b><span>Simulasi penuh 11 subtes tiap pagi, latihan bebas${pw ? "" : " tanpa batas"}, dan rencana belajar sampai hari H.</span></span>
+  <span class="pu-aksi">Buka<span aria-hidden="true">→</span></span>
+</a>
+<div class="menu-grid">
+  ${[["/psikotes/materi/", "buku", "Materi", "Konsep, contoh terbahas, dan coba soal per subtes.", "baru"],
+     ["/psikotes/latihan/", "jam", "Latihan bebas", "Pilih subtes, jumlah soal, dan tempo.", ""],
+     ["/psikotes/metode/", "rute", "Metode belajar", "Siklus ukur–asah dan rencana sampai hari H.", ""],
+     ["/akun/", "orang", a ? "Akun saya" : "Masuk / Daftar", a ? "Progres tersinkron di semua perangkat." : "Akun gratis untuk menyimpan progres.", a ? "" : "gratis"]]
+    .map(([h, ik, t, d, tg]) => `<a class="menu-kartu" href="${h}"><span class="mk-atas"><span class="mk-ikon">${IKON[ik]}</span>${tg ? `<span class="tag${tg === "baru" ? " spark" : ""}">${tg}</span>` : ""}</span><b>${t}</b><span class="mk-sub">${d}</span></a>`).join("")}
 </div>
+${pw && !penuh() ? `<a class="pita aksen" href="/akses/"><span class="mk-ikon">${IKON.bintang}</span><span class="pita-teks"><b>Akses Penuh · ${rupiah(ak.harga || 10000)}</b><span>Semua arsip paket dan latihan tanpa batas, sekali bayar sampai ${tglPendek(ak.batas)}.</span></span><span class="pita-panah" aria-hidden="true">→</span></a>` : ""}
+<a class="pita" href="/tip/"><span class="mk-ikon">${IKON.kopi}</span><span class="pita-teks"><b>Tip ke Admin buat beli kopi</b><span>Kalau Whetio membantu, traktir secangkir kopi lewat GoPay.</span></span><span class="pita-panah" aria-hidden="true">→</span></a>
 <div class="panel"><h2>Kenapa pelatuk?</h2><p style="margin:0">Burung pelatuk mematuk dengan gerakan pendek yang rutin, cepat, dan tepat sasaran — persis cara Whetio mengajak Anda berlatih: sedikit, setiap hari, fokus pada titik yang perlu diasah.</p></div>
 </main>` + kaki();
 }

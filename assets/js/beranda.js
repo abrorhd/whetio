@@ -58,7 +58,7 @@ function render(list) {
   if (kini) {
     const s = statusPaket(kini);
     h += `<div class="panel"><h2>Paket hari ini · ${esc(kini.judul)}</h2><p class="hint" style="margin:0 0 8px">${Object.keys(kini.subtes).length} subtes · ${kini.jumlah} butir · ${s.sel ? `${s.sel}/${s.total} subtes selesai` : "belum dimulai"}</p>
-      <div class="bar-prog"><i style="width:${pct(s.sel, s.total)}%"></i></div><div class="cta" style="margin-top:12px"><a class="btn spark" href="/psikotes/paket/${kini.id}/">${s.sel ? (s.sel >= s.total ? "Lihat hasil" : "Lanjutkan simulasi") : "Mulai simulasi penuh"}</a><a class="btn" href="/psikotes/latihan/">Latihan bebas</a></div></div>`;
+      <div class="bar-prog"><i style="width:${pct(s.sel, s.total)}%"></i></div><div class="cta" style="margin-top:12px"><a class="btn spark" href="/psikotes/paket/${kini.id}/">${s.sel ? (s.sel >= s.total ? "Lihat hasil" : "Lanjutkan simulasi") : "Mulai simulasi penuh"}</a><a class="btn" href="/psikotes/latihan/">Latihan bebas</a><a class="btn" href="/psikotes/materi/">Materi</a></div></div>`;
   }
   const fk = fokus(per);
   h += `<div class="panel"><h2>Fokus hari ini</h2>${adaData ? "" : '<p class="hint">Belum ada data. Kerjakan simulasi penuh pertama sebagai diagnostik; setelah itu bagian ini menunjukkan subtes yang paling perlu diasah.</p>'}
