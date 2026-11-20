@@ -1,5 +1,5 @@
 // Webhook Trakteer → aktifkan Akses Penuh.
-// Daftarkan di Trakteer (Integrasi → Webhook): https://whetio.vercel.app/api/trakteer/
+// Daftarkan di Trakteer (Integrasi → Webhook): https://whetio.com/api/trakteer/
 // Keaslian dicek lewat header X-Webhook-Token = env TRAKTEER_WEBHOOK_TOKEN.
 // Pembeli menulis kode WH-XXXXX di pesan dukungan; nominal minimal HARGA.
 import { createHash, timingSafeEqual } from "node:crypto";

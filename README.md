@@ -61,11 +61,11 @@ Generator memakai benih tanggal, jadi paket sebuah tanggal selalu sama. Kunci pi
 
 ## Akun & database
 
-- Neon (lewat Vercel Marketplace, region Singapura). Login memakai Neon Managed Better Auth; proxy `api/auth-proxy.js` membuat cookie sesi menjadi milik domain situs.
+- Neon (dibuat lewat integrasi Vercel Marketplace, region Singapura; organisasi Neon "Vercel: abrorhd" — JANGAN uninstall integrasi Neon di Vercel karena ikut menghapus database). Login memakai Neon Managed Better Auth; proxy `api/auth-proxy.js` membuat cookie sesi menjadi milik domain situs.
 - `api/progres.js` menyimpan progres per pengguna (`profil`, `hasil` per paket×subtes, `latihan`). Progres tetap utama di browser; bila masuk, otomatis dikirim setiap subtes selesai dan ditarik saat membuka beranda/paket.
 - Akses tabel hanya lewat fungsi server yang memeriksa sesi; `DATABASE_URL` tidak pernah dikirim ke browser.
 
 ## Deploy
 
-Situs statis tanpa build. Repo terhubung ke Vercel (preset Other); setiap push ke `main` langsung terbit.
-Laporan kunci keliru masuk sebagai issue berlabel `lapor-kunci` di repo ini.
+Cloudflare Workers (Workers Builds, terhubung ke repo): setiap push ke `main` dideploy dengan `npx wrangler deploy` ke https://whetio.com. `worker.js` + `server/adapter.js` menjalankan handler `api/*.js`; aset statis dari root (pengecualian di `.assetsignore`, header di `_headers`). Variabel: `DATABASE_URL` (secret), `NEON_AUTH_BASE_URL`, `ADMIN_EMAILS`, nanti `TRAKTEER_WEBHOOK_TOKEN` (secret) dan `TRAKTEER_URL`.
+`whetio.vercel.app` hanya pengalih ke whetio.com (vercel.json). Laporan soal masuk ke `/admin/`.

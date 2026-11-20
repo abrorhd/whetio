@@ -57,7 +57,7 @@ async function muatBayar() {
   const r = await fetch(`/api/bayar/?admin=1${filterBayar ? `&status=${filterBayar}` : ""}`, { credentials: "same-origin" }).catch(() => null);
   if (!r) return render("Gagal memuat. Periksa koneksi.");
   if (r.status === 401) return render(`Masuk dulu dengan akun admin. <a href="/akun/?lanjut=/admin/">Masuk</a>`);
-  if (r.status === 403) return render("Akun ini bukan admin. Email admin diatur lewat variabel ADMIN_EMAILS di Vercel.");
+  if (r.status === 403) return render("Akun ini bukan admin. Email admin diatur lewat variabel ADMIN_EMAILS di Cloudflare.");
   if (!r.ok) return render("Database sedang bermasalah. Coba lagi sebentar lagi.");
   bayar = await r.json(); render();
 }
@@ -87,7 +87,7 @@ async function muat() {
   const r = await fetch(API + (filter ? `?status=${filter}` : ""), { credentials: "same-origin" }).catch(() => null);
   if (!r) return render("Gagal memuat. Periksa koneksi.");
   if (r.status === 401) return render(`Masuk dulu dengan akun admin. <a href="/akun/?lanjut=/admin/">Masuk</a>`);
-  if (r.status === 403) return render("Akun ini bukan admin. Email admin diatur lewat variabel ADMIN_EMAILS di Vercel.");
+  if (r.status === 403) return render("Akun ini bukan admin. Email admin diatur lewat variabel ADMIN_EMAILS di Cloudflare.");
   if (!r.ok) return render("Database sedang bermasalah. Coba lagi sebentar lagi.");
   data = await r.json(); render();
 }

@@ -15,6 +15,7 @@ export default {
     muatEnv(env);
     globalThis.__ASSETS = env.ASSETS;
     const url = new URL(request.url);
+    if (url.hostname === "www.whetio.com") return Response.redirect(`https://whetio.com${url.pathname}${url.search}`, 301);
 
     const api = url.pathname.match(/^\/api\/([a-z-]+)\/?$/);
     if (api) {

@@ -1,6 +1,6 @@
 # Repo Whetio
 
-Situs statis + fungsi /api. Hosting: Vercel (lama) dan Cloudflare Workers (baru: `worker.js` + `server/adapter.js` menjalankan handler `api/*.js` yang sama; aset statis dari root, pengecualian di `.assetsignore`). Keduanya auto-deploy dari `main`. Lihat README untuk struktur.
+Situs statis + fungsi /api. Hosting: Cloudflare Workers di https://whetio.com (`worker.js` + `server/adapter.js` menjalankan handler `api/*.js`; aset statis dari root, pengecualian di `.assetsignore`), auto-deploy dari `main`. `whetio.vercel.app` hanya pengalih. Lihat README untuk struktur.
 
 ## Aturan tugas harian Siap Psikotes
 
@@ -17,4 +17,4 @@ Situs statis + fungsi /api. Hosting: Vercel (lama) dan Cloudflare Workers (baru:
 - Laporan soal & kritik/saran: `api/laporan.js` (POST tamu boleh, 30/hari per sidik; GET/PATCH khusus email di env `ADMIN_EMAILS`), dibaca di `/admin/`.
 - Akses Penuh (Rp10.000, s.d. 2 Des 2026): `api/bayar.js` (status, kode WH-XXXXX, aktivasi manual admin, cek arsip), `api/trakteer.js` (webhook Trakteer, header `X-Webhook-Token`), `middleware.js` (soal.json arsip → 403 tanpa akses). Paywall aktif hanya bila env `TRAKTEER_WEBHOOK_TOKEN` dan `TRAKTEER_URL` diisi (`PAYWALL=off` untuk mematikan). Tabel `akses`, `pesanan`, `pembayaran`.
 - Progres: `api/progres.js` (GET/POST/DELETE) ke Neon Postgres lewat `DATABASE_URL`; tabel `profil`, `hasil`, `latihan` dibuat otomatis oleh `api/_lib.js`.
-- Variabel lingkungan (`DATABASE_URL`, `NEON_AUTH_BASE_URL`) diisi integrasi Vercel–Neon. Jangan menaruh connection string di repo.
+- Variabel lingkungan diatur di Cloudflare (Worker whetio → Settings → Variables and Secrets). Jangan menaruh connection string di repo. Database Neon berada di organisasi yang dikelola integrasi Vercel: jangan uninstall integrasi Neon di Vercel.
