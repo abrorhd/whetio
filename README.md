@@ -14,7 +14,7 @@ Program pertama: **Siap Psikotes** (psikotes UPKP Kemenkeu 2026) di `/psikotes/`
 | `/psikotes/paket/<tanggal>/` | Simulasi penuh 11 subtes (mode simulasi berwaktu / latihan bebas), tab Kunci dan Rekap |
 | `/psikotes/latihan/` | Latihan bebas tanpa batas: pilih subtes, jumlah soal, tempo 150/100/80% |
 | `/psikotes/metode/` | Metode belajar, teknik per subtes, panduan kepribadian, rencana harian sampai hari H |
-| `/tip/` | Tip ke Admin buat beli kopi (GoPay) |
+| `/tip/` | Dukungan lewat Trakteer (trakteer.id/whetio) |
 | `/akun/` | Daftar/masuk (email + password, verifikasi kode email), sinkron progres, keluar, hapus akun |
 | `/privasi/` | Kebijakan privasi |
 

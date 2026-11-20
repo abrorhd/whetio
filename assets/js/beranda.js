@@ -82,7 +82,7 @@ function render(list) {
   app.innerHTML = h;
 }
 export function kaki() {
-  return `<footer class="situs"><div class="wrap">Whetio · Asah sedikit, tajam tiap hari. · Soal disusun orisinal mengikuti format psikotes UPKP; bukan materi resmi BPPK. · <button type="button" class="tautan" data-saran>Kritik &amp; saran</button> · <a href="/tip/">Tip ke Admin buat beli kopi</a> · <a href="/privasi/">Privasi</a></div></footer>`;
+  return `<footer class="situs"><div class="wrap">Whetio · Asah sedikit, tajam tiap hari. · Soal disusun orisinal mengikuti format psikotes UPKP; bukan materi resmi BPPK. · <button type="button" class="tautan" data-saran>Kritik &amp; saran</button> · <a href="/tip/">Traktir Whetio di Trakteer</a> · <a href="/privasi/">Privasi</a></div></footer>`;
 }
 
 if (app && app.dataset.halaman === "beranda") {

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Tip ke Admin buat beli kopi · Whetio</title>
-<meta name="description" content="Dukung Whetio dengan mentraktir admin secangkir kopi lewat GoPay.">
+<title>Traktir Whetio · Whetio</title>
+<meta name="description" content="Dukung Whetio lewat Trakteer: trakteer.id/whetio.">
 <meta name="theme-color" content="#1F4E5F">
 <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,23 +18,18 @@
 import { kepalaSitus } from "/assets/js/kuis.js";
 import { pelatuk } from "/assets/js/merek.js";
 import { kaki } from "/assets/js/beranda.js";
-const NOMOR = "081225688665";
+const URL_T = "https://trakteer.id/whetio";
 document.getElementById("app").innerHTML = kepalaSitus("tip") + `<main class="wrap"><section class="tip card">
   ${pelatuk("ngopi")}
-  <h1 style="font-size:26px;margin:8px 0 4px">Tip ke Admin buat beli kopi</h1>
-  <p class="hint" style="font-size:14px">Whetio gratis dipakai. Kalau latihannya membantu, secangkir kopi bikin admin tetap melek menyiapkan paket tiap pagi.</p>
-  <div class="gopay"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#00AED6"/><circle cx="12" cy="12" r="4.5" fill="#fff"/></svg>GoPay</div>
-  <div class="nomor" id="nomor">0812-2568-8665</div>
-  <div class="cta" style="justify-content:center"><button class="btn spark" id="salin">Salin nomor</button></div>
-  <ol style="text-align:left;max-width:360px;margin:18px auto 0;font-size:14px">
-    <li>Buka aplikasi Gojek atau GoPay.</li><li>Pilih <b>Bayar</b> atau <b>Transfer</b>, lalu masukkan nomor di atas.</li><li>Isi nominal seikhlasnya — harga satu kopi pun sangat berarti.</li>
-  </ol>
+  <h1 style="font-size:26px;margin:8px 0 4px">Traktir Whetio</h1>
+  <p class="hint" style="font-size:14px">Kalau latihannya membantu, traktiran kecil lewat Trakteer bikin admin tetap melek menyiapkan paket tiap pagi.</p>
+  <div class="cta" style="justify-content:center;margin-top:14px"><a class="btn spark" href="${URL_T}" target="_blank" rel="noopener">Buka trakteer.id/whetio</a></div>
+  <div class="panel" style="text-align:left;max-width:440px;margin:18px auto 0">
+    <b>Ingin sekalian membuka Akses Penuh?</b>
+    <p style="margin:6px 0 0;font-size:14px">Ambil dulu kode pembayaran di halaman <a href="/akses/">Akses Penuh</a>, lalu tulis kode itu di pesan traktiran. Traktiran tanpa kode tetap kami terima sebagai dukungan, tetapi tidak membuka akses.</p>
+  </div>
   <p class="hint" style="margin-top:16px">Terima kasih! Semoga psikotesnya lancar. ☕</p>
 </section></main>` + kaki();
-document.getElementById("salin").addEventListener("click", async (e) => {
-  try { await navigator.clipboard.writeText(NOMOR); e.target.textContent = "Nomor tersalin ✓"; }
-  catch (err) { const r = document.createRange(); r.selectNodeContents(document.getElementById("nomor")); getSelection().removeAllRanges(); getSelection().addRange(r); e.target.textContent = "Tekan salin di papan ketik"; }
-});
 </script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import { pelatuk } from "./merek.js";
 import { tingkat, bacaAkses, rupiah, tglPendek } from "./akses.js";
 
 export { tingkat };
-export const BATAS = { sesi: 3, soal: 10, tamu: { sesi: 3 }, gratis: { sesi: 5 } };
+export const BATAS = { sesi: 1, soal: 10, tamu: { sesi: 1 }, gratis: { sesi: 2 } };
 const kunciKuota = () => (akun() ? "whetio:gratis:latihan" : "whetio:tamu:latihan");
 export const tamu = () => !akun();
 export const terbatas = () => tingkat() !== "penuh";
