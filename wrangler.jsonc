@@ -4,6 +4,7 @@
   "main": "worker.js",
   "compatibility_date": "2025-11-01",
   "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
