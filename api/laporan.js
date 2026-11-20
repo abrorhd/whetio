@@ -3,17 +3,13 @@
 // GET   /api/laporan/?status=baru|ditinjau|selesai|ditolak  → daftar (khusus admin: email di ADMIN_EMAILS)
 // PATCH /api/laporan/  { id, status, catatan? } → ubah status (khusus admin)
 import { createHash } from "node:crypto";
-import { sql, pastikanSkema, penggunaDari, bodyJSON } from "./_lib.js";
+import { sql, pastikanSkema, penggunaDari, bodyJSON, adalahAdmin } from "./_lib.js";
 
 const KATEGORI = new Set(["soal", "kunci", "bahas", "tampilan", "lain", "saran", "bug", "materi"]);
 const STATUS = new Set(["baru", "ditinjau", "selesai", "ditolak"]);
 const PAKET = /^(\d{4}-\d{2}-\d{2}|latihan)$/, KODE = /^[A-Z]{2,4}$/;
 const MAKS_HARI = 30, MAKS_KONTEKS = 32 * 1024;
 
-const adalahAdmin = (u) => {
-  const daftar = (process.env.ADMIN_EMAILS || "").toLowerCase().split(/[\s,;]+/).filter(Boolean);
-  return !!(u && u.verified && u.email && daftar.includes(u.email.toLowerCase()));
-};
 // Sidik anti-spam: hash IP + tanggal + rahasia server, berganti tiap hari, tidak bisa dibalik.
 function sidik(req) {
   const ip = String(req.headers["x-forwarded-for"] || (req.socket && req.socket.remoteAddress) || "").split(",")[0].trim();

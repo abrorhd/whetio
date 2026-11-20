@@ -279,6 +279,17 @@ svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
 .chip[disabled]{opacity:.5;cursor:not-allowed}
 @media (pointer:coarse){.hint-kb{display:none}}
 
+/* Akses Penuh */
+.akun-pil .bintang{color:var(--spark);margin-left:4px;font-size:12px}
+.ajak-buka{border-color:color-mix(in srgb,var(--spark) 45%,var(--line))}
+.tbl-akses td:not(:first-child),.tbl-akses th:not(:first-child){text-align:center}
+.langkah h2{margin-top:0}
+.langkah ol{margin:6px 0 12px;padding-left:20px;display:grid;gap:4px}
+.langkah.redup{opacity:.55}
+.kode-bayar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kode-bayar .mono{font-size:26px;font-weight:700;letter-spacing:.06em;padding:8px 14px;border:2px dashed var(--spark);border-radius:12px;background:var(--sunk)}
+.akses-ringkas .tag.ok{background:var(--oks);color:var(--ok)}
+
 /* Dialog laporan & kritik/saran */
 .lapor-dlg{border:1px solid var(--line);border-radius:18px;padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface);color:var(--ink);box-shadow:0 18px 50px rgba(10,15,20,.28)}
 .lapor-dlg::backdrop{background:rgba(12,17,23,.45)}
@@ -320,6 +331,7 @@ svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
 .lp .lp-ref .lp-svg{max-width:46px}
 .lp .lp-pesan{margin:10px 0;padding:10px 12px;border-left:3px solid var(--spark);background:var(--sunk);border-radius:0 10px 10px 0;white-space:pre-wrap}
 .lp .lp-kunci{font-size:13.5px}
+.isian-admin{flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit}
 
 /* Kawanan pelatuk di latar */
 .kawanan{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}

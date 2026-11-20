@@ -3,6 +3,8 @@ import { kepalaSitus } from "./kuis.js";
 import { pelatuk } from "./merek.js";
 import { kaki } from "./beranda.js";
 import * as A from "./sinkron.js";
+import { paywall, penuh, bacaAkses, muatAkses, rupiah, tglPendek } from "./akses.js";
+import { BATAS } from "./gerbang.js";
 
 const app = document.getElementById("app");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
@@ -50,11 +52,13 @@ function layar() {
     ${v.pesan ? `<p class="ok-t">${esc(v.pesan)}</p>` : ""}${v.galat ? `<p class="no-t">${esc(v.galat)}</p>` : ""}
     <div class="cta" style="justify-content:center;margin-top:12px"><button class="btn pri" data-aksi-link="sinkron"${v.sibuk ? " disabled" : ""}>Sinkronkan sekarang</button><a class="btn" href="${esc(lanjut || "/psikotes/")}">Ke Siap Psikotes</a><button class="btn" data-aksi-link="keluar">Keluar</button></div>
     <p class="hint" style="margin-top:14px">Progres otomatis tersimpan ke akun setiap kali satu subtes selesai, dan diambil lagi saat Anda membuka situs di perangkat lain.</p></section>
-    <section class="panel" style="max-width:520px;margin:14px auto"><h2>Hapus akun</h2><p class="hint" style="font-size:13.5px">Menghapus semua progres yang tersimpan di server beserta akun Anda. Progres di browser ini tidak ikut terhapus.</p><button class="btn kecil" data-aksi-link="hapus">Hapus akun &amp; data</button></section>`;
+    ${paywall() ? `<section class="panel akses-ringkas" style="max-width:520px;margin:14px auto"><h2>Akses Penuh</h2>${penuh() ? `<p style="margin:0"><span class="tag ok">aktif</span> sampai <b>${tglPendek((bacaAkses() || {}).sampai)}</b>. Semua arsip paket dan latihan tanpa batas terbuka.</p>`
+      : `<p style="margin:0 0 10px">Akun gratis: paket hari ini dan ${BATAS.gratis.sesi} sesi latihan bebas per hari.</p><a class="btn spark kecil" href="/akses/">Buka Akses Penuh · ${rupiah((bacaAkses() || {}).harga || 10000)}</a>`}</section>` : ""}
+    <section class="panel" style="max-width:520px;margin:14px auto"><h2>Hapus akun</h2><p class="hint" style="font-size:13.5px">Menghapus semua progres yang tersimpan di server beserta akun Anda. Progres di browser ini tidak ikut terhapus.${paywall() && penuh() ? " <b>Akses Penuh yang sudah dibayar ikut hilang.</b>" : ""}</p><button class="btn kecil" data-aksi-link="hapus">Hapus akun &amp; data</button></section>`;
 }
 function render() {
   const ajak = lanjut && v.layar !== "profil" ? `<p class="panel" style="max-width:440px;margin:10px auto 0;text-align:center"><b>Silakan masuk untuk menyimpan progres belajar psikotes.</b><br><span class="hint">Belum punya akun? Pilih tab Daftar — gratis.</span></p>` : "";
-  app.innerHTML = kepalaSitus("akun") + `<main class="wrap"><div class="pk-head" style="text-align:center"><h1>Akun</h1><div class="sub">Akun gratis untuk menyimpan progres, membuka arsip paket, dan latihan tanpa batas di semua perangkat.</div></div>${ajak}${layar()}</main>` + kaki();
+  app.innerHTML = kepalaSitus("akun") + `<main class="wrap"><div class="pk-head" style="text-align:center"><h1>Akun</h1><div class="sub">${paywall() ? "Akun gratis untuk menyimpan progres di semua perangkat. Arsip paket dan latihan tanpa batas tersedia lewat Akses Penuh." : "Akun gratis untuk menyimpan progres, membuka arsip paket, dan latihan tanpa batas di semua perangkat."}</div></div>${ajak}${layar()}</main>` + kaki();
   const f = app.querySelector("form input"); if (f && v.layar !== "profil") f.focus();
 }
 function set(o) { Object.assign(v, o); render(); }
@@ -65,6 +69,7 @@ async function setelahMasuk() {
   set({ layar: "profil", sibuk: true, galat: "", pesan: "Menyinkronkan progres…" });
   try { const r = await A.sinkronPenuh(); set({ sibuk: false, pesan: `Sinkron selesai${r.berubah ? ` — ${r.berubah} hasil subtes diambil dari akun` : ""}.` }); }
   catch (e) { set({ sibuk: false, pesan: "", galat: "Masuk berhasil, tetapi sinkron gagal: " + terjemah(e) }); }
+  await muatAkses(); render();
   if (lanjut) location.replace(lanjut);
 }
 
@@ -121,4 +126,5 @@ app.addEventListener("click", async (ev) => {
   if (v.user && !adaSalinan) return setelahMasuk(); // perangkat baru dengan sesi aktif: tarik progres otomatis
   if (v.user && lanjut) return location.replace(lanjut);
   set({ layar: v.user ? "profil" : "masuk" });
+  if (v.user) { await muatAkses(); render(); }
 })();

@@ -31,6 +31,17 @@ export function pastikanSkema() {
       status text NOT NULL DEFAULT 'baru', catatan text)`;
     await q`CREATE INDEX IF NOT EXISTS laporan_status ON laporan (status, dibuat DESC)`;
     await q`CREATE INDEX IF NOT EXISTS laporan_sidik ON laporan (ip_hash, dibuat)`;
+    await q`CREATE TABLE IF NOT EXISTS akses (
+      user_id text PRIMARY KEY, email text, berlaku_sampai timestamptz NOT NULL, sumber text NOT NULL, ref text,
+      dibuat timestamptz NOT NULL DEFAULT now(), diubah timestamptz NOT NULL DEFAULT now())`;
+    await q`CREATE TABLE IF NOT EXISTS pesanan (
+      kode text PRIMARY KEY, user_id text NOT NULL, email text, status text NOT NULL DEFAULT 'menunggu',
+      pembayaran_id text, dibuat timestamptz NOT NULL DEFAULT now(), dibayar timestamptz)`;
+    await q`CREATE INDEX IF NOT EXISTS pesanan_user ON pesanan (user_id, dibuat DESC)`;
+    await q`CREATE TABLE IF NOT EXISTS pembayaran (
+      id text PRIMARY KEY, sumber text NOT NULL, dibuat timestamptz NOT NULL DEFAULT now(), nominal int, nama text, pesan text,
+      kode text, user_id text, status text NOT NULL, data jsonb, diubah timestamptz NOT NULL DEFAULT now())`;
+    await q`CREATE INDEX IF NOT EXISTS pembayaran_status ON pembayaran (status, dibuat DESC)`;
   })().catch((e) => { _skema = null; throw e; });
   return _skema;
 }
@@ -53,3 +64,24 @@ export async function bodyJSON(req) {
   if (!chunks.length) return null;
   try { return JSON.parse(Buffer.concat(chunks).toString("utf8")); } catch { return null; }
 }
+
+// Akses Penuh (berbayar). Paywall hanya aktif bila token webhook Trakteer dan halaman Trakteer sudah diatur.
+export const HARGA = 10000;
+export const BERLAKU_SAMPAI = "2026-12-02T23:59:59+08:00";
+export const TRAKTEER_URL = (process.env.TRAKTEER_URL || "").trim();
+export const paywallAktif = () => !!(process.env.TRAKTEER_WEBHOOK_TOKEN && TRAKTEER_URL && process.env.PAYWALL !== "off");
+export function adalahAdmin(u) {
+  const daftar = (process.env.ADMIN_EMAILS || "").toLowerCase().split(/[\s,;]+/).filter(Boolean);
+  return !!(u && u.verified && u.email && daftar.includes(u.email.toLowerCase()));
+}
+export async function aksesDari(q, u) {
+  if (!u) return null;
+  if (adalahAdmin(u)) return { sampai: BERLAKU_SAMPAI, sumber: "admin" };
+  const [a] = await q`SELECT berlaku_sampai, sumber FROM akses WHERE user_id = ${u.id} AND berlaku_sampai > now()`;
+  return a ? { sampai: new Date(a.berlaku_sampai).toISOString(), sumber: a.sumber } : null;
+}
+export async function berikanAkses(q, userId, email, sumber, ref) {
+  await q`INSERT INTO akses (user_id, email, berlaku_sampai, sumber, ref) VALUES (${userId}, ${email || null}, ${BERLAKU_SAMPAI}, ${sumber}, ${ref || null})
+    ON CONFLICT (user_id) DO UPDATE SET berlaku_sampai = GREATEST(akses.berlaku_sampai, EXCLUDED.berlaku_sampai), sumber = EXCLUDED.sumber, ref = EXCLUDED.ref, diubah = now()`;
+}
+

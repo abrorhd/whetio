@@ -2,6 +2,7 @@
 import { KODE as META } from "./gen/index.js";
 import { logo, pelatuk, ubahMood } from "./merek.js";
 import { bukaLapor } from "./laporan.js";
+import { paywall, penuh } from "./akses.js";
 import { akun, kirimHasil } from "./sinkron.js";
 
 const SKALA = ["Sangat tidak menggambarkan", "Tidak menggambarkan", "Agak menggambarkan", "Menggambarkan", "Sangat menggambarkan"];
@@ -17,9 +18,10 @@ function tulis(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 let kbAktif = null; // satu pendengar papan ketik per halaman
 
 export function kepalaSitus(aktif) {
-  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ["/tip/", "Tip kopi", "tip"]];
+  const pw = paywall(), pn = penuh();
+  const nav = [["/psikotes/", "Siap Psikotes", "psikotes"], ["/psikotes/latihan/", "Latihan bebas", "latihan"], ["/psikotes/metode/", "Metode", "metode"], ...(pw && !pn ? [["/akses/", "Akses Penuh", "akses"]] : []), ["/tip/", "Tip kopi", "tip"]];
   const a = akun(), inisial = a && a.email ? esc(a.email[0].toUpperCase()) : "";
-  const tombol = a ? `<a class="akun-pil masuk" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""} title="${esc(a.email)}"><span class="avatar">${inisial}</span>Akun</a>`
+  const tombol = a ? `<a class="akun-pil masuk" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""} title="${esc(a.email)}${pw && pn ? " · Akses Penuh" : ""}"><span class="avatar">${inisial}</span>Akun${pw && pn ? '<span class="bintang" aria-label="Akses Penuh">★</span>' : ""}</a>`
     : `<a class="akun-pil" href="/akun/"${aktif === "akun" ? ' aria-current="page"' : ""}>Masuk</a>`;
   return `<header class="topbar"><div class="wrap"><a class="merek" href="/">${logo(34)}<span>Whetio</span></a><nav class="menu">${nav.map(([h, t, k]) => `<a href="${h}"${k === aktif ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav>${tombol}</div></header>`;
 }

@@ -56,7 +56,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true, hasil: ops.length - 1 - latihan.length, waktu: Date.now() });
     }
     if (req.method === "DELETE") {
-      await q.transaction([q`DELETE FROM hasil WHERE user_id = ${u.id}`, q`DELETE FROM latihan WHERE user_id = ${u.id}`, q`DELETE FROM profil WHERE user_id = ${u.id}`, q`UPDATE laporan SET user_id = NULL, email = NULL WHERE user_id = ${u.id}`]);
+      await q.transaction([q`DELETE FROM hasil WHERE user_id = ${u.id}`, q`DELETE FROM latihan WHERE user_id = ${u.id}`, q`DELETE FROM profil WHERE user_id = ${u.id}`, q`UPDATE laporan SET user_id = NULL, email = NULL WHERE user_id = ${u.id}`,
+        q`DELETE FROM akses WHERE user_id = ${u.id}`, q`UPDATE pesanan SET email = NULL WHERE user_id = ${u.id}`, q`UPDATE pembayaran SET user_id = NULL WHERE user_id = ${u.id}`]);
       return res.status(200).json({ ok: true });
     }
     return res.status(405).json({ message: "Metode tidak didukung." });
