@@ -242,6 +242,10 @@ svg.pelatuk[data-mood=senyum]{animation:pl-lompat .55s ease-out 2}
 .pelatuk[data-mood=patuk] .pl-percik{display:inline;animation:pl-percik 1.6s infinite}
 .pelatuk[data-mood=patuk] .pl-kepala{animation:pl-patuk-ulang 1.6s ease-in-out infinite}
 .pelatuk.anim-patuk .pl-kepala{animation:pl-patuk .3s ease-in-out 3}
+.pelatuk.anim-kedip .m-kelopak{animation:pl-kedip-sekali .42s ease-in-out}
+.pelatuk.anim-sapa .pl-kepala{animation:pl-sapa .6s ease-in-out}
+@keyframes pl-kedip-sekali{0%,100%{transform:scaleY(0)}30%,60%{transform:scaleY(1)}}
+@keyframes pl-sapa{40%{transform:rotate(-8deg) translateY(-2px)}}
 .pelatuk.anim-patuk .pl-percik{display:inline;animation:pl-percik .3s 3}
 .pelatuk[data-mood=ngopi] .pl-kopi{display:inline}
 svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
@@ -320,11 +324,19 @@ svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
 /* Kawanan pelatuk di latar */
 .kawanan{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .kw-burung{position:absolute;left:0;top:0;width:var(--uk,30px);opacity:0;transition-property:transform,opacity;transition-timing-function:ease-in-out;will-change:transform}
-.kw-burung.tampak{opacity:.6}
-.kw-burung svg{display:block;width:100%;height:auto}
-.kw-sayap{transform-box:view-box;transform-origin:16px 16px;animation:kw-kepak .22s ease-in-out infinite alternate}
-@keyframes kw-kepak{from{transform:rotate(14deg)}to{transform:rotate(-38deg) scaleY(.85)}}
+.kw-burung.tampak{opacity:.55}
+.kw-burung svg{display:block;width:100%;height:auto;transform-origin:50% 90%}
 .kw-t{fill:#2B3440}.kw-g{fill:#1E252E}
+.kw-sayap{transform-box:view-box;transform-origin:16px 16px;animation:kw-kepak .22s ease-in-out infinite alternate}
+.kw-mata{transform-box:fill-box;transform-origin:center;animation:kw-kedip 4.2s infinite;animation-delay:var(--kd,0s)}
+.kw-burung.hinggap .kw-sayap{animation:none;transform:rotate(12deg)}
+.kw-burung.hinggap svg{animation:kw-angguk 1.4s ease-in-out infinite}
+.kw-burung.kaget .kw-sayap{animation-duration:.11s}
+.kw-burung.kedip .kw-mata{animation:kw-kedip-sekali .4s ease-in-out}
+@keyframes kw-kepak{from{transform:rotate(14deg)}to{transform:rotate(-38deg) scaleY(.85)}}
+@keyframes kw-kedip{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes kw-kedip-sekali{0%,100%{transform:scaleY(1)}30%,60%{transform:scaleY(.1)}}
+@keyframes kw-angguk{0%,70%,100%{transform:none}80%{transform:rotate(8deg)}90%{transform:rotate(-2deg)}}
 @media (prefers-color-scheme:dark){.kw-burung.tampak{opacity:.55}.kw-t{fill:#7D8E9E}.kw-g{fill:#5F7080}}
 @media (max-width:640px){
   .topbar .wrap{justify-content:space-between}

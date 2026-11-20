@@ -16,10 +16,13 @@ export function pelatuk(mood = "fokus", kelas = "") {
   <g class="pl-batang"><rect x="160" y="0" width="34" height="200" rx="6" fill="#B9A58A"/><path d="M168 20 v40 M184 70 v50 M170 130 v50" stroke="#9C8669" stroke-width="3" stroke-linecap="round"/></g>
   <g class="pl-tubuh">
     <path d="M104 150 l40 48 l16 -2 l-30 -50 z" fill="#1E252E"/>
+    <g class="pl-kaki" fill="none" stroke="#E8891C" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M120 132 L151 141" stroke-width="7"/><path d="M151 141 l11 -7 M151 141 l12 1" stroke-width="4.5"/>
+      <path d="M114 152 L149 164" stroke-width="7"/><path d="M149 164 l12 -6 M149 164 l12 2 M149 164 l7 9" stroke-width="4.5"/>
+    </g>
     <ellipse cx="112" cy="116" rx="40" ry="50" fill="#2B3440"/>
     <path d="M96 92 q16 -6 30 4 q8 30 -6 62 q-24 4 -30 -14 q-8 -28 6 -52 z" fill="#F4F1EA"/>
     <g class="pl-sayap"><path d="M84 104 q-6 26 8 50 q-20 -6 -22 -28 q0 -14 14 -22 z" fill="#1E252E"/><g fill="#FFFFFF" opacity=".9"><circle cx="80" cy="122" r="3"/><circle cx="86" cy="134" r="3"/><circle cx="78" cy="140" r="2.5"/></g></g>
-    <path d="M146 152 q10 4 14 0 M146 162 q10 4 14 0" stroke="#F29F3D" stroke-width="5" stroke-linecap="round" fill="none"/>
   </g>
   <g class="pl-kepala">
     <circle cx="122" cy="66" r="30" fill="#2B3440"/>
@@ -49,18 +52,22 @@ function sementara(el, mood, ms) {
 }
 function picu(el, kelas, ms) { el.classList.remove(kelas); void el.getBoundingClientRect(); el.classList.add(kelas); setTimeout(() => el.classList.remove(kelas), ms); }
 
-// Kawanan pelatuk kecil di latar (saat pengguna diam).
+// Kawanan pelatuk kecil di latar, dan dialog laporan/kritik-saran.
 if (typeof document !== "undefined") { import("./kawanan.js"); import("./laporan.js"); }
 
-// Reaksi: kursor mendekat → menyapa (ramah), disentuh/diklik → mematuk. Dipasang sekali per halaman.
+// Reaksi: kursor mendekat → berkedip + menyapa/memiringkan kepala, disentuh/diklik → mematuk. Dipasang sekali per halaman.
 if (typeof document !== "undefined" && !window.__pelatukHidup) {
   window.__pelatukHidup = true;
   const tenang = () => window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.addEventListener("pointerover", (e) => {
     const p = e.target.closest && e.target.closest("svg.pelatuk");
-    if (!p || tenang() || p._sapa || !["fokus", "patuk"].includes(p.dataset.mood)) return;
-    p._sapa = true; setTimeout(() => (p._sapa = false), 5000);
-    sementara(p, "ramah", 1800);
+    if (!p || tenang() || p._lirik) return;
+    p._lirik = true; setTimeout(() => (p._lirik = false), 700);
+    picu(p, "anim-kedip", 450);                          // selalu berkedip saat didekati kursor
+    if (p._sapa) return;
+    p._sapa = true; setTimeout(() => (p._sapa = false), 4000);
+    if (["fokus", "patuk"].includes(p.dataset.mood)) sementara(p, "ramah", 1800);   // menyapa sambil melambai
+    else picu(p, "anim-sapa", 650);                                                   // memiringkan kepala
   });
   document.addEventListener("click", (e) => {
     const p = e.target.closest && e.target.closest("svg.pelatuk");
