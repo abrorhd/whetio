@@ -361,7 +361,12 @@ svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
 .pu-aksi{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13.5px;white-space:nowrap}
 .menu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0}
 .menu-kartu{display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink);min-height:132px}
+.program-utama,.menu-kartu,.pita{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.program-utama:hover,.menu-kartu:hover,.pita:hover{transform:translateY(-3px);box-shadow:0 8px 20px -10px rgba(23,32,43,.35)}
 .menu-kartu:hover,.pita:hover{border-color:var(--accent)}
+.program-utama:active,.menu-kartu:active,.pita:active{transform:translateY(-1px)}
+@media (hover:none){.program-utama:hover,.menu-kartu:hover,.pita:hover{transform:none;box-shadow:none}}
+@media (prefers-color-scheme:dark){.program-utama:hover,.menu-kartu:hover,.pita:hover{box-shadow:0 8px 22px -10px rgba(0,0,0,.8)}}
 .menu-kartu b{font-size:15px;margin-top:6px}
 .mk-sub{font-size:12.5px;color:var(--muted);line-height:1.45}
 .mk-atas{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
