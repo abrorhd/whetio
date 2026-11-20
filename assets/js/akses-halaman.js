@@ -37,6 +37,7 @@ function isi() {
       : `<button class="btn pri" data-aksi="kode"${v.sibuk ? " disabled" : ""}>Ambil kode</button>`}</section>
   <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 2 · Bayar ${rupiah(a.harga || 10000)} di Trakteer</h2>
     <ol><li>Buka halaman Trakteer Whetio, pilih <b>1 unit (${rupiah(a.harga || 10000)})</b>.</li><li>Di kolom <b>pesan</b>, tulis kode <b class="mono">${esc(kode || "WH-XXXXX")}</b>.</li><li>Bayar dengan QRIS, e-wallet, atau transfer bank.</li></ol>
+    <p class="hint">Cukup 1 unit. Lebih dari 1 unit dianggap dukungan tambahan dan tidak dikembalikan.</p>
     ${kode && a.tautan ? `<a class="btn spark" href="${esc(a.tautan)}" target="_blank" rel="noopener" data-aksi="trakteer">Buka Trakteer</a>` : ""}</section>
   <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 3 · Akses terbuka otomatis</h2>
     <p>Biasanya kurang dari satu menit setelah pembayaran berhasil. ${v.menunggu ? '<span class="hint">Menunggu konfirmasi pembayaran…</span>' : ""}</p>
