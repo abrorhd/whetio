@@ -1,7 +1,8 @@
 // Utilitas fungsi server (berkas berawalan _ tidak menjadi endpoint).
 import { neon } from "@neondatabase/serverless";
 
-export const AUTH = (process.env.NEON_AUTH_BASE_URL || process.env.VITE_NEON_AUTH_URL || "").replace(/\/+$/, "");
+const bacaAuth = () => (process.env.NEON_AUTH_BASE_URL || process.env.VITE_NEON_AUTH_URL || "").replace(/\/+$/, "");
+export let AUTH = bacaAuth();
 let _sql = null, _skema = null;
 export function sql() {
   if (!_sql) _sql = neon(process.env.DATABASE_URL);
@@ -68,7 +69,14 @@ export async function bodyJSON(req) {
 // Akses Penuh (berbayar). Paywall hanya aktif bila token webhook Trakteer dan halaman Trakteer sudah diatur.
 export const HARGA = 10000;
 export const BERLAKU_SAMPAI = "2026-12-02T23:59:59+08:00";
-export const TRAKTEER_URL = (process.env.TRAKTEER_URL || "").trim();
+export let TRAKTEER_URL = (process.env.TRAKTEER_URL || "").trim();
+// Cloudflare Workers: variabel lingkungan datang lewat objek env per permintaan → salin ke process.env.
+export function muatEnv(env) {
+  if (!env) return;
+  for (const [k, v] of Object.entries(env)) if (typeof v === "string") process.env[k] = v;
+  AUTH = bacaAuth();
+  TRAKTEER_URL = (process.env.TRAKTEER_URL || "").trim();
+}
 export const paywallAktif = () => !!(process.env.TRAKTEER_WEBHOOK_TOKEN && TRAKTEER_URL && process.env.PAYWALL !== "off");
 export function adalahAdmin(u) {
   const daftar = (process.env.ADMIN_EMAILS || "").toLowerCase().split(/[\s,;]+/).filter(Boolean);

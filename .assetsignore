@@ -1,0 +1,16 @@
+.git
+.github
+.wrangler
+node_modules
+api
+server
+scripts
+data
+worker.js
+middleware.js
+wrangler.jsonc
+vercel.json
+package.json
+package-lock.json
+*.md
+.gitignore

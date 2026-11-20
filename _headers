@@ -1,0 +1,8 @@
+/psikotes/paket.json
+  Cache-Control: no-cache
+
+/psikotes/paket/*/soal.json
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: public, max-age=0, must-revalidate

@@ -17,7 +17,9 @@ let manifes = { t: 0, terbaru: null };
 async function paketTerbaru(req) {
   if (Date.now() - manifes.t < 60_000 && manifes.terbaru) return manifes.terbaru;
   const host = req.headers["x-forwarded-host"] || req.headers.host;
-  const list = await fetch(`https://${host}/psikotes/paket.json`, { cache: "no-store" }).then((r) => r.json());
+  const alamat = `https://${host || "whetio"}/psikotes/paket.json`;
+  // Di Cloudflare, baca langsung dari aset statis (tanpa memanggil domain sendiri).
+  const list = await (globalThis.__ASSETS ? globalThis.__ASSETS.fetch(new Request(alamat)) : fetch(alamat, { cache: "no-store" })).then((r) => r.json());
   manifes = { t: Date.now(), terbaru: list.map((p) => p.id).sort().pop() || null };
   return manifes.terbaru;
 }
