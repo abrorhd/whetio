@@ -3,13 +3,11 @@
 // GET  /api/bayar/?cek=YYYY-MM-DD   → { boleh }  (dipakai middleware untuk paket arsip)
 // GET  /api/bayar/?admin=1&status=  → daftar pembayaran (khusus admin)
 // POST /api/bayar/ { aksi:"kode" }  → buat/ambil kode pembayaran milik pengguna
-// POST /api/bayar/ { aksi:"aktifkan", pembayaran_id?, tujuan:"WH-XXXXX"|email } → aktifkan manual (admin)
+// POST /api/bayar/ { aksi:"aktifkan", pembayaran_id?, tujuan:"pelatuk tajam"|email } → aktifkan manual (admin)
 // POST /api/bayar/ { aksi:"tandai", pembayaran_id, status } → ubah status pembayaran (admin)
-import { randomInt } from "node:crypto";
 import { sql, pastikanSkema, penggunaDari, bodyJSON, adalahAdmin, aksesDari, berikanAkses, paywallAktif, HARGA, BERLAKU_SAMPAI, TRAKTEER_URL } from "./_lib.js";
 
-const ABJAD = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-const kodeBaru = () => "WH-" + Array.from({ length: 5 }, () => ABJAD[randomInt(ABJAD.length)]).join("");
+import { kodeBaru, calonKode } from "./_kode.js";
 const TGL = /^\d{4}-\d{2}-\d{2}$/;
 const STATUS = new Set(["cocok", "manual", "tak-cocok", "kurang", "abaikan"]);
 let manifes = { t: 0, terbaru: null };
@@ -59,7 +57,7 @@ export default async function handler(req, res) {
       const dasar = { aktif, harga: HARGA, sampai: BERLAKU_SAMPAI, tautan: TRAKTEER_URL || null, masuk: !!u };
       if (!u) return res.status(200).json(dasar);
       const a = await aksesDari(q, u);
-      const [p] = await q`SELECT kode FROM pesanan WHERE user_id = ${u.id} AND status = 'menunggu' ORDER BY dibuat DESC LIMIT 1`;
+      const [p] = await q`SELECT kode FROM pesanan WHERE user_id = ${u.id} AND status = 'menunggu' AND kode NOT LIKE 'WH-%' ORDER BY dibuat DESC LIMIT 1`;
       return res.status(200).json({ ...dasar, penuh: !aktif || !!a, berlaku_sampai: a ? a.sampai : null, kode: p ? p.kode : null });
     }
 
@@ -68,9 +66,9 @@ export default async function handler(req, res) {
       if (b.aksi === "kode") {
         if (!u) return res.status(401).json({ message: "Silakan masuk terlebih dahulu." });
         if (!aktif) return res.status(409).json({ message: "Pembayaran belum dibuka." });
-        const [ada] = await q`SELECT kode FROM pesanan WHERE user_id = ${u.id} AND status = 'menunggu' ORDER BY dibuat DESC LIMIT 1`;
+        const [ada] = await q`SELECT kode FROM pesanan WHERE user_id = ${u.id} AND status = 'menunggu' AND kode NOT LIKE 'WH-%' ORDER BY dibuat DESC LIMIT 1`;
         if (ada) return res.status(200).json({ kode: ada.kode });
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 25; i++) {
           const kode = kodeBaru();
           const r = await q`INSERT INTO pesanan (kode, user_id, email) VALUES (${kode}, ${u.id}, ${u.email}) ON CONFLICT (kode) DO NOTHING RETURNING kode`;
           if (r.length) return res.status(200).json({ kode });
@@ -81,8 +79,8 @@ export default async function handler(req, res) {
       if (b.aksi === "aktifkan") {
         const tujuan = String(b.tujuan || "").trim();
         let target = null;
-        const kode = (tujuan.toUpperCase().match(/WH-?([A-Z0-9]{5})/) || [])[1];
-        if (kode) [target] = await q`SELECT user_id, email FROM pesanan WHERE kode = ${"WH-" + kode}`;
+        const calon = tujuan.includes("@") ? [] : calonKode(tujuan);
+        if (calon.length) [target] = await q`SELECT user_id, email FROM pesanan WHERE kode = ANY(${calon}) ORDER BY (status = 'menunggu') DESC, dibuat DESC LIMIT 1`;
         if (!target && tujuan.includes("@")) {
           [target] = await q`SELECT user_id, email FROM pesanan WHERE lower(email) = lower(${tujuan}) ORDER BY dibuat DESC LIMIT 1`;
           if (!target) [target] = await q`SELECT user_id, email FROM profil WHERE lower(email) = lower(${tujuan}) LIMIT 1`;

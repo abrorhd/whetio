@@ -41,7 +41,7 @@ function kartuBayar(p) {
     <div class="meta"><span class="qno">${rupiah(p.nominal)}</span><span class="tag ${perlu ? "no" : p.status === "abaikan" ? "" : "ok"}">${esc((ST_BAYAR.find(([s]) => s === p.status) || [, p.status])[1])}</span><span class="hint">${waktu(p.dibuat)} · ${esc(p.nama || "tanpa nama")}</span></div>
     <blockquote class="lp-pesan">${esc(p.pesan || "(tanpa pesan)")}</blockquote>
     <p class="hint">Kode terbaca: <b class="mono">${esc(p.kode || "–")}</b> · ID: <span class="mono">${esc(p.id)}</span></p>
-    ${perlu ? `<div class="nav lp-aksi"><input class="isian-admin" placeholder="Kode WH-XXXXX atau email akun" value="${esc(p.kode || "")}"><button class="btn kecil pri" data-aktifkan>Aktifkan</button><button class="btn kecil" data-tandai="abaikan">Abaikan</button></div>` : ""}
+    ${perlu ? `<div class="nav lp-aksi"><input class="isian-admin" placeholder="Kode dua kata (mis. pelatuk tajam) atau email akun" value="${esc(p.kode || "")}"><button class="btn kecil pri" data-aktifkan>Aktifkan</button><button class="btn kecil" data-tandai="abaikan">Abaikan</button></div>` : ""}
     <details><summary>Data mentah</summary><pre class="mono" style="white-space:pre-wrap;font-size:12px">${esc(JSON.stringify(p.data, null, 2))}</pre></details>
   </article>`;
 }
@@ -50,7 +50,7 @@ function renderBayar(h) {
   const j = bayar.jumlah || {}, semua = Object.values(j).reduce((a, b) => a + b, 0);
   h += `<p class="panel">Paywall: <b>${bayar.aktif ? "aktif" : "belum aktif"}</b> · Akses Penuh aktif: <b>${bayar.aksesAktif}</b> akun</p>`;
   h += `<div class="modebar"><div class="seg">${ST_BAYAR.map(([s, t]) => `<button data-filter-bayar="${s}" aria-pressed="${filterBayar === s}">${t} <span class="mono">${s ? j[s] || 0 : semua}</span></button>`).join("")}</div></div>`;
-  h += `<section class="panel"><h2>Aktifkan manual</h2><div class="nav lp-aksi"><input class="isian-admin" id="manual" placeholder="Kode WH-XXXXX atau email akun"><button class="btn kecil pri" data-manual>Aktifkan</button></div></section>`;
+  h += `<section class="panel"><h2>Aktifkan manual</h2><div class="nav lp-aksi"><input class="isian-admin" id="manual" placeholder="Kode dua kata (mis. pelatuk tajam) atau email akun"><button class="btn kecil pri" data-manual>Aktifkan</button></div></section>`;
   return h + (bayar.pembayaran.length ? bayar.pembayaran.map(kartuBayar).join("") : '<p class="panel">Tidak ada pembayaran di sini.</p>');
 }
 async function muatBayar() {

@@ -425,6 +425,7 @@ details.mtr[open]>summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
 .coba-kepala{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;min-height:34px}
 .coba .fb ol.bahas{margin:4px 0 0;padding-left:18px}
 .coba .fb ol.bahas li{font-size:14px;margin:3px 0}
+.kode-kata{font-size:24px;font-weight:800;letter-spacing:.01em;color:var(--accent);padding:8px 16px;border:2px dashed var(--spark);border-radius:12px;background:var(--sunk)}
 .mtr-kaki{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 @media (prefers-color-scheme:dark){.kw-burung.tampak{opacity:.55}.kw-t{fill:#7D8E9E}.kw-g{fill:#5F7080}}
 @media (max-width:720px) and (min-width:641px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

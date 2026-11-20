@@ -32,11 +32,11 @@ function isi() {
     <a class="btn pri" href="/akun/?lanjut=%2Fakses%2F">Masuk / Daftar</a></section>`;
   const kode = a.kode;
   h += `<section class="panel langkah"><h2>Langkah 1 · Ambil kode pembayaran</h2>
-    ${kode ? `<div class="kode-bayar"><span class="mono" id="kode">${esc(kode)}</span><button class="btn kecil" data-aksi="salin">Salin</button></div>
-      <p class="hint">Kode ini milik <b>${esc(u.email)}</b>. Tulis persis di kolom pesan Trakteer.</p>`
-      : `<button class="btn pri" data-aksi="kode"${v.sibuk ? " disabled" : ""}>Ambil kode</button>`}</section>
+    ${kode ? `<div class="kode-bayar"><span class="kode-kata" id="kode">${esc(kode)}</span><button class="btn kecil" data-aksi="salin">Salin</button></div>
+      <p class="hint">Kode ini milik <b>${esc(u.email)}</b>. Tulis dua kata ini di kolom pesan Trakteer. Huruf besar/kecil dan tanda baca tidak berpengaruh, dan boleh ditambah ucapan lain.</p>`
+      : `<p class="hint" style="margin-top:0">Kode berupa dua kata, misalnya <i>pelatuk tajam</i>.</p><button class="btn pri" data-aksi="kode"${v.sibuk ? " disabled" : ""}>Ambil kode</button>`}</section>
   <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 2 · Bayar ${rupiah(a.harga || 10000)} di Trakteer</h2>
-    <ol><li>Buka halaman Trakteer Whetio, pilih <b>1 unit (${rupiah(a.harga || 10000)})</b>.</li><li>Di kolom <b>pesan</b>, tulis kode <b class="mono">${esc(kode || "WH-XXXXX")}</b>.</li><li>Bayar dengan QRIS, e-wallet, atau transfer bank.</li></ol>
+    <ol><li>Buka halaman Trakteer Whetio, pilih <b>1 unit (${rupiah(a.harga || 10000)})</b>.</li><li>Di kolom <b>pesan</b>, tulis kode <b>${kode ? `“${esc(kode)}”` : "dua kata dari langkah 1"}</b>.</li><li>Bayar dengan QRIS, e-wallet, atau transfer bank.</li></ol>
     <p class="hint">Cukup 1 unit. Lebih dari 1 unit dianggap dukungan tambahan dan tidak dikembalikan.</p>
     ${kode && a.tautan ? `<a class="btn spark" href="${esc(a.tautan)}" target="_blank" rel="noopener" data-aksi="trakteer">Buka Trakteer</a>` : ""}</section>
   <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 3 · Akses terbuka otomatis</h2>

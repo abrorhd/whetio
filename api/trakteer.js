@@ -1,9 +1,10 @@
 // Webhook Trakteer → aktifkan Akses Penuh.
 // Daftarkan di Trakteer (Integrasi → Webhook): https://whetio.com/api/trakteer/
 // Keaslian dicek lewat header X-Webhook-Token = env TRAKTEER_WEBHOOK_TOKEN.
-// Pembeli menulis kode WH-XXXXX di pesan dukungan; nominal minimal HARGA.
+// Pembeli menulis kode dua kata (mis. "pelatuk tajam") di pesan dukungan; nominal minimal HARGA.
 import { createHash, timingSafeEqual } from "node:crypto";
 import { sql, pastikanSkema, bodyJSON, berikanAkses, HARGA } from "./_lib.js";
+import { calonKode } from "./_kode.js";
 
 const sama = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && timingSafeEqual(x, y); };
 // "Rp 10.000" / "10000" / 10000 → 10000
@@ -17,8 +18,7 @@ export function uraikan(body) {
   if (qty && satuan) nominal = qty * satuan;
   const id = String(d.transaction_id ?? d.order_id ?? d.id ?? "").slice(0, 100)
     || "h-" + createHash("sha256").update(JSON.stringify(body)).digest("hex").slice(0, 24);
-  const kode = (pesan.toUpperCase().match(/WH\s*-?\s*([A-HJ-NP-Z2-9]{5})\b/) || [])[1];
-  return { id, nama: String(d.supporter_name ?? "").slice(0, 120), pesan, nominal, kode: kode ? "WH-" + kode : null, jenis: String(d.type ?? body.type ?? "") };
+  return { id, nama: String(d.supporter_name ?? "").slice(0, 120), pesan, nominal, calon: calonKode(pesan), jenis: String(d.type ?? body.type ?? "") };
 }
 
 export default async function handler(req, res) {
@@ -33,11 +33,13 @@ export default async function handler(req, res) {
     await pastikanSkema();
     const q = sql();
     const baru = await q`INSERT INTO pembayaran (id, sumber, nominal, nama, pesan, kode, status, data)
-      VALUES (${b.id}, 'trakteer', ${b.nominal}, ${b.nama}, ${b.pesan}, ${b.kode}, 'tak-cocok', ${JSON.stringify(body)}::jsonb)
+      VALUES (${b.id}, 'trakteer', ${b.nominal}, ${b.nama}, ${b.pesan}, ${b.calon[0] || null}, 'tak-cocok', ${JSON.stringify(body)}::jsonb)
       ON CONFLICT (id) DO NOTHING RETURNING id`;
     if (!baru.length) return res.status(200).json({ ok: true, ulang: true });
-    const [p] = b.kode ? await q`SELECT kode, user_id, email, status FROM pesanan WHERE kode = ${b.kode}` : [];
+    // Utamakan kode yang masih menunggu pembayaran.
+    const [p] = b.calon.length ? await q`SELECT kode, user_id, email, status FROM pesanan WHERE kode = ANY(${b.calon}) ORDER BY (status = 'menunggu') DESC, dibuat DESC LIMIT 1` : [];
     if (!p) return res.status(200).json({ ok: true, status: "tak-cocok" });
+    await q`UPDATE pembayaran SET kode = ${p.kode} WHERE id = ${b.id}`;
     if (b.nominal == null || b.nominal < HARGA) {
       await q`UPDATE pembayaran SET status = 'kurang', user_id = ${p.user_id}, diubah = now() WHERE id = ${b.id}`;
       return res.status(200).json({ ok: true, status: "kurang" });
