@@ -39,5 +39,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://whetio.com/:path*",
+      "permanent": true
+    }
   ]
 }
