@@ -23,10 +23,10 @@ function isi() {
   if (v.memuat) return '<p class="muat">Memeriksa status…</p>';
   if (!a.aktif) return `<section class="card kunci-arsip">${pelatuk("ramah", "akun-pl")}<h1>Akses Penuh belum dibuka</h1>
     <p>Saat ini semua fitur masih gratis untuk akun yang masuk. Pembayaran Akses Penuh akan diumumkan di halaman ini.</p>
-    <div class="cta" style="justify-content:center"><a class="btn spark" href="/psikotes/">Ke Siap Psikotes</a>${u ? "" : '<a class="btn pri" href="/akun/?lanjut=%2Fakses%2F">Masuk / Daftar</a>'}</div></section>`;
+    <div class="cta" style="justify-content:center"><a class="btn spark" href="/psikotes/">Ke Persiapan Psikotes</a>${u ? "" : '<a class="btn pri" href="/akun/?lanjut=%2Fakses%2F">Masuk / Daftar</a>'}</div></section>`;
   if (u && penuh()) return `<section class="card kunci-arsip">${pelatuk("senyum", "akun-pl anim-masuk")}<h1>Akses Penuh aktif</h1>
     <p>Berlaku sampai <b>${tglPendek(a.sampai)}</b>. Semua arsip paket dan latihan bebas tanpa batas sudah terbuka untuk <b>${esc(u.email)}</b>.</p>
-    <div class="cta" style="justify-content:center"><a class="btn spark" href="/psikotes/">Ke Siap Psikotes</a><a class="btn" href="/psikotes/latihan/">Latihan bebas</a></div></section>`;
+    <div class="cta" style="justify-content:center"><a class="btn spark" href="/psikotes/">Ke Persiapan Psikotes</a><a class="btn" href="/psikotes/latihan/">Latihan bebas</a></div></section>`;
   let h = `<div class="panel">${tabel(a)}</div>`;
   if (!u) return h + `<section class="panel langkah"><h2>Langkah 1 · Masuk dulu</h2><p>Akses Penuh terpasang ke akun Whetio, jadi berlaku di semua perangkat Anda.</p>
     <a class="btn pri" href="/akun/?lanjut=%2Fakses%2F">Masuk / Daftar</a></section>`;

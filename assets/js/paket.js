@@ -29,7 +29,7 @@ const id = (app.dataset.src.match(/paket\/(\d{4}-\d{2}-\d{2})\//) || [])[1];
   if (!r.ok) throw new Error(r.status);
   const p = await r.json();
   mulai(app, p, {
-    kembali: { href: "/psikotes/", teks: "Siap Psikotes" },
+    kembali: { href: "/psikotes/", teks: "Persiapan Psikotes" },
     ajak: () => ajakan(),
     catatan: "Simulasi penuh mengikuti urutan, jumlah soal, dan durasi psikotes UPKP; Visual Matching memakai batas 5 detik per soal.",
   });

@@ -1,4 +1,4 @@
-// Beranda Siap Psikotes: tanggal ujian, paket hari ini, fokus latihan, progres, daftar paket.
+// Beranda Persiapan Psikotes: tanggal ujian, paket hari ini, fokus latihan, progres, daftar paket.
 import { SUBTES, KODE } from "./gen/index.js";
 import { kepalaSitus, KUNCI_RINGKAS } from "./kuis.js";
 import { pelatuk } from "./merek.js";
@@ -16,7 +16,7 @@ const app = document.getElementById("app");
 function hero() {
   const t = tglUjian(), h = sisaHari(t), f = fase(h);
   const hitung = t == null ? "Pilih tanggal psikotes Anda:" : h > 0 ? `H-${h} menuju psikotes · ${teksTgl(t)}` : h === 0 ? "Hari ini psikotes. Tenang dan tajam!" : `Psikotes ${teksTgl(t)} sudah lewat`;
-  return `<section class="hero"><div><span class="slogan">Asah sedikit, tajam tiap hari.</span><h1>Siap Psikotes</h1>
+  return `<section class="hero"><div><span class="slogan">Asah sedikit, tajam tiap hari.</span><h1>Persiapan Psikotes</h1>
     <p class="lead">Simulasi penuh psikotes UPKP setiap pagi — 11 subtes, jumlah soal dan waktu seperti aslinya — plus latihan bebas${paywall() ? "" : " tanpa batas"} untuk mengejar tempo.</p>
     <div class="hitung" id="hitung">${hitung}</div>
     <div class="tgl-uji" role="group" aria-label="Tanggal psikotes">${PILIHAN_TGL.map(([v, l]) => `<button class="chip" data-tgl="${v}" aria-pressed="${t === v}">${l}</button>`).join("")}</div>
