@@ -60,6 +60,10 @@ document.getElementById("app").innerHTML = kepalaSitus("") + `<main class="wrap"
 ${pw && !penuh() ? `<a class="pita aksen" href="/akses/"><span class="mk-ikon">${IKON.bintang}</span><span class="pita-teks"><b>Akses Penuh · ${rupiah(ak.harga || 10000)}</b><span>Semua arsip paket dan latihan tanpa batas, sekali bayar sampai ${tglPendek(ak.batas)}.</span></span><span class="pita-panah" aria-hidden="true">→</span></a>` : ""}
 <a class="pita" href="/tip/"><span class="mk-ikon">${IKON.kopi}</span><span class="pita-teks"><b>Tip ke Admin buat beli kopi</b><span>Kalau Whetio membantu, traktir secangkir kopi lewat GoPay.</span></span><span class="pita-panah" aria-hidden="true">→</span></a>
 <div class="panel"><h2>Kenapa pelatuk?</h2><p style="margin:0">Burung pelatuk mematuk dengan gerakan pendek yang rutin, cepat, dan tepat sasaran — persis cara Whetio mengajak Anda berlatih: sedikit, setiap hari, fokus pada titik yang perlu diasah.</p></div>
+<div class="kotak-bawah">
+  <div class="kotak-info segera"><b>Nantikan menu persiapan ujian lain berikutnya</b><span>Program baru akan hadir di sini.</span></div>
+  <button type="button" class="kotak-info" data-saran><b>Kritik dan Saran</b><span>Kritik dan saranmu akan menjadi bahan pengembangan Whetio berikutnya.</span></button>
+</div>
 </main>` + kaki();
 }
 render();

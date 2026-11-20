@@ -379,6 +379,14 @@ svg.pelatuk.anim-masuk{animation:pl-masuk .6s cubic-bezier(.2,.8,.3,1.2) both}
 .pita-panah{color:var(--muted);font-weight:700}
 .program-utama+.menu-grid{margin-top:10px}
 .pita+.panel{margin-top:22px}
+.kotak-bawah{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:-4px 0 14px}
+.kotak-info{display:flex;flex-direction:column;gap:3px;text-align:left;padding:14px 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit}
+.kotak-info b{font-size:14.5px}
+.kotak-info span{font-size:12.5px;color:var(--muted)}
+.kotak-info.segera{border-style:dashed;background:transparent}
+button.kotak-info{cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+button.kotak-info:hover{transform:translateY(-3px);box-shadow:0 8px 20px -10px rgba(23,32,43,.35);border-color:var(--accent)}
+@media (hover:none){button.kotak-info:hover{transform:none;box-shadow:none}}
 
 /* Materi */
 .mtr-prog{display:flex;align-items:center;gap:12px;margin:8px 0 4px;font-size:13px;color:var(--muted)}
@@ -438,6 +446,7 @@ details.mtr[open]>summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
   .program-utama{grid-template-columns:auto 1fr;padding:14px}.pu-aksi{grid-column:1/-1;justify-content:center}
   .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.menu-kartu{min-height:0}
   .dua-kolom{grid-template-columns:1fr;gap:0}
+  .kotak-bawah{grid-template-columns:1fr}
   .ilus-grid.lebar{grid-template-columns:repeat(2,minmax(0,1fr))}.ilus-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .mtr-isi{padding:2px 12px 14px}details.mtr>summary{gap:10px;padding:12px}
   .mtr-kaki .btn{flex:1}
