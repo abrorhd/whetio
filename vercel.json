@@ -42,8 +42,8 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
-      "destination": "https://whetio.com/:path*",
+      "source": "/(.*)",
+      "destination": "https://whetio.com/$1",
       "permanent": true
     }
   ]
