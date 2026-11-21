@@ -8,7 +8,8 @@ import { muatAkses, mintaKode, bacaAkses, penuh, rupiah, tglPendek } from "./aks
 
 const app = document.getElementById("app");
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-let v = { memuat: true, sibuk: false, galat: "", pesan: "", menunggu: false };
+let v = { memuat: true, sibuk: false, galat: "", pesan: "", menunggu: false, klaim: false, klaimTerkirim: false };
+const sekarang = () => { const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); };
 
 const tabel = (a) => `<table class="tbl tbl-akses"><thead><tr><th></th><th>Tamu</th><th>Akun gratis</th><th>Akses Penuh</th></tr></thead><tbody>
   <tr><td>Paket simulasi hari ini</td><td>✓</td><td>✓</td><td>✓</td></tr>
@@ -42,7 +43,15 @@ function isi() {
   <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 3 · Akses terbuka otomatis</h2>
     <p>Biasanya kurang dari satu menit setelah pembayaran berhasil. ${v.menunggu ? '<span class="hint">Menunggu konfirmasi pembayaran…</span>' : ""}</p>
     <button class="btn" data-aksi="cek"${v.sibuk || !kode ? " disabled" : ""}>Cek status</button>
-    <p class="hint" style="margin-top:10px">Lupa menulis kode atau akses belum terbuka setelah 10 menit? Kirim lewat <button type="button" class="tautan" data-saran>Kritik &amp; saran</button>: nama di Trakteer, waktu bayar, dan email akun Anda. Admin akan mengaktifkan secara manual.</p></section>`;
+  </section>
+  <section class="panel langkah"><h2>Sudah bayar tapi lupa menulis kode?</h2>
+    ${v.klaimTerkirim ? `<p class="ok-t">Klaim terkirim atas akun <b>${esc(u.email)}</b>. Admin akan mencocokkan dengan data Trakteer dan mengaktifkan Akses Penuh secara manual, biasanya di hari yang sama.</p>`
+      : v.klaim ? `<form class="klaim-form" data-klaim>
+        <label>Nama di Trakteer<input name="nama" required maxlength="120" placeholder="Nama yang tampil saat mentraktir"></label>
+        <label>Perkiraan waktu bayar<input name="waktu" type="datetime-local" required value="${sekarang()}"></label>
+        <label>Catatan (opsional)<textarea name="catatan" rows="2" maxlength="500" placeholder="Mis. bayar lewat QRIS, pesan yang ditulis: …"></textarea></label>
+        <div class="cta" style="margin:0"><button class="btn pri"${v.sibuk ? " disabled" : ""}>Kirim klaim</button><button type="button" class="btn" data-aksi="batal-klaim">Batal</button></div></form>`
+      : `<p>Tidak apa-apa. Isi nama Anda di Trakteer dan perkiraan waktu bayar, admin akan mengaktifkan akses untuk akun ini.</p><button class="btn" data-aksi="klaim">Saya sudah bayar</button>`}</section>`;
   return h;
 }
 
@@ -72,6 +81,8 @@ app.addEventListener("click", async (e) => {
     try { await navigator.clipboard.writeText(document.getElementById("kode").textContent); b.textContent = "Tersalin ✓"; } catch (err) { b.textContent = "Salin manual"; }
   } else if (aksi === "trakteer") {
     tunggu(10);
+  } else if (aksi === "klaim" || aksi === "batal-klaim") {
+    v.klaim = aksi === "klaim"; v.galat = ""; render();
   } else if (aksi === "cek") {
     v.sibuk = true; render();
     await muatAkses(4000);
@@ -82,3 +93,18 @@ app.addEventListener("click", async (e) => {
 
 render();
 muatAkses(4000).then(() => { v.memuat = false; render(); });
+
+app.addEventListener("submit", async (e) => {
+  const f = e.target.closest("[data-klaim]"); if (!f) return;
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(f));
+  const t = d.waktu ? new Date(d.waktu) : null;
+  const waktu = t && !isNaN(t) ? t.toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) + " (waktu perangkat)" : d.waktu;
+  v.sibuk = true; v.galat = ""; render();
+  try {
+    const r = await fetch("/api/bayar/", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ aksi: "klaim", nama: d.nama, waktu, catatan: d.catatan }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok || r.status === 429) { v.klaimTerkirim = true; v.klaim = false; } else v.galat = j.message || "Gagal mengirim klaim. Coba lagi.";
+  } catch (err) { v.galat = "Gagal mengirim klaim. Periksa koneksi."; }
+  v.sibuk = false; render();
+});

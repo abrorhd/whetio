@@ -7,7 +7,7 @@ import { KATEGORI } from "./laporan.js";
 const API = "/api/laporan/";
 const app = document.getElementById("app");
 const HURUF = "ABCDEF";
-const LABEL = Object.fromEntries([...KATEGORI.soal, ...KATEGORI.umum]);
+const LABEL = { ...Object.fromEntries([...KATEGORI.soal, ...KATEGORI.umum]), bayar: "Klaim lupa kode bayar" };
 const STATUS = [["baru", "Baru"], ["ditinjau", "Ditinjau"], ["selesai", "Selesai"], ["ditolak", "Ditolak"], ["", "Semua"]];
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 // SVG dari laporan adalah masukan pengguna: tampilkan sebagai <img> (skrip di dalamnya tidak dijalankan), teks lain di-escape.
@@ -35,13 +35,29 @@ function kartu(r) {
   </article>`;
 }
 
+// Calon pemilik pembayaran tanpa kode: kode diambil ≤24 jam sebelum bayar, atau klaim dengan nama Trakteer serupa / dikirim ≤2 hari setelahnya.
+function calonPemilik(p) {
+  const t = new Date(p.dibuat).getTime(), nama = String(p.nama || "").toLowerCase().trim(), hasil = new Map();
+  for (const k of (bayar.klaim || [])) {
+    const nk = String((k.konteks || {}).nama_trakteer || "").toLowerCase().trim(), dk = new Date(k.dibuat).getTime();
+    const mirip = nama && nk && (nk.includes(nama) || nama.includes(nk));
+    if (k.email && (mirip || (dk >= t - 3600e3 && dk <= t + 48 * 3600e3))) hasil.set(k.email, `klaim${mirip ? " · nama cocok" : ""} · ${waktu(k.dibuat)}`);
+  }
+  for (const m of (bayar.menunggu || [])) {
+    const dm = new Date(m.dibuat).getTime();
+    if (m.email && !hasil.has(m.email) && dm >= t - 24 * 3600e3 && dm <= t + 600e3) hasil.set(m.email, `kode “${m.kode}” diambil ${waktu(m.dibuat)}`);
+  }
+  return [...hasil];
+}
 function kartuBayar(p) {
   const perlu = p.status === "tak-cocok" || p.status === "kurang";
+  const calon = perlu ? calonPemilik(p) : [];
   return `<article class="card lp" data-bayar="${esc(p.id)}">
     <div class="meta"><span class="qno">${rupiah(p.nominal)}</span><span class="tag ${perlu ? "no" : p.status === "abaikan" ? "" : "ok"}">${esc((ST_BAYAR.find(([s]) => s === p.status) || [, p.status])[1])}</span><span class="hint">${waktu(p.dibuat)} · ${esc(p.nama || "tanpa nama")}</span></div>
     <blockquote class="lp-pesan">${esc(p.pesan || "(tanpa pesan)")}</blockquote>
     <p class="hint">Kode terbaca: <b class="mono">${esc(p.kode || "–")}</b> · ID: <span class="mono">${esc(p.id)}</span></p>
-    ${perlu ? `<div class="nav lp-aksi"><input class="isian-admin" placeholder="Kode dua kata (mis. pelatuk tajam) atau email akun" value="${esc(p.kode || "")}"><button class="btn kecil pri" data-aktifkan>Aktifkan</button><button class="btn kecil" data-tandai="abaikan">Abaikan</button></div>` : ""}
+    ${perlu ? `<div class="nav lp-aksi"><input class="isian-admin" placeholder="Kode dua kata (mis. pelatuk tajam) atau email akun" value="${esc(p.kode || "")}"><button class="btn kecil pri" data-aktifkan>Aktifkan</button><button class="btn kecil" data-tandai="abaikan">Abaikan</button></div>
+      ${calon.length ? `<div class="calon"><span class="hint">Calon pemilik (klik untuk mengisi):</span>${calon.map(([e, ket]) => `<button type="button" class="chip" data-isi="${esc(e)}"><b>${esc(e)}</b><span>${esc(ket)}</span></button>`).join("")}</div>` : `<p class="hint">Belum ada calon pemilik yang cocok waktunya. Lihat daftar kode menunggu dan klaim di atas.</p>`}` : ""}
     <details><summary>Data mentah</summary><pre class="mono" style="white-space:pre-wrap;font-size:12px">${esc(JSON.stringify(p.data, null, 2))}</pre></details>
   </article>`;
 }
@@ -51,6 +67,11 @@ function renderBayar(h) {
   h += `<p class="panel">Paywall: <b>${bayar.aktif ? "aktif" : "belum aktif"}</b> · Akses Penuh aktif: <b>${bayar.aksesAktif}</b> akun</p>`;
   h += `<div class="modebar"><div class="seg">${ST_BAYAR.map(([s, t]) => `<button data-filter-bayar="${s}" aria-pressed="${filterBayar === s}">${t} <span class="mono">${s ? j[s] || 0 : semua}</span></button>`).join("")}</div></div>`;
   h += `<section class="panel"><h2>Aktifkan manual</h2><div class="nav lp-aksi"><input class="isian-admin" id="manual" placeholder="Kode dua kata (mis. pelatuk tajam) atau email akun"><button class="btn kecil pri" data-manual>Aktifkan</button></div></section>`;
+  const kl = bayar.klaim || [], mn = bayar.menunggu || [];
+  h += `<details class="panel"${kl.length ? " open" : ""}><summary><b>Klaim “sudah bayar, lupa kode”</b> <span class="mono">${kl.length}</span></summary>
+    ${kl.length ? `<table class="tbl"><thead><tr><th>Dikirim</th><th>Email akun</th><th>Nama Trakteer · waktu bayar</th></tr></thead><tbody>${kl.map((k) => `<tr><td>${waktu(k.dibuat)}</td><td>${esc(k.email)}</td><td>${esc((k.konteks || {}).nama_trakteer || "")} · ${esc((k.konteks || {}).waktu_bayar || "")}</td></tr>`).join("")}</tbody></table>` : '<p class="hint">Belum ada klaim.</p>'}</details>`;
+  h += `<details class="panel"><summary><b>Kode diambil, belum dibayar</b> <span class="mono">${mn.length}</span></summary>
+    ${mn.length ? `<table class="tbl"><thead><tr><th>Diambil</th><th>Kode</th><th>Email akun</th></tr></thead><tbody>${mn.map((m) => `<tr><td>${waktu(m.dibuat)}</td><td>${esc(m.kode)}</td><td>${esc(m.email)}</td></tr>`).join("")}</tbody></table>` : '<p class="hint">Tidak ada.</p>'}</details>`;
   return h + (bayar.pembayaran.length ? bayar.pembayaran.map(kartuBayar).join("") : '<p class="panel">Tidak ada pembayaran di sini.</p>');
 }
 async function muatBayar() {
@@ -106,7 +127,8 @@ app.addEventListener("click", async (e) => {
   if (b.dataset.filterBayar !== undefined) { filterBayar = b.dataset.filterBayar; bayar = null; render(); return muatBayar(); }
   if (b.dataset.manual !== undefined) return aktifkan(document.getElementById("manual").value.trim(), null, b);
   const kb = b.closest("[data-bayar]");
-  if (kb && b.dataset.aktifkan !== undefined) return aktifkan(kb.querySelector("input").value.trim(), kb.dataset.bayar, b);
+  if (kb && b.dataset.isi) { const i = kb.querySelector("input.isian-admin"); i.value = b.dataset.isi; i.focus(); return; }
+  if (kb && b.dataset.aktifkan !== undefined) return aktifkan(kb.querySelector("input.isian-admin").value.trim(), kb.dataset.bayar, b);
   if (kb && b.dataset.tandai) {
     b.disabled = true;
     const r = await fetch("/api/bayar/", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ aksi: "tandai", pembayaran_id: kb.dataset.bayar, status: b.dataset.tandai }) }).catch(() => null);

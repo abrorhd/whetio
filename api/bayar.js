@@ -3,6 +3,7 @@
 // GET  /api/bayar/?cek=YYYY-MM-DD   → { boleh }  (dipakai middleware untuk paket arsip)
 // GET  /api/bayar/?admin=1&status=  → daftar pembayaran (khusus admin)
 // POST /api/bayar/ { aksi:"kode" }  → buat/ambil kode pembayaran milik pengguna
+// POST /api/bayar/ { aksi:"klaim", nama, waktu, catatan? } → "sudah bayar tapi lupa kode" (masuk ke admin)
 // POST /api/bayar/ { aksi:"aktifkan", pembayaran_id?, tujuan:"pelatuk tajam"|email } → aktifkan manual (admin)
 // POST /api/bayar/ { aksi:"tandai", pembayaran_id, status } → ubah status pembayaran (admin)
 import { sql, pastikanSkema, penggunaDari, bodyJSON, adalahAdmin, aksesDari, berikanAkses, paywallAktif, HARGA, BERLAKU_SAMPAI, TRAKTEER_URL } from "./_lib.js";
@@ -50,7 +51,12 @@ export default async function handler(req, res) {
         : await q`SELECT id, dibuat, nominal, nama, pesan, kode, status, data FROM pembayaran ORDER BY dibuat DESC LIMIT 300`;
       const jumlah = await q`SELECT status, count(*)::int AS n FROM pembayaran GROUP BY status`;
       const [{ n: aksesAktif }] = await q`SELECT count(*)::int AS n FROM akses WHERE berlaku_sampai > now()`;
-      return res.status(200).json({ aktif, pembayaran: rows, jumlah: Object.fromEntries(jumlah.map((r) => [r.status, r.n])), aksesAktif });
+      // Bahan pencocokan manual: kode yang diambil tapi belum dibayar, dan klaim "lupa kode".
+      const menunggu = await q`SELECT p.kode, p.email, p.dibuat FROM pesanan p WHERE p.status = 'menunggu'
+        AND NOT EXISTS (SELECT 1 FROM akses a WHERE a.user_id = p.user_id AND a.berlaku_sampai > now()) ORDER BY p.dibuat DESC LIMIT 200`;
+      const klaim = await q`SELECT l.id, l.dibuat, l.email, l.pesan, l.konteks, l.status FROM laporan l WHERE l.kategori = 'bayar' AND l.status IN ('baru', 'ditinjau')
+        AND NOT EXISTS (SELECT 1 FROM akses a WHERE a.user_id = l.user_id AND a.berlaku_sampai > now()) ORDER BY l.dibuat DESC LIMIT 100`;
+      return res.status(200).json({ aktif, pembayaran: rows, jumlah: Object.fromEntries(jumlah.map((r) => [r.status, r.n])), aksesAktif, menunggu, klaim });
     }
 
     if (req.method === "GET") {
@@ -75,6 +81,17 @@ export default async function handler(req, res) {
         }
         return res.status(503).json({ message: "Gagal membuat kode. Coba lagi." });
       }
+      if (b.aksi === "klaim") {
+        if (!u) return res.status(401).json({ message: "Silakan masuk terlebih dahulu." });
+        const nama = String(b.nama || "").trim().slice(0, 120), wkt = String(b.waktu || "").trim().slice(0, 40), cat = String(b.catatan || "").trim().slice(0, 500);
+        if (!nama || !wkt) return res.status(400).json({ message: "Isi nama di Trakteer dan perkiraan waktu bayar." });
+        const [{ n }] = await q`SELECT count(*)::int AS n FROM laporan WHERE kategori = 'bayar' AND user_id = ${u.id} AND dibuat > now() - interval '1 day'`;
+        if (n >= 3) return res.status(429).json({ message: "Klaim sudah terkirim. Admin akan segera mengecek." });
+        const pesan = `Sudah bayar tapi lupa kode. Nama di Trakteer: ${nama}. Waktu bayar: ${wkt}.${cat ? " Catatan: " + cat : ""}`;
+        await q`INSERT INTO laporan (jenis, kategori, pesan, konteks, halaman, user_id, email)
+          VALUES ('umum', 'bayar', ${pesan}, ${JSON.stringify({ nama_trakteer: nama, waktu_bayar: wkt })}::jsonb, '/akses/', ${u.id}, ${u.email})`;
+        return res.status(200).json({ ok: true });
+      }
       if (!adalahAdmin(u)) return res.status(u ? 403 : 401).json({ message: "Khusus admin." });
       if (b.aksi === "aktifkan") {
         const tujuan = String(b.tujuan || "").trim();
@@ -84,12 +101,14 @@ export default async function handler(req, res) {
         if (!target && tujuan.includes("@")) {
           [target] = await q`SELECT user_id, email FROM pesanan WHERE lower(email) = lower(${tujuan}) ORDER BY dibuat DESC LIMIT 1`;
           if (!target) [target] = await q`SELECT user_id, email FROM profil WHERE lower(email) = lower(${tujuan}) LIMIT 1`;
+          if (!target) [target] = await q`SELECT user_id, email FROM laporan WHERE user_id IS NOT NULL AND lower(email) = lower(${tujuan}) ORDER BY dibuat DESC LIMIT 1`;
         }
         if (!target) return res.status(404).json({ message: "Kode atau email tidak ditemukan. Pengguna perlu masuk ke Whetio dan membuka halaman Akses Penuh sekali." });
         const pid = b.pembayaran_id ? String(b.pembayaran_id) : null;
         await berikanAkses(q, target.user_id, target.email, "manual", pid);
         await q`UPDATE pesanan SET status = 'lunas', dibayar = now(), pembayaran_id = ${pid} WHERE user_id = ${target.user_id} AND status = 'menunggu'`;
         if (pid) await q`UPDATE pembayaran SET status = 'manual', user_id = ${target.user_id}, diubah = now() WHERE id = ${pid}`;
+        await q`UPDATE laporan SET status = 'selesai', catatan = 'Akses Penuh diaktifkan manual', diubah = now() WHERE kategori = 'bayar' AND user_id = ${target.user_id} AND status IN ('baru', 'ditinjau')`;
         return res.status(200).json({ ok: true, email: target.email });
       }
       if (b.aksi === "tandai") {
