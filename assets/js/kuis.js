@@ -78,6 +78,29 @@ export function mulai(app, paket, opsi = {}) {
 
   // ---------- alur ----------
   function bukaIntro(kode) { stopTimer(); st.view = "intro"; st.kode = kode; simpan(); render(); window.scrollTo(0, 0); }
+  // Visual Matching: referensi dihafal dulu (HAFAL_DTK detik), lalu disembunyikan selama menjawab.
+  const HAFAL_DTK = 30;
+  function hafalVM(kode) {
+    st.hafal = { kode, akhir: Date.now() + HAFAL_DTK * 1000 };
+    st.view = "hafal"; st.kode = kode; simpan(); render(); window.scrollTo(0, 0);
+  }
+  function tickHafal() {
+    const hf = st.hafal; if (!hf || st.view !== "hafal") return stopTimer();
+    const sisa = hf.akhir - Date.now();
+    if (sisa <= 0) { st.hafal = null; return mulaiSubtes(hf.kode); }
+    const el = app.querySelector("#hafal-sisa"), bar = app.querySelector("#bar-hafal i");
+    if (el) el.textContent = Math.ceil(sisa / 1000);
+    if (bar) bar.style.transform = `scaleX(${Math.max(0, sisa / (HAFAL_DTK * 1000))})`;
+  }
+  function vHafal() {
+    const s = BY[st.hafal.kode];
+    return `<section class="card intro hafal"><span class="tag">Subtes ${s.no} · tahap hafal</span><h2>Hafalkan enam gambar ini</h2>
+      <p>Setelah waktu hafal habis, referensi <b>disembunyikan</b>. Anda hanya melihat satu gambar per soal dan menekan hurufnya (A–F atau 1–6).</p>
+      <div class="ref-vm besar">${s.ref.map((g, i) => `<div><b>${HURUF[i]}</b>${g}</div>`).join("")}</div>
+      <div class="hafal-waktu"><span class="mono"><b id="hafal-sisa">${Math.max(0, Math.ceil((st.hafal.akhir - Date.now()) / 1000))}</b> detik</span><div class="bar-waktu" id="bar-hafal"><i></i></div></div>
+      <p class="hint">Cari satu ciri pembeda untuk tiap huruf, misalnya arah garis atau jumlah garis.</p>
+      <div class="nav"><button class="btn" data-act="daftar">Kembali</button><button class="btn pri" data-act="hafal-selesai">Sudah hafal, mulai</button></div></section>`;
+  }
   function mulaiSubtes(kode) {
     const s = BY[kode], now = Date.now();
     st.hasil[kode] = { jw: Array(s.n).fill(null), dt: Array(s.n).fill(0), selesai: false, mode: st.mode, t: now };
@@ -125,11 +148,13 @@ export function mulai(app, paket, opsi = {}) {
     h += '<main class="wrap">';
     if (v === "intro") h += vIntro();
     else if (v === "run") h += vRun();
+    else if (v === "hafal" && st.hafal && BY[st.hafal.kode]) h += vHafal();
     else if (v === "hasil") h += vHasil();
     else if (v === "bahas") h += vBahas();
     else h += vDaftar();
     app.innerHTML = h + "</main>";
     if (v === "run" && st.mode === "simulasi") { timer = setInterval(tick, 200); tick(); }
+    if (v === "hafal") { timer = setInterval(tickHafal, 200); tickHafal(); }
   }
   function kepalaPaket() {
     return `<div class="pk-head">${opsi.kembali ? `<a class="hint" href="${opsi.kembali.href}">&larr; ${esc(opsi.kembali.teks)}</a>` : ""}<h1>${esc(paket.judul)}</h1><div class="sub">${esc(paket.subjudul || `${SUB.length} subtes · ${paket.jumlah} butir · format & waktu seperti psikotes UPKP`)}</div></div>`;
@@ -157,7 +182,7 @@ export function mulai(app, paket, opsi = {}) {
   function vIntro() {
     const s = BY[st.kode], m = META[s.kode] || {};
     const angka = s.jenis === "likert" ? [`${s.n} pernyataan`, `${Math.round(s.durasi / 60)} menit`, "skala 1–5"] : [`${s.n} soal`, `${Math.round(s.durasi / 6) / 10} menit`, `maks ${s.batas} dtk/soal`, `target ${s.target} dtk/soal`];
-    const ref = s.jenis === "vm" ? `<p class="hint">Referensi paket ini:</p>${refVM(s)}` : "";
+    const ref = s.jenis === "vm" ? `<p class="hint">Setelah menekan Mulai, Anda punya ${HAFAL_DTK} detik untuk menghafal enam gambar referensi (A–F). Selama menjawab, referensi tidak ditampilkan.</p>` : "";
     return `<section class="card intro"><span class="tag">Subtes ${s.no}</span><h2>${esc(s.nama)}</h2><p>${esc(m.petunjuk || "")}</p>
       <div class="angka">${angka.map((a) => `<span class="tag o">${a}</span>`).join("")}<span class="tag spark">${st.mode === "simulasi" ? "Simulasi berwaktu" : "Latihan bebas"}</span></div>
       ${m.kiat ? `<b>Kiat cepat</b><ul>${m.kiat.map((k) => `<li>${esc(k)}</li>`).join("")}</ul>` : ""}${ref}
@@ -173,7 +198,7 @@ export function mulai(app, paket, opsi = {}) {
       <div class="bar-prog"><i style="width:${pct(a.i, s.n)}%"></i></div>${!lat && s.batas ? '<div class="bar-waktu" id="bar-soal"><i></i></div>' : ""}</div>`;
     out += `<article class="card" aria-live="polite">`;
     if (s.jenis === "vm") {
-      out += refVM(s) + `<div class="vm-g">${q.g}</div><ol class="opts vm">${HURUF.split("").map((L, j) => `<li><button class="opt${tampil ? (j === q.k ? " ok" : j === jw ? " no" : "") : ""}" data-o="${j}"${tampil ? " disabled" : ""}><span class="L">${L}</span>${L}</button></li>`).join("")}</ol>`;
+      out += `<div class="vm-g">${q.g}</div><ol class="opts vm">${HURUF.split("").map((L, j) => `<li><button class="opt${tampil ? (j === q.k ? " ok" : j === jw ? " no" : "") : ""}" data-o="${j}"${tampil ? " disabled" : ""}><span class="L">${L}</span>${L}</button></li>`).join("")}</ol>`;
     } else if (s.jenis === "likert") {
       out += (q.s ? `<div class="ilustrasi"><b>Ilustrasi.</b> ${esc(q.s)}</div>` : "") + `<p class="stem">${esc(q.q)}</p><ol class="opts likert">${SKALA.map((t, j) => `<li><button class="opt" data-o="${j + 1}" aria-pressed="${jw === j + 1}"><span class="L">${HURUF[j]}</span><span>${t}</span></button></li>`).join("")}</ol>`;
     } else if (s.jenis === "pasangan") {
@@ -211,7 +236,7 @@ export function mulai(app, paket, opsi = {}) {
     const ok = jw != null && benar(s, q, jw);
     const pl = hidup ? pelatuk(ok ? "senyum" : "marah") : "";
     const kunci = s.jenis === "pasangan" ? `${q.k.map((k) => esc(q.w[k])).join(" – ")} (${q.r === "S" ? "sinonim" : "antonim"})` : HURUF[q.k];
-    const e = s.jenis === "vm" ? `Gambar ini sama persis dengan referensi ${HURUF[q.k]}.` : q.e;
+    const e = s.jenis === "vm" ? `Gambar ini sama persis dengan referensi ${HURUF[q.k]}: <span class="vm-mini">${s.ref[q.k]}</span>` : q.e;
     return `<div class="fb">${pl}<div class="v ${ok ? "ok" : "no"}">${jw == null ? "Tidak dijawab." : ok ? "Benar." : "Kurang tepat."} Kunci: ${kunci}.</div><p>${e}</p><p>${lapor(s, i)}</p></div>`;
   }
   function vHasil() {
@@ -298,7 +323,7 @@ export function mulai(app, paket, opsi = {}) {
     if (d.tab) { st.tab = d.tab; simpan(); render(); return; }
     if (d.mode) { st.mode = d.mode; simpan(); render(); return; }
     if (d.intro) { bukaIntro(d.intro); return; }
-    if (d.mulai) { mulaiSubtes(d.mulai); return; }
+    if (d.mulai) { if (BY[d.mulai].jenis === "vm") hafalVM(d.mulai); else mulaiSubtes(d.mulai); return; }
     if (d.bahas) { st.view = "bahas"; st.kode = d.bahas; simpan(); render(); window.scrollTo(0, 0); return; }
     if (d.filter) { st.filter = d.filter; simpan(); render(); return; }
     if (d.lapor) { const [k, i] = d.lapor.split(":"); if (BY[k]) bukaLapor(konteksSoal(BY[k], Number(i))); return; }
@@ -317,6 +342,8 @@ export function mulai(app, paket, opsi = {}) {
       return;
     }
     const act = d.act;
+    if (act === "hafal-selesai" && st.hafal) { const k = st.hafal.kode; st.hafal = null; stopTimer(); mulaiSubtes(k); return; }
+    if (act === "daftar") { st.hafal = null; }
     if (act === "daftar") { stopTimer(); st.view = "daftar"; st.penuh = st.penuh && SUB.some((s) => !(st.hasil[s.kode] && st.hasil[s.kode].selesai)); simpan(); render(); window.scrollTo(0, 0); }
     if (act === "penuh") {
       const s = SUB.find((x) => !(st.hasil[x.kode] && st.hasil[x.kode].selesai));

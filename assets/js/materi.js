@@ -202,11 +202,11 @@ const M = {
   },
   VM: {
     ukur: "Kecepatan persepsi dan konsentrasi: mencocokkan bentuk dengan ritme yang stabil.",
-    konsep: `<p>Ada enam gambar referensi berlabel A–F. Setiap soal menampilkan satu gambar, dan Anda menekan huruf referensi yang sama persis. Jumlah soalnya banyak (150), dengan batas sekitar 5 detik per soal.</p>
+    konsep: `<p>Subtes dimulai dengan <b>tahap hafal</b>: enam gambar referensi berlabel A–F ditampilkan sebentar, lalu <b>disembunyikan</b>. Setelah itu setiap soal hanya menampilkan satu gambar, dan Anda menekan huruf referensi yang sama persis dari ingatan. Jumlah soalnya banyak (150), dengan batas sekitar 5 detik per soal. Di latihan Whetio, waktu hafalnya 30 detik.</p>
       <p>Kuncinya bukan teliti lama, tetapi <b>ciri pembeda</b>. Untuk setiap referensi, pilih satu ciri yang tidak dimiliki referensi lain, misalnya arah garis, jumlah garis, atau posisi titik.</p>
       <p>Di Whetio Anda bisa menekan A–F atau angka 1–6 di papan ketik. Biasakan jari tetap di tombol agar mata tidak perlu berpindah.</p>`,
-    langkah: ["Gunakan 10 detik pertama untuk menghafal enam ciri pembeda.", "Lihat gambar, tekan, lanjut. Ritme sekitar 3 detik per soal.", "Ragu di antara dua referensi? Pilih yang lebih mirip lalu lanjut. Jangan berhenti."],
-    jebakan: ["Bentuk yang mirip tetapi diputar atau berbeda jumlah garisnya.", "Berhenti terlalu lama di satu soal sehingga ritme pecah.", "Mengecek ulang referensi di setiap soal, padahal seharusnya dihafal di awal."],
+    langkah: ["Selama tahap hafal, tetapkan satu ciri pembeda per huruf dan ucapkan dalam hati, misalnya “A kait kanan, B mangkuk, C kait kiri”.", "Lihat gambar, tekan, lanjut. Ritme sekitar 3 detik per soal.", "Ragu di antara dua referensi? Pilih yang lebih mirip lalu lanjut. Jangan berhenti."],
+    jebakan: ["Bentuk yang mirip tetapi diputar atau berbeda jumlah garisnya.", "Berhenti terlalu lama di satu soal sehingga ritme pecah.", "Menghabiskan waktu hafal untuk melihat semua detail. Cukup satu ciri pembeda per huruf."],
     contoh: null,
   },
   PD: {
@@ -298,7 +298,7 @@ function soalCoba(kode) {
   if (kode === "VM") {
     const s = buatSubtes("VM", acak(), 6);
     const i = Math.floor(Math.random() * s.soal.length);
-    return { jenis: "vm", ref: s.ref, g: s.soal[i].g, k: s.soal[i].k, e: `Gambar ini sama persis dengan referensi ${HURUF[s.soal[i].k]}.` };
+    return { jenis: "vm", ref: s.ref, g: s.soal[i].g, k: s.soal[i].k, hafal: true, e: `Gambar ini sama persis dengan referensi ${HURUF[s.soal[i].k]}.` };
   }
   return buatSubtes(kode, acak(), 1).soal[0];
 }
@@ -311,6 +311,11 @@ function htmlKartu(id) {
       let k = "opt"; if (selesai) { if (q.k.includes(j)) k += " ok"; else if (pil.includes(j)) k += " no"; } else if (pil.includes(j)) k += " pilih";
       return `<li><button class="${k}" data-k="${id}" data-sa="${j}"${selesai ? " disabled" : ""}><span class="L">${HURUF[j]}</span><span>${esc(w)}</span></button></li>`;
     }).join("")}</ol>`;
+  } else if (q.jenis === "vm" && q.hafal && !selesai) {
+    h += `<p class="stem">Hafalkan enam gambar ini, lalu tekan <b>Sudah hafal</b>. Referensi akan disembunyikan.</p><div class="ref-vm">${q.ref.map((g, i) => `<div><b>${HURUF[i]}</b>${g}</div>`).join("")}</div><p style="margin:10px 0 0"><button type="button" class="btn pri kecil" data-hafal="${id}">Sudah hafal</button></p>`;
+    return h;
+  } else if (q.jenis === "vm" && !selesai) {
+    h += `<div class="vm-g">${q.g}</div><ol class="opts vm">${q.ref.map((_, j) => `<li><button class="opt" data-k="${id}" data-o="${j}"><span class="L">${HURUF[j]}</span>${HURUF[j]}</button></li>`).join("")}</ol>`;
   } else if (q.jenis === "vm") {
     h += `<div class="ref-vm">${q.ref.map((g, i) => `<div><b>${HURUF[i]}</b>${g}</div>`).join("")}</div><div class="vm-g">${q.g}</div><ol class="opts vm">${q.ref.map((_, j) =>
       `<li><button class="opt${selesai ? (j === q.k ? " ok" : j === c.jw ? " no" : "") : ""}" data-k="${id}" data-o="${j}"${selesai ? " disabled" : ""}><span class="L">${HURUF[j]}</span>${HURUF[j]}</button></li>`).join("")}</ol>`;
@@ -386,6 +391,7 @@ app.addEventListener("click", (e) => {
     gambarKartu(id);
     return;
   }
+  if (t.dataset.hafal) { kartu[t.dataset.hafal].q.hafal = false; gambarKartu(t.dataset.hafal); return; }
   if (t.dataset.buka) { kartu[t.dataset.buka].buka = true; gambarKartu(t.dataset.buka); return; }
   if (t.dataset.baca) {
     const k = t.dataset.baca, x = sudah();
