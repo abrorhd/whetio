@@ -44,7 +44,7 @@ Generator memakai benih tanggal, jadi paket sebuah tanggal selalu sama. Kunci pi
 | `assets/js/kuis.js` | Mesin simulasi: timer subtes & per soal, 4 jenis jawaban, hasil, pembahasan, kunci, rekap |
 | `assets/js/beranda.js`, `latihan.js`, `paket.js`, `rencana.js`, `merek.js` | Beranda, latihan bebas, pemuat paket, rencana belajar, logo & maskot |
 | `scripts/buat-paket.mjs` | Terbitkan paket: `node scripts/buat-paket.mjs <YYYY-MM-DD> --verbal <verbal.json>` |
-| `scripts/cek-verbal.mjs` | Validasi soal verbal (jumlah, format, tidak mengulang 7 paket terakhir, panjang kata tidak jadi petunjuk) |
+| `scripts/cek-verbal.mjs` | Validasi soal verbal (jumlah, format, tidak mengulang 7 paket terakhir, panjang kata tidak jadi petunjuk, variasi PK) |
 | `scripts/uji-generator.mjs` | Uji tahan banting generator di banyak benih |
 
 ## Format soal verbal (`verbal.json`, di luar repo)
@@ -52,12 +52,16 @@ Generator memakai benih tanggal, jadi paket sebuah tanggal selalu sama. Kunci pi
 ```json
 [
   {"t":"SA","w":["KUNCI1","KUNCI2","pengecoh","pengecoh","pengecoh"],"r":"S","e":"pembahasan"},
-  {"t":"PK","f":"L","q":["kata1","kata2","kata3"],"o":["KUNCI","pengecoh","pengecoh","pengecoh","pengecoh"],"g":"nama kelompok","e":"pembahasan"},
-  {"t":"PK","f":"B","o":["KATA_PALING_BERBEDA","anggota","anggota","anggota","anggota"],"g":"nama kelompok","e":"pembahasan"}
+  {"t":"PK","f":"L","q":["kata1","kata2","kata3"],"o":["KUNCI","pengecoh","pengecoh","pengecoh","pengecoh"],"g":"nama kelompok","kk":"kerja","dasar":"makna","d":"gerak-tindakan","e":"pembahasan"},
+  {"t":"PK","f":"B","o":["KATA_PALING_BERBEDA","anggota","anggota","anggota","anggota"],"g":"nama kelompok","kk":"benda","dasar":"fungsi","d":"rumah-benda","e":"pembahasan"}
 ]
 ```
 
 30 SA (sinonim dan antonim masing-masing ≥12) + 25 PK (format L dan B masing-masing ≥10).
+
+Variasi PK (diperiksa `cek-verbal.mjs`, daftar lengkap di `VARIASI`): label `kk` (benda/nama/abstrak/kerja/sifat), `dasar` (jenis/fungsi/ciri/bagian/makna), dan `d` (bidang). Per paket: kerja ≥4, sifat ≥4, abstrak ≥3, benda ≤10, nama ≤5; makna ≥3, fungsi/ciri/bagian ≥2, jenis ≤12; tiap bidang ≤2 dan minimal 12 bidang; nama kelompok tidak boleh sama dengan 7 paket terakhir; paling banyak 6 kata PK yang sudah dipakai 7 paket terakhir.
+
+Block Pattern memakai pola 6×6 (kuadran 3×3, sel segitiga dan setengah) dengan pengecoh nyaris sama; Visual Matching memakai gambar 5–7 ruas garis yang berkeluarga (diputar, dicerminkan, atau digeser satu ruas). Paket yang sudah terbit menyimpan gambarnya sendiri, jadi tidak ikut berubah.
 
 ## Akun & database
 

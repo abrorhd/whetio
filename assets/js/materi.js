@@ -139,15 +139,17 @@ const M = {
       <ul><li><b>Lengkapi kelompok:</b> tiga kata sekelompok diberikan, lalu pilih satu opsi yang masuk kelompok yang sama.</li>
       <li><b>Kata paling berbeda:</b> dari lima kata, empat sekelompok. Pilih satu yang tidak.</li></ul>
       <p>Kuncinya ada pada <b>nama kelompok yang spesifik</b>. Biola, selo, dan kontrabas bukan sekadar “alat musik”, tetapi “alat musik gesek”. Karena itu gitar (dipetik) dan piano (ditekan) bukan jawabannya.</p>
+      <p>Yang dikelompokkan tidak hanya nama benda. Kata kerja, kata sifat, dan kata abstrak juga sering muncul, dan kelompoknya ditentukan oleh <b>makna</b>, bukan bentuk katanya.</p>
       <table class="tbl"><thead><tr><th>Dasar pengelompokan</th><th>Contoh kelompok</th></tr></thead><tbody>
-      <tr><td>Jenis</td><td>mamalia laut, hewan berkantong, unggas, umbi-umbian, rempah</td></tr>
-      <tr><td>Cara kerja</td><td>alat musik gesek / petik / tiup / pukul</td></tr>
-      <tr><td>Fungsi</td><td>alat ukur, alat tulis, alat pertukangan</td></tr>
-      <tr><td>Bidang</td><td>profesi hukum, profesi kesehatan, istilah anggaran</td></tr>
-      <tr><td>Satuan</td><td>panjang, massa, waktu, volume</td></tr>
-      <tr><td>Benda langit</td><td>planet, satelit, bintang</td></tr></tbody></table>`,
+      <tr><td>Jenis</td><td>mamalia laut, hewan berkantong, umbi-umbian, profesi hukum, satuan massa</td></tr>
+      <tr><td>Fungsi atau cara kerja</td><td>alat untuk memotong, alat musik gesek, wadah menyimpan cairan</td></tr>
+      <tr><td>Ciri atau sifat</td><td>benda yang lentur, rasa pada lidah, bunyi yang keras</td></tr>
+      <tr><td>Bagian atau tahap</td><td>bagian sepeda, bagian surat dinas, tahap siklus anggaran</td></tr>
+      <tr><td>Makna kata kerja</td><td>cara melihat (melirik, menatap, mengintip), cara bersuara (berbisik, bergumam)</td></tr>
+      <tr><td>Makna kata sifat</td><td>sifat tekun (gigih, ulet, rajin), perasaan cemas (gelisah, waswas)</td></tr>
+      <tr><td>Kata abstrak</td><td>nilai kebajikan (kejujuran, keadilan), jenis kesalahan (kelalaian, kekeliruan)</td></tr></tbody></table>`,
     langkah: ["Beri nama kelompok sespesifik mungkin, cukup 2–3 kata.", "Uji setiap opsi terhadap nama itu.", "Bila dua opsi sama-sama lolos, persempit nama kelompoknya.", "Kata yang tidak Anda kenal: uji opsi lain dulu, mungkin ia bisa dieliminasi."],
-    jebakan: ["Nama kelompok terlalu luas sehingga dua opsi tampak benar.", "Hidup di air dianggap ikan: lumba-lumba dan paus termasuk mamalia.", "Bulan dianggap planet, padahal ia satelit Bumi."],
+    jebakan: ["Nama kelompok terlalu luas sehingga dua opsi tampak benar.", "Hidup di air dianggap ikan: lumba-lumba dan paus termasuk mamalia.", "Kata kerja yang sebidang tetapi beda makna: mendengar bukan cara melihat meskipun sama-sama memakai indra.", "Kata sifat yang bunyinya positif tetapi maknanya lain kelompok: tenang bukan perasaan cemas."],
     contoh: { q: `<p class="premis">Biola · Selo · Kontrabas</p><p class="tanya">Kata yang sekelompok dengan ketiga kata di atas adalah …</p>`,
       o: ["Rebab", "Gitar", "Piano", "Seruling", "Kecapi"], k: 0,
       langkah: ["Nama kelompok: <b>alat musik gesek</b>.", "Rebab dimainkan dengan cara digesek, jadi masuk kelompok.", "Gitar dan kecapi dipetik, piano ditekan, seruling ditiup. Semuanya alat musik, tetapi bukan alat gesek."] },
@@ -257,6 +259,9 @@ const BANK = {
     { b: true, o: ["Bulan", "Merkurius", "Venus", "Mars", "Saturnus"], g: "planet", e: "Merkurius, Venus, Mars, dan Saturnus adalah planet. Bulan adalah satelit alami Bumi." },
     { q: ["Notaris", "Hakim", "Jaksa"], o: ["Advokat", "Akuntan", "Auditor", "Apoteker", "Arsitek"], g: "profesi bidang hukum", e: "Notaris, hakim, dan jaksa adalah profesi hukum, begitu pula advokat (pengacara). Akuntan dan auditor bidang keuangan, apoteker kesehatan, arsitek bangunan." },
     { q: ["Meter", "Inci", "Mil"], o: ["Yard", "Liter", "Gram", "Detik", "Hektare"], g: "satuan panjang", e: "Meter, inci, dan mil adalah satuan panjang, begitu pula yard. Liter satuan volume, gram massa, detik waktu, dan hektare luas." },
+    { q: ["Melirik", "Menatap", "Memandang"], o: ["Mengintip", "Menyimak", "Mencium", "Meraba", "Mengecap"], g: "cara melihat", e: "Melirik, menatap, dan memandang adalah cara melihat, begitu pula mengintip. Menyimak (mendengar), mencium, meraba, dan mengecap memakai indra lain." },
+    { b: true, o: ["Tenang", "Cemas", "Gelisah", "Waswas", "Khawatir"], g: "perasaan takut atau tidak tenang", e: "Cemas, gelisah, waswas, dan khawatir sama-sama menggambarkan hati yang tidak tenang. Tenang justru kebalikannya." },
+    { q: ["Gunting", "Pisau", "Gergaji"], o: ["Kapak", "Palu", "Obeng", "Kunci inggris", "Lem"], g: "alat untuk memotong atau membelah", e: "Gunting, pisau, dan gergaji dipakai untuk memotong, begitu pula kapak. Palu memukul, obeng memutar sekrup, kunci inggris memutar mur, dan lem merekatkan." },
   ],
 };
 

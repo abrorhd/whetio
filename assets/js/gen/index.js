@@ -24,7 +24,7 @@ export const SUBTES = [
     kiat: ["Cari kata paling “aneh” lebih dulu; pasangannya biasanya ada.", "Kata serapan (otonom, rekonsiliasi) sering jadi kunci.", "Jangan kejar arti sempurna — pilih pasangan paling kuat."] },
   { kode: "PK", no: 5, nama: "Pengelompokan Kata", n: 25, durasi: 8 * 60, batas: 30, target: 15, jenis: "pg",
     petunjuk: "Lengkapi kelompok kata, atau pilih satu kata yang paling berbeda dari yang lain.",
-    kiat: ["Tentukan nama kelompoknya dengan satu kata (alat tulis, planet, protein hewani).", "Uji tiap opsi pada nama kelompok itu.", "Kata yang tidak Anda pahami: lewati, cek opsi lain dulu."] },
+    kiat: ["Tentukan nama kelompoknya sespesifik mungkin (alat tulis, cara melihat, sifat tekun).", "Kata kerja dan kata sifat juga dikelompokkan menurut maknanya; cek kelas katanya dulu.", "Uji tiap opsi pada nama kelompok itu. Kata yang tidak Anda pahami: cek opsi lain dulu."] },
   { kode: "OM", no: 6, nama: "Operasi Matematika", n: 20, durasi: 12 * 60, batas: 45, target: 30, jenis: "pg", gen: operasi,
     petunjuk: "Cari angka atau tanda operasi pengganti ? agar kedua sisi persamaan bernilai sama.",
     kiat: ["Hitung sisi yang lengkap lebih dulu.", "Untuk mencari tanda, coba × dan : dulu — paling sering jadi kunci.", "Kerjakan yang di dalam kurung dulu."] },
