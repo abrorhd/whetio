@@ -142,11 +142,13 @@ button.lapor:hover,button.tautan:hover{color:var(--accent)}
 .fig{display:block;flex:none}
 .stem-blok{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
 .stem-blok .sama{font-size:28px;font-weight:800}
+.stem-blok svg{max-width:calc(50% - 28px);height:auto}
 .ref-vm{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:10px 0 0}
 .ref-vm div{display:flex;flex-direction:column;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 2px}
 .ref-vm b{font-family:var(--mono);font-size:12px}
 .vm-g{display:flex;justify-content:center;padding:8px 0}
 .ref-vm.besar{gap:10px;margin:14px 0 8px}.ref-vm.besar div{padding:10px 4px}.ref-vm.besar svg{width:56px;height:56px}
+.ref-vm svg{max-width:100%;height:auto}
 .hafal-waktu{display:flex;align-items:center;gap:12px;margin:6px 0}.hafal-waktu .bar-waktu{flex:1}
 .vm-mini{display:inline-flex;vertical-align:middle;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:2px}.vm-mini svg{width:28px;height:28px}
 .opts.vm{grid-template-columns:repeat(6,minmax(0,1fr))}

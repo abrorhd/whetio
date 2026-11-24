@@ -189,24 +189,27 @@ const M = {
   },
   BP: {
     ukur: "Persepsi ruang dan kecepatan mencocokkan pola dalam hitungan detik.",
-    konsep: `<p>Soal menampilkan pola besar 4×4 sel. Setiap sel kosong, penuh, atau berisi segitiga hitam. Pola itu dibagi menjadi empat kuadran 2×2, dan di sebelahnya ada kerangka dengan tanda <b>?</b> di salah satu kuadran.</p>
-      <p>Pilih potongan yang <b>persis sama</b> dengan kuadran di posisi ? pada pola besar, tanpa diputar, dicerminkan, atau dibalik warnanya.</p>
+    konsep: `<p>Soal menampilkan pola besar 6×6 sel. Setiap sel kosong, penuh, berisi segitiga hitam, atau hitam separuh (atas, bawah, kiri, atau kanan). Pola itu dibagi menjadi empat kuadran 3×3, dan di sebelahnya ada kerangka dengan tanda <b>?</b> di salah satu kuadran.</p>
+      <p>Pilih potongan yang <b>persis sama</b> dengan kuadran di posisi ? pada pola besar, tanpa diputar, dicerminkan, dibalik warnanya, atau diubah satu sel pun.</p>
       <table class="tbl"><thead><tr><th>Jenis pengecoh</th><th>Cara mengenali</th></tr></thead><tbody>
+      <tr><td>Satu sel berbeda</td><td>Hampir semua sama, hanya satu sel yang arah segitiganya atau sisi hitamnya lain. Paling sering menjebak.</td></tr>
+      <tr><td>Dua sel tertukar</td><td>Isi sel benar, tetapi dua sel bersebelahan bertukar tempat.</td></tr>
       <tr><td>Kuadran lain</td><td>Posisinya beda. Cocokkan sel sudut luar kuadran yang ditanya.</td></tr>
-      <tr><td>Diputar 90° atau 180°</td><td>Arah sudut siku segitiga ikut berputar.</td></tr>
-      <tr><td>Dicerminkan</td><td>Segitiga menghadap ke sisi sebaliknya.</td></tr>
+      <tr><td>Diputar 90° atau 180°</td><td>Arah sudut siku segitiga dan sisi hitam separuh ikut berputar.</td></tr>
+      <tr><td>Dicerminkan kiri–kanan / atas–bawah</td><td>Segitiga menghadap ke sisi sebaliknya.</td></tr>
       <tr><td>Warna terbalik</td><td>Sel hitam menjadi putih. Hitung saja jumlah sel penuh.</td></tr></tbody></table>`,
-    langkah: ["Lihat posisi ? (kiri atas, kanan atas, kiri bawah, atau kanan bawah).", "Pada pola besar, ingat satu sel sudut yang paling khas di kuadran itu.", "Buang opsi yang sel sudutnya berbeda, lalu cek satu sel lagi.", "Target sekitar 6 detik per soal. Jangan lebih dari 10 detik."],
-    jebakan: ["Memilih kuadran yang posisinya bersebelahan.", "Tertipu potongan benar yang dicerminkan: polanya terlihat akrab tetapi arah segitiganya terbalik.", "Terlalu lama memastikan semua sel. Dua sel yang khas sudah cukup."],
+    langkah: ["Lihat posisi ? (kiri atas, kanan atas, kiri bawah, atau kanan bawah).", "Pada pola besar, hafal dua sel khas di kuadran itu: satu sel sudut luar dan satu sel miring atau separuh di tengah.", "Buang opsi yang kedua sel khasnya berbeda. Bila tersisa dua opsi yang nyaris sama, bandingkan baris demi baris.", "Target sekitar 6 detik per soal. Jangan lebih dari 10 detik."],
+    jebakan: ["Memilih potongan yang hanya berbeda satu sel karena sekilas terlihat sama.", "Tertipu potongan benar yang dicerminkan: polanya terlihat akrab tetapi arah segitiganya terbalik.", "Terlalu lama memastikan semua sembilan sel. Dua sel khas dulu, baru cek baris yang meragukan."],
     contoh: null,
   },
   VM: {
     ukur: "Kecepatan persepsi dan konsentrasi: mencocokkan bentuk dengan ritme yang stabil.",
     konsep: `<p>Subtes dimulai dengan <b>tahap hafal</b>: enam gambar referensi berlabel A–F ditampilkan sebentar, lalu <b>disembunyikan</b>. Setelah itu setiap soal hanya menampilkan satu gambar, dan Anda menekan huruf referensi yang sama persis dari ingatan. Jumlah soalnya banyak (150), dengan batas sekitar 5 detik per soal. Di latihan Whetio, waktu hafalnya 30 detik.</p>
-      <p>Kuncinya bukan teliti lama, tetapi <b>ciri pembeda</b>. Untuk setiap referensi, pilih satu ciri yang tidak dimiliki referensi lain, misalnya arah garis, jumlah garis, atau posisi titik.</p>
+      <p>Setiap gambar tersusun dari lima sampai tujuh ruas garis, kadang dengan satu titik bulat. Enam referensi biasanya datang <b>berkeluarga</b>: satu bentuk dasar beserta versinya yang diputar, dicerminkan, atau digeser satu garisnya. Jadi bentuk kasarnya mirip; yang membedakan adalah detail kecil.</p>
+      <p>Kuncinya bukan teliti lama, tetapi <b>ciri pembeda</b>. Kelompokkan dulu referensi per keluarga, lalu untuk setiap huruf pilih satu ciri yang tidak dimiliki saudaranya, misalnya arah kait, letak garis miring, atau posisi titik.</p>
       <p>Di Whetio Anda bisa menekan A–F atau angka 1–6 di papan ketik. Biasakan jari tetap di tombol agar mata tidak perlu berpindah.</p>`,
-    langkah: ["Selama tahap hafal, tetapkan satu ciri pembeda per huruf dan ucapkan dalam hati, misalnya “A kait kanan, B mangkuk, C kait kiri”.", "Lihat gambar, tekan, lanjut. Ritme sekitar 3 detik per soal.", "Ragu di antara dua referensi? Pilih yang lebih mirip lalu lanjut. Jangan berhenti."],
-    jebakan: ["Bentuk yang mirip tetapi diputar atau berbeda jumlah garisnya.", "Berhenti terlalu lama di satu soal sehingga ritme pecah.", "Menghabiskan waktu hafal untuk melihat semua detail. Cukup satu ciri pembeda per huruf."],
+    langkah: ["Selama tahap hafal, kelompokkan referensi per keluarga, lalu tetapkan satu ciri pembeda per huruf dan ucapkan dalam hati, misalnya “A kait kanan, B kait kiri, C titik di bawah”.", "Lihat gambar, tekan, lanjut. Ritme sekitar 3 detik per soal.", "Ragu di antara dua referensi? Pilih yang lebih mirip lalu lanjut. Jangan berhenti."],
+    jebakan: ["Bentuk sekeluarga yang hanya diputar, dicerminkan, atau beda satu garis.", "Berhenti terlalu lama di satu soal sehingga ritme pecah.", "Menghabiskan waktu hafal untuk melihat semua detail. Cukup satu ciri pembeda per huruf."],
     contoh: null,
   },
   PD: {

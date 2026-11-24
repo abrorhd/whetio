@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-// Uji tahan banting generator: banyak benih, cek opsi unik, kunci valid, dan ketunggalan kunci (diagram & block).
+// Uji tahan banting generator: banyak benih, cek opsi unik, kunci valid, ketunggalan kunci (diagram & block), kerumitan figural (block & visual).
 // Pakai: node scripts/uji-generator.mjs [jumlahBenih=40]
 import { SUBTES, buatSubtes } from "../assets/js/gen/index.js";
 import { BENTUK } from "../assets/js/gen/diagram.js";
+import { blockData, kuadran, kunciBlok } from "../assets/js/gen/block.js";
+import { susunRef, kunciVM, tersambung } from "../assets/js/gen/visual.js";
+import { buatRng } from "../assets/js/gen/rng.js";
 
 const N = Number(process.argv[2] || 40);
 let gagal = 0;
@@ -16,6 +19,30 @@ for (const [nama, pts] of Object.entries(BENTUK)) {
     tf.push(P.map(([x, y]) => { let a = cer ? -x : x, b = y; for (let i = 0; i < rot; i++) [a, b] = [-b, a]; return `${Math.round(a)},${Math.round(b)}`; }).sort().join(" "));
   }
   if (new Set(tf).size !== 8) lapor(`bentuk ${nama} simetris (${new Set(tf).size}/8)`);
+}
+
+// Block Pattern: kunci = kuadran bertanda ? persis; tidak ada pengecoh yang sama dengan kunci; kuadran cukup rumit.
+for (let i = 0; i < N * 5; i++) {
+  const d = blockData(buatRng("uji-bp-" + i)), kb = kunciBlok(d.benar);
+  if (kb !== kunciBlok(kuadran(d.g, d.t))) lapor(`BP uji-bp-${i}: kunci bukan kuadran ?`);
+  if (d.g.length !== 6 || d.benar.length !== 3) lapor(`BP uji-bp-${i}: ukuran pola bukan 6×6 / 3×3`);
+  const ks = d.peng.map((p) => kunciBlok(p.g));
+  if (ks.includes(kb) || new Set(ks).size !== 4) lapor(`BP uji-bp-${i}: pengecoh sama dengan kunci/sesamanya`);
+  if (!d.peng.some((p) => p.w.startsWith("potongan benar dengan"))) lapor(`BP uji-bp-${i}: tidak ada pengecoh yang hampir sama`);
+  if (d.benar.flat().filter((x) => x >= 2).length < 3) lapor(`BP uji-bp-${i}: kuadran kunci terlalu sederhana`);
+}
+// Visual Matching: enam referensi berbeda, tersambung, 5–7 ruas, dan tiap pasangan beda minimal satu ruas/titik.
+for (let i = 0; i < N * 5; i++) {
+  const ref = susunRef(buatRng("uji-vm-" + i));
+  if (ref.length !== 6 || new Set(ref.map(kunciVM)).size !== 6) lapor(`VM uji-vm-${i}: referensi tidak unik`);
+  ref.forEach((g, a) => {
+    if (!tersambung(g.r)) lapor(`VM uji-vm-${i}: referensi ${a} terputus`);
+    if (g.r.length < 5 || g.r.length > 7) lapor(`VM uji-vm-${i}: referensi ${a} punya ${g.r.length} ruas`);
+    ref.slice(a + 1).forEach((h) => {
+      const beda = g.r.filter((x) => !h.r.includes(x)).length + h.r.filter((x) => !g.r.includes(x)).length;
+      if (beda < 2 && String(g.t) === String(h.t)) lapor(`VM uji-vm-${i}: dua referensi nyaris sama`);
+    });
+  });
 }
 
 const t0 = Date.now();

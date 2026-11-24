@@ -98,7 +98,7 @@ export function mulai(app, paket, opsi = {}) {
       <p>Setelah waktu hafal habis, referensi <b>disembunyikan</b>. Anda hanya melihat satu gambar per soal dan menekan hurufnya (A–F atau 1–6).</p>
       <div class="ref-vm besar">${s.ref.map((g, i) => `<div><b>${HURUF[i]}</b>${g}</div>`).join("")}</div>
       <div class="hafal-waktu"><span class="mono"><b id="hafal-sisa">${Math.max(0, Math.ceil((st.hafal.akhir - Date.now()) / 1000))}</b> detik</span><div class="bar-waktu" id="bar-hafal"><i></i></div></div>
-      <p class="hint">Cari satu ciri pembeda untuk tiap huruf, misalnya arah garis atau jumlah garis.</p>
+      <p class="hint">Kelompokkan dulu bentuk yang sekeluarga (diputar, dicerminkan, atau beda satu garis), lalu cari satu ciri pembeda tiap huruf: arah kait, garis miring, atau letak titik.</p>
       <div class="nav"><button class="btn" data-act="daftar">Kembali</button><button class="btn pri" data-act="hafal-selesai">Sudah hafal, mulai</button></div></section>`;
   }
   function mulaiSubtes(kode) {
