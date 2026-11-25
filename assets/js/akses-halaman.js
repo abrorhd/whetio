@@ -1,4 +1,4 @@
-// Halaman /akses/: beli Akses Penuh lewat Trakteer.
+// Halaman /akses/: beli Akses Penuh lewat Trakteer (kode otomatis → salin & buka Trakteer → bayar QRIS → aktif otomatis).
 import { kepalaSitus } from "./kuis.js";
 import { kaki } from "./beranda.js";
 import { pelatuk } from "./merek.js";
@@ -8,7 +8,7 @@ import { muatAkses, mintaKode, bacaAkses, penuh, rupiah, tglPendek } from "./aks
 
 const app = document.getElementById("app");
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-let v = { memuat: true, sibuk: false, galat: "", pesan: "", menunggu: false, klaim: false, klaimTerkirim: false };
+let v = { memuat: true, sibuk: false, galat: "", pesan: "", menunggu: false, klaim: false, klaimTerkirim: false, tersalin: false };
 const sekarang = () => { const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); };
 
 const tabel = (a) => `<table class="tbl tbl-akses"><thead><tr><th></th><th>Tamu</th><th>Akun gratis</th><th>Akses Penuh</th></tr></thead><tbody>
@@ -28,36 +28,52 @@ function isi() {
   if (u && penuh()) return `<section class="card kunci-arsip">${pelatuk("senyum", "akun-pl anim-masuk")}<h1>Akses Penuh aktif</h1>
     <p>Berlaku sampai <b>${tglPendek(a.sampai)}</b>. Semua arsip paket dan latihan bebas tanpa batas sudah terbuka untuk <b>${esc(u.email)}</b>.</p>
     <div class="cta" style="justify-content:center"><a class="btn spark" href="/psikotes/">Ke Persiapan Psikotes</a><a class="btn" href="/psikotes/latihan/">Latihan bebas</a></div></section>`;
-  let h = `<div class="panel">${tabel(a)}</div>`;
-  if (!u) return h + `<section class="panel langkah"><h2>Langkah 1 · Masuk dulu</h2><p>Akses Penuh terpasang ke akun Whetio, jadi berlaku di semua perangkat Anda.</p>
+  if (!u) return `<div class="panel">${tabel(a)}</div><section class="panel langkah"><h2>Langkah 1 · Masuk dulu</h2><p>Akses Penuh terpasang ke akun Whetio, jadi berlaku di semua perangkat Anda.</p>
     <a class="btn pri" href="/akun/?lanjut=%2Fakses%2F">Masuk / Daftar</a></section>`;
-  const kode = a.kode;
-  h += `<section class="panel langkah"><h2>Langkah 1 · Ambil kode pembayaran</h2>
-    ${kode ? `<div class="kode-bayar"><span class="kode-kata" id="kode">${esc(kode)}</span><button class="btn kecil" data-aksi="salin">Salin</button></div>
-      <p class="hint">Kode ini milik <b>${esc(u.email)}</b>. Tulis dua kata ini di kolom pesan Trakteer. Huruf besar/kecil dan tanda baca tidak berpengaruh, dan boleh ditambah ucapan lain.</p>`
-      : `<p class="hint" style="margin-top:0">Kode berupa dua kata, misalnya <i>pelatuk tajam</i>.</p><button class="btn pri" data-aksi="kode"${v.sibuk ? " disabled" : ""}>Ambil kode</button>`}</section>
-  <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 2 · Bayar ${rupiah(a.harga || 10000)} di Trakteer</h2>
-    <ol><li>Buka halaman Trakteer Whetio, pilih <b>1 unit (${rupiah(a.harga || 10000)})</b>.</li><li>Di kolom <b>pesan</b>, tulis kode <b>${kode ? `“${esc(kode)}”` : "dua kata dari langkah 1"}</b>.</li><li>Bayar dengan QRIS, e-wallet, atau transfer bank.</li></ol>
-    <p class="hint">Cukup 1 unit. Lebih dari 1 unit dianggap dukungan tambahan dan tidak dikembalikan.</p>
-    ${kode && a.tautan ? `<a class="btn spark" href="${esc(a.tautan)}" target="_blank" rel="noopener" data-aksi="trakteer">Buka Trakteer</a>` : ""}</section>
-  <section class="panel langkah${kode ? "" : " redup"}"><h2>Langkah 3 · Akses terbuka otomatis</h2>
-    <p>Biasanya kurang dari satu menit setelah pembayaran berhasil. ${v.menunggu ? '<span class="hint">Menunggu konfirmasi pembayaran…</span>' : ""}</p>
-    <button class="btn" data-aksi="cek"${v.sibuk || !kode ? " disabled" : ""}>Cek status</button>
-  </section>
-  <section class="panel langkah"><h2>Sudah bayar tapi lupa menulis kode?</h2>
+  const kode = a.kode, harga = rupiah(a.harga || 10000);
+  // Satu kartu bayar: kode dibuat otomatis, satu tombol menyalin kode sekaligus membuka Trakteer, lalu bayar dengan scan QRIS.
+  let h = `<section class="panel bayar"><h2>Bayar ${harga} lewat Trakteer</h2>
+    <p class="hint" style="margin-top:0">Sekali bayar, aktif untuk <b>${esc(u.email)}</b> sampai ${tglPendek(a.batas)}.</p>
+    ${kode ? `<div class="kode-bayar"><div><div class="hint">Kode pembayaran Anda</div><span class="kode-kata" id="kode">${esc(kode)}</span></div></div>`
+      : `<p>${v.sibuk ? "Menyiapkan kode pembayaran…" : `<button class="btn pri" data-aksi="kode">Buat kode pembayaran</button>`}</p>`}
+    ${kode && a.tautan ? `<a class="btn spark besar" href="${esc(a.tautan)}" target="_blank" rel="noopener" data-aksi="trakteer">${v.tersalin ? "Kode tersalin ✓ · buka Trakteer lagi" : "Salin kode &amp; buka Trakteer"}</a>` : ""}
+    <ol class="alur">
+      <li><span><b>Tempel kode</b> di kolom <i>pesan</i> Trakteer, jumlah <b>1 unit (${harga})</b>.</span></li>
+      <li><span><b>Pilih QRIS</b>, lalu scan kodenya dengan aplikasi m-banking atau e-wallet apa pun. Bisa juga pilih e-wallet atau transfer bank.</span></li>
+      <li><span><b>Kembali ke halaman ini.</b> Akses terbuka otomatis, biasanya kurang dari satu menit.</span></li>
+    </ol>
+    <div class="status-bayar">${v.menunggu ? '<span class="tunggu-titik" aria-hidden="true"></span><span>Menunggu pembayaran masuk…</span>' : '<span class="hint">Sudah bayar? Halaman ini mengecek otomatis saat Anda kembali.</span>'}
+      <button class="btn kecil" data-aksi="cek"${v.sibuk || !kode ? " disabled" : ""}>Cek status</button></div>
+    <p class="hint">Cukup 1 unit. Lebih dari 1 unit dianggap dukungan tambahan dan tidak dikembalikan.</p></section>
+  <div class="panel"><h2>Yang Anda dapat</h2>${tabel(a)}</div>
+  <details class="panel langkah"${v.klaim || v.klaimTerkirim ? " open" : ""}><summary><b>Sudah bayar tapi lupa menulis kode?</b></summary>
     ${v.klaimTerkirim ? `<p class="ok-t">Klaim terkirim atas akun <b>${esc(u.email)}</b>. Admin akan mencocokkan dengan data Trakteer dan mengaktifkan Akses Penuh secara manual, biasanya di hari yang sama.</p>`
       : v.klaim ? `<form class="klaim-form" data-klaim>
         <label>Nama di Trakteer<input name="nama" required maxlength="120" placeholder="Nama yang tampil saat mentraktir"></label>
         <label>Perkiraan waktu bayar<input name="waktu" type="datetime-local" required value="${sekarang()}"></label>
         <label>Catatan (opsional)<textarea name="catatan" rows="2" maxlength="500" placeholder="Mis. bayar lewat QRIS, pesan yang ditulis: …"></textarea></label>
         <div class="cta" style="margin:0"><button class="btn pri"${v.sibuk ? " disabled" : ""}>Kirim klaim</button><button type="button" class="btn" data-aksi="batal-klaim">Batal</button></div></form>`
-      : `<p>Tidak apa-apa. Isi nama Anda di Trakteer dan perkiraan waktu bayar, admin akan mengaktifkan akses untuk akun ini.</p><button class="btn" data-aksi="klaim">Saya sudah bayar</button>`}</section>`;
+      : `<p>Tidak apa-apa. Isi nama Anda di Trakteer dan perkiraan waktu bayar, admin akan mengaktifkan akses untuk akun ini.</p><button class="btn" data-aksi="klaim">Saya sudah bayar</button>`}</details>`;
   return h;
 }
 
 function render() {
   app.innerHTML = kepalaSitus("akses") + `<main class="wrap"><div class="pk-head"><h1>Akses Penuh</h1><div class="sub">Sekali bayar untuk semua arsip paket Siap Psikotes dan latihan bebas tanpa batas sampai hari H.</div></div>
     ${v.pesan ? `<p class="ok-t">${esc(v.pesan)}</p>` : ""}${v.galat ? `<p class="no-t">${esc(v.galat)}</p>` : ""}${isi()}</main>` + kaki();
+}
+
+// Salin teks ke papan klip secara sinkron (tetap dalam gestur klik), dengan Clipboard API sebagai tambahan.
+function salin(t) {
+  if (!t) return false;
+  let ok = false;
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length);
+    ok = document.execCommand("copy"); ta.remove();
+  } catch (e) {}
+  try { if (navigator.clipboard) { navigator.clipboard.writeText(t).catch(() => {}); ok = true; } } catch (e) {}
+  return ok;
 }
 
 let poll = null;
@@ -77,10 +93,12 @@ app.addEventListener("click", async (e) => {
     v.sibuk = true; v.galat = ""; render();
     try { await mintaKode(); } catch (err) { v.galat = err.message; }
     v.sibuk = false; render();
-  } else if (aksi === "salin") {
-    try { await navigator.clipboard.writeText(document.getElementById("kode").textContent); b.textContent = "Tersalin ✓"; } catch (err) { b.textContent = "Salin manual"; }
   } else if (aksi === "trakteer") {
-    tunggu(10);
+    // Salin kode lalu buka Trakteer di tab baru, dalam satu ketukan. Salin dulu selagi halaman ini masih fokus.
+    e.preventDefault();
+    v.tersalin = salin((bacaAkses() || {}).kode);
+    window.open(b.href, "_blank", "noopener");
+    tunggu(15);
   } else if (aksi === "klaim" || aksi === "batal-klaim") {
     v.klaim = aksi === "klaim"; v.galat = ""; render();
   } else if (aksi === "cek") {
@@ -91,8 +109,23 @@ app.addEventListener("click", async (e) => {
   }
 });
 
+// Kode dibuat otomatis begitu pengguna yang masuk membuka halaman ini (tidak perlu tombol "Ambil kode").
+async function siapkanKode() {
+  const a = bacaAkses() || {};
+  if (!a.aktif || !akun() || penuh() || a.kode) return;
+  v.sibuk = true; render();
+  try { await mintaKode(); } catch (err) { v.galat = err.message; }
+  v.sibuk = false; render();
+}
+// Kembali dari tab Trakteer → langsung cek status pembayaran.
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState !== "visible" || v.memuat || penuh() || !(bacaAkses() || {}).kode) return;
+  await muatAkses(4000);
+  if (penuh()) { clearInterval(poll); v.menunggu = false; v.pesan = "Pembayaran diterima. Akses Penuh aktif!"; render(); }
+});
+
 render();
-muatAkses(4000).then(() => { v.memuat = false; render(); });
+muatAkses(4000).then(() => { v.memuat = false; render(); return siapkanKode(); });
 
 app.addEventListener("submit", async (e) => {
   const f = e.target.closest("[data-klaim]"); if (!f) return;

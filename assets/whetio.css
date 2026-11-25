@@ -437,6 +437,17 @@ details.mtr[open]>summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
 .coba .fb ol.bahas{margin:4px 0 0;padding-left:18px}
 .coba .fb ol.bahas li{font-size:14px;margin:3px 0}
 .kode-kata{font-size:24px;font-weight:800;letter-spacing:.01em;color:var(--accent);padding:8px 16px;border:2px dashed var(--spark);border-radius:12px;background:var(--sunk)}
+.bayar .kode-bayar{margin:10px 0 12px}.bayar .kode-bayar .hint{margin-bottom:8px}
+.bayar .btn.besar{display:flex;width:100%;min-height:52px;font-size:16.5px;border-radius:14px}
+.alur{list-style:none;counter-reset:alur;margin:14px 0 10px;padding:0;display:grid;gap:8px}
+.alur li{counter-increment:alur;display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;font-size:14px;line-height:1.5}.alur li>span{padding-top:2px}
+.alur li::before{content:counter(alur);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px}
+.status-bayar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:var(--sunk);font-size:13.5px}
+.status-bayar .btn{margin-left:auto}
+.tunggu-titik{width:10px;height:10px;border-radius:50%;background:var(--spark);animation:denyut 1.2s ease-in-out infinite}
+@keyframes denyut{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+details.langkah summary{cursor:pointer;list-style-position:inside}
+details.langkah[open] summary{margin-bottom:6px}
 .calon{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .calon .chip{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
 .calon .chip:hover{border-color:var(--accent)}
