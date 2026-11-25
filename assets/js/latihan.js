@@ -14,6 +14,19 @@ const app = document.getElementById("app");
 const q = new URLSearchParams(location.search);
 let pil = { kode: KOG.some((s) => s.kode === q.get("s")) ? q.get("s") : "VM", n: "10", mode: q.get("mode") === "tempo" ? "t100" : "latihan" };
 const MODE = [["latihan", "Latihan (tanpa timer)"], ["t150", "Tempo 150%"], ["t100", "Tempo 100%"], ["t80", "Tempo 80%"]];
+const bts = (s, p) => Math.max(2, Math.round(s.target * p)); // batas per soal mode tempo (detik)
+
+// Penjelasan tiap mode, dengan angka batas per soal untuk subtes yang dipilih.
+function infoMode(s) {
+  const isi = {
+    latihan: ["tanpa batas waktu", "Pembahasan muncul begitu Anda menjawab, dan Anda bisa kembali ke soal sebelumnya. Cocok untuk memahami cara mengerjakan."],
+    t150: [`${bts(s, 1.5)} dtk/soal = 1,5 × target`, "Tempo paling longgar. Untuk membiasakan diri bekerja dengan timer."],
+    t100: [`${bts(s, 1)} dtk/soal = target`, "Tempo ideal yang dikejar di hari ujian. Bila nilai Anda stabil di sini, tempo Anda sudah cukup."],
+    t80: [`${bts(s, 0.8)} dtk/soal = 0,8 × target`, "Lebih cepat dari target. Melatih cadangan waktu agar ujian asli terasa lebih lega."],
+  };
+  return `<ul class="mode-info">${MODE.map(([m, t]) => `<li${pil.mode === m ? ' class="pilih"' : ""}><b>${t}</b> <span class="bts">${isi[m][0]}</span><br>${isi[m][1]}</li>`).join("")}</ul>
+    <p class="hint">Persentase tempo dihitung dari target tempo subtes. Di mode tempo, soal berganti otomatis saat waktunya habis (soal itu dihitung tidak terjawab), tidak bisa kembali ke soal sebelumnya, dan pembahasan baru muncul setelah selesai. Urutan yang disarankan: latihan → 150% → 100% → 80%.</p>`;
+}
 
 function setelan() {
   const s = KOG.find((x) => x.kode === pil.kode);
@@ -28,7 +41,8 @@ function setelan() {
     <div class="panel"><h2>Subtes</h2><div class="tgl-uji">${KOG.map((x) => `<button class="chip" data-k="${x.kode}" aria-pressed="${pil.kode === x.kode}">${x.no}. ${esc(x.nama)}</button>`).join("")}</div>
     <h2 style="margin-top:14px">Jumlah soal</h2><div class="tgl-uji">${["10", "20", "asli"].map((n) => `<button class="chip" data-n="${n}" aria-pressed="${pil.n === n}"${t && n !== "10" ? ` disabled title="${kunciTeks}"` : ""}>${n === "asli" ? `seperti ujian (${nAsli})` : n}${t && n !== "10" ? " 🔒" : ""}</button>`).join("")}</div>
     <h2 style="margin-top:14px">Mode</h2><div class="tgl-uji">${MODE.map(([m, t]) => `<button class="chip" data-m="${m}" aria-pressed="${pil.mode === m}">${t}</button>`).join("")}</div>
-    <p class="hint">Target tempo ${esc(s.nama)}: ${s.target} dtk/soal · batas ujian ${s.batas} dtk/soal${pil.mode.startsWith("t") ? ` · batas latihan ini ${Math.max(2, Math.round(s.target * Number(pil.mode.slice(1)) / 100))} dtk/soal` : ""}.</p>
+    ${infoMode(s)}
+    <p class="hint">Target tempo ${esc(s.nama)}: ${s.target} dtk/soal · batas ujian ${s.batas} dtk/soal${pil.mode.startsWith("t") ? ` · batas latihan ini ${bts(s, Number(pil.mode.slice(1)) / 100)} dtk/soal` : ""}.</p>
     <div class="cta">${t && !sisa ? (tk === "tamu" ? `<button class="btn spark" disabled>Kuota tamu hari ini habis</button><a class="btn pri" href="/akun/?lanjut=%2Fpsikotes%2Flatihan%2F">Masuk untuk lanjut</a>`
       : `<button class="btn spark" disabled>Kuota hari ini habis</button><a class="btn pri" href="/akses/">Buka Akses Penuh</a>`) : `<button class="btn spark" data-act="mulai">Mulai latihan</button>`}</div></div>
     ${log.length ? `<div class="panel"><h2>Riwayat latihan bebas</h2><table class="tbl"><thead><tr><th>Subtes</th><th>Mode</th><th class="n">Benar</th><th class="n">dtk/soal</th></tr></thead><tbody>${log.map((d) => `<tr><td>${esc((KOG.find((x) => x.kode === d.kode) || {}).nama || d.kode)}</td><td>${esc(d.mode)}</td><td class="n">${d.b}/${d.n}</td><td class="n">${(d.dt || 0).toFixed(1)}</td></tr>`).join("")}</tbody></table></div>` : ""}
@@ -50,7 +64,7 @@ async function mulaiLatihan() {
   const s = KOG.find((x) => x.kode === pil.kode);
   const n = pil.n === "asli" ? s.n : Number(pil.n);
   const tempo = pil.mode.startsWith("t") ? Number(pil.mode.slice(1)) / 100 : null;
-  const batas = tempo ? Math.max(2, Math.round(s.target * tempo)) : s.batas;
+  const batas = tempo ? bts(s, tempo) : s.batas;
   let isi;
   if (s.kode === "SA" || s.kode === "PK") { const b = await bankVerbal(s.kode); isi = { soal: b.slice(0, n) }; }
   else isi = buatSubtes(s.kode, "latihan-" + Date.now() + "-" + Math.random(), n);
