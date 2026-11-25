@@ -92,10 +92,12 @@ const M = {
       <tr><td>Modus ponens</td><td>Jika p maka q. p.</td><td>q</td></tr>
       <tr><td>Modus tollens</td><td>Jika p maka q. Tidak q.</td><td>Tidak p</td></tr>
       <tr><td>Silogisme hipotetis</td><td>Jika p maka q. Jika q maka r.</td><td>Jika p maka r (setara: jika tidak r maka tidak p)</td></tr>
-      <tr><td>Silogisme disjungtif</td><td>p atau q. Tidak p.</td><td>q</td></tr></tbody></table>
+      <tr><td>Silogisme disjungtif</td><td>p atau q. Tidak p.</td><td>q</td></tr>
+      <tr><td>Mengiyakan akibat (keliru)</td><td>Jika p maka q. q.</td><td>Tidak dapat dipastikan apakah p</td></tr>
+      <tr><td>Menyangkal sebab (keliru)</td><td>Jika p maka q. Tidak p.</td><td>Tidak dapat dipastikan apakah q</td></tr></tbody></table>
       <p>Pernyataan yang <b>setara</b> dengan “jika p maka q” hanya kontraposisinya: “jika tidak q maka tidak p”. Pernyataan “jika q maka p” (konvers) dan “jika tidak p maka tidak q” (invers) <b>tidak setara</b>.</p>`,
     langkah: ["Tandai kata kunci: semua, sebagian, tidak ada, jika–maka, atau.", "Gambar lingkaran kecil untuk pernyataan kategoris, atau tulis p → q untuk jika–maka.", "Cari istilah yang muncul di kedua premis (istilah tengah). Kesimpulan tidak memuat istilah itu.", "Uji tiap opsi: adakah gambar yang memenuhi semua premis tetapi membuat opsi itu salah? Kalau ada, opsi itu bukan kesimpulan pasti."],
-    jebakan: ["Membalik jika–maka. Dari “jika hujan, jalan basah” dan “jalan basah”, Anda tidak bisa menyimpulkan bahwa hujan turun.", "Memperkuat kuantor: “sebagian” diubah menjadi “semua”.", "Memilih kesimpulan yang benar di dunia nyata tetapi tidak didukung premis.", "Terpancing premis tambahan yang tidak berkaitan. Abaikan, karena ia tidak menyumbang kesimpulan."],
+    jebakan: ["Membalik jika–maka. Dari “jika hujan, jalan basah” dan “jalan basah”, Anda tidak bisa menyimpulkan bahwa hujan turun.", "Memperkuat kuantor: “sebagian” diubah menjadi “semua”.", "Memilih kesimpulan yang benar di dunia nyata tetapi tidak didukung premis. Contoh: dari “Semua sungai di Kalimantan adalah sungai di Indonesia” dan “Semua sungai di Jawa adalah sungai di Indonesia”, kesimpulan “tidak ada sungai di Kalimantan yang merupakan sungai di Jawa” benar di dunia nyata, tetapi tidak dijamin premis.", "Menyangkal sebab. Dari “jika hujan, jalan basah” dan “tidak hujan”, belum tentu jalan kering, karena jalan bisa basah oleh hal lain."],
     contoh: {
       q: `<p class="premis">Semua pelari adalah atlet. Sebagian mahasiswa adalah pelari.</p><p class="tanya">Kesimpulan yang tepat adalah …</p>`,
       o: ["Sebagian mahasiswa adalah atlet.", "Semua mahasiswa adalah atlet.", "Sebagian atlet bukan mahasiswa.", "Semua atlet adalah pelari.", "Tidak ada mahasiswa yang atlet."], k: 0,

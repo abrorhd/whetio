@@ -5,6 +5,7 @@ import { SUBTES, buatSubtes } from "../assets/js/gen/index.js";
 import { BENTUK } from "../assets/js/gen/diagram.js";
 import { blockData, kuadran, kunciBlok } from "../assets/js/gen/block.js";
 import { susunRef, kunciVM, tersambung } from "../assets/js/gen/visual.js";
+import { SKENARIO, cekSkenario } from "../assets/js/gen/silogisme.js";
 import { buatRng } from "../assets/js/gen/rng.js";
 
 const N = Number(process.argv[2] || 40);
@@ -20,6 +21,9 @@ for (const [nama, pts] of Object.entries(BENTUK)) {
   }
   if (new Set(tf).size !== 8) lapor(`bentuk ${nama} simetris (${new Set(tf).size}/8)`);
 }
+
+// Silogisme: setiap skenario kategoris konsisten (hubungan antarhimpunannya benar-benar berlaku).
+for (const sk of SKENARIO) cekSkenario(sk).forEach((m) => lapor(`SIL skenario "${sk.t.join(" / ")}": ${m}`));
 
 // Block Pattern: kunci = kuadran bertanda ? persis; tidak ada pengecoh yang sama dengan kunci; kuadran cukup rumit.
 for (let i = 0; i < N * 5; i++) {
