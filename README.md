@@ -59,7 +59,7 @@ Generator memakai benih tanggal, jadi paket sebuah tanggal selalu sama. Kunci pi
 
 30 SA (sinonim dan antonim masing-masing ≥12) + 25 PK (format L dan B masing-masing ≥10).
 
-Variasi PK (diperiksa `cek-verbal.mjs`, daftar lengkap di `VARIASI`): label `kk` (benda/nama/abstrak/kerja/sifat), `dasar` (jenis/fungsi/ciri/bagian/makna), dan `d` (bidang). Per paket: kerja ≥4, sifat ≥4, abstrak ≥3, benda ≤10, nama ≤5; makna ≥3, fungsi/ciri/bagian ≥2, jenis ≤12; tiap bidang ≤2 dan minimal 12 bidang; nama kelompok tidak boleh sama dengan 7 paket terakhir; paling banyak 6 kata PK yang sudah dipakai 7 paket terakhir.
+Variasi PK (diperiksa `cek-verbal.mjs`, daftar lengkap di `VARIASI`): label `kk` (benda/nama/abstrak/kerja/sifat), `dasar` (jenis/fungsi/ciri/bagian/makna), dan `d` (bidang). Per paket: kerja ≥4, sifat ≥4, abstrak ≥3, benda ≤10, nama ≤5; makna ≥3, fungsi/ciri/bagian ≥2, jenis ≤12; tiap bidang ≤2 dan minimal 12 bidang. Kata PK diperbarui setiap hari: tidak boleh ada kata (3 kata soal + 5 opsi) maupun nama kelompok yang pernah dipakai di PK paket mana pun sebelumnya.
 
 Block Pattern memakai pola 6×6 (kuadran 3×3, sel segitiga dan setengah) dengan pengecoh nyaris sama; Visual Matching memakai gambar 5–7 ruas garis yang berkeluarga (diputar, dicerminkan, atau digeser satu ruas). Paket yang sudah terbit menyimpan gambarnya sendiri, jadi tidak ikut berubah.
 

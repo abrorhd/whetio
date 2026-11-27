@@ -23,7 +23,7 @@ export const VARIASI = {
     "teknologi-transportasi", "pendidikan-ilmu", "olahraga-permainan", "waktu-ukuran"],
   BIDANG_MAKS: 2,
   BIDANG_MIN_JENIS: 12,
-  KATA_ULANG_MAKS: 6, // kata PK (3 kata soal + 5 opsi) yang sudah dipakai di PK 7 paket terakhir
+  KATA_ULANG_MAKS: 0, // kata PK (3 kata soal + 5 opsi) yang sudah dipakai di PK paket mana pun sebelumnya: kata diperbarui tiap hari
 };
 const kata = (s) => typeof s === "string" && /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ' -]{1,24}$/.test(s.trim());
 const norm = (s) => String(s).trim().toLowerCase();
@@ -45,11 +45,11 @@ export function sidikLama(repo, tanggal) {
 }
 
 const unhtml = (h) => String(h).replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
-// Kata dan nama kelompok PK dari 7 paket terakhir: Map kata → tanggal, Map kelompok → tanggal.
+// Kata dan nama kelompok PK dari SEMUA paket sebelumnya (bukan hanya 7 terakhir): Map kata → tanggal, Map kelompok → tanggal.
 export function pkLama(repo, tanggal) {
   const dir = path.join(repo, "psikotes", "paket"), kata = new Map(), kel = new Map();
   if (!fs.existsSync(dir)) return { kata, kel };
-  const tgl = fs.readdirSync(dir).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d !== tanggal).sort().slice(-JUMLAH.JENDELA);
+  const tgl = fs.readdirSync(dir).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d !== tanggal).sort();
   for (const d of tgl) {
     const f = path.join(dir, d, "soal.json");
     if (!fs.existsSync(f)) continue;
@@ -101,7 +101,7 @@ export function cek(data, { repo, tanggal } = {}) {
       if (!VARIASI.KK.includes(s.kk)) err.push(`${id}: kk (kelas kata) harus salah satu dari ${VARIASI.KK.join("/")}.`);
       if (!VARIASI.DASAR.includes(s.dasar)) err.push(`${id}: dasar harus salah satu dari ${VARIASI.DASAR.join("/")}.`);
       if (!VARIASI.BIDANG.includes(s.d)) err.push(`${id}: d (bidang) harus salah satu dari ${VARIASI.BIDANG.join(", ")}.`);
-      if (typeof s.g === "string" && kelLama.has(norm(s.g))) err.push(`${id}: nama kelompok "${s.g}" sudah dipakai di paket ${kelLama.get(norm(s.g))}; pilih kelompok lain.`);
+      if (typeof s.g === "string" && kelLama.has(norm(s.g))) err.push(`${id}: nama kelompok "${s.g}" sudah pernah dipakai (paket ${kelLama.get(norm(s.g))}); pilih kelompok lain.`);
       const sd = sidikPK(s);
       if (lihat.has(sd)) err.push(`${id}: soal dobel dalam paket ini.`);
       if (lama.has(sd)) err.push(`${id}: soal sama sudah keluar di paket ${lama.get(sd)}.`);
@@ -126,7 +126,7 @@ export function cek(data, { repo, tanggal } = {}) {
     if (nBid < VARIASI.BIDANG_MIN_JENIS) err.push(`Variasi PK: hanya ${nBid} bidang berbeda; minimal ${VARIASI.BIDANG_MIN_JENIS}.`);
     const semua = PK.flatMap((s) => (s.f === "L" && Array.isArray(s.q) ? s.q : []).concat(Array.isArray(s.o) ? s.o : []));
     const ulang = [...new Set(semua.map(norm).filter((w) => kataLama.has(w)))];
-    if (ulang.length > VARIASI.KATA_ULANG_MAKS) err.push(`Variasi PK: ${ulang.length} kata sudah dipakai di PK ${JUMLAH.JENDELA} paket terakhir (maksimal ${VARIASI.KATA_ULANG_MAKS}); ganti sebagian: ${ulang.map((w) => `${w} (${kataLama.get(w)})`).join(", ")}.`);
+    if (ulang.length > VARIASI.KATA_ULANG_MAKS) err.push(`Variasi PK: kata harus baru setiap hari, tetapi ${ulang.length} kata sudah pernah dipakai di PK paket sebelumnya; ganti: ${ulang.map((w) => `${w} (${kataLama.get(w)})`).join(", ")}.`);
     else if (ulang.length) warn.push(`PK memakai ulang ${ulang.length} kata dari paket sebelumnya: ${ulang.join(", ")}.`);
   }
   return { err, warn };
